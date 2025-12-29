@@ -26,8 +26,8 @@ fairy {
 
     // Plugin Description
     bukkitProperties().authors.add("Lotiny")
-    bukkitProperties().website = "https://github.com/Lotiny"
-    bukkitProperties().description = "The advanced UHC plugin for Minecraft 1.8.8, 1.12.2, 1.16.5 and 1.21+"
+    bukkitProperties().website = "https://github.com/Lotiny/misty"
+    bukkitProperties().description = "An open-sourced & powerful Minecraft UHC Plugin. Supported Paper version 1.8.8, 1.12.2, 1.16.5 and 1.21+"
     bukkitProperties().bukkitApi = "1.13"
 }
 
