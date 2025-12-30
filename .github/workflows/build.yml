@@ -1,0 +1,44 @@
+name: Build Misty Plugin
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Get Version
+        id: get_version
+        run: |
+          echo "VERSION=$(./gradlew :plugin:dist:properties -q | grep "^version:" | awk '{print $2}')" >> $GITHUB_ENV
+
+      - name: Build with Gradle
+        run: ./gradlew :plugin:dist:shadowJar
+
+      - name: Publish to Releases
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/heads/master')
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: "Misty v${{ env.VERSION }}"
+          files: plugin/dist/build/libs/*.jar
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
