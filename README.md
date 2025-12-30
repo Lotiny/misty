@@ -13,7 +13,7 @@ Misty is an open-sourced & powerful UHC plugin that come with many features.
 - [Paper](https://papermc.io/)
 - [fairy-lib-plugin](https://github.com/FairyProject/fairy-lib-plugin)
 - [Chunky](https://modrinth.com/plugin/chunky) (For 1.16.5+)
-- [Chunky](https://modrinth.com/plugin/chunkyborder) (For 1.16.5+)
+- [Chunky Border](https://modrinth.com/plugin/chunkyborder) (For 1.16.5+)
 - [WorldBorder](https://dev.bukkit.org/projects/worldborder) (For 1.8.8, 1.12.2)
 
 Optional
