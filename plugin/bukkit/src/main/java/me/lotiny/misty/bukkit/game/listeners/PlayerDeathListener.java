@@ -15,12 +15,11 @@ import me.lotiny.misty.api.scenario.ScenarioManager;
 import me.lotiny.misty.api.team.Team;
 import me.lotiny.misty.api.team.TeamManager;
 import me.lotiny.misty.bukkit.config.Config;
+import me.lotiny.misty.bukkit.config.ConfigManager;
+import me.lotiny.misty.bukkit.config.impl.MainConfig;
 import me.lotiny.misty.bukkit.provider.hotbar.HotBar;
 import me.lotiny.misty.bukkit.storage.StorageRegistry;
-import me.lotiny.misty.bukkit.utils.KeyEx;
-import me.lotiny.misty.bukkit.utils.Snapshot;
-import me.lotiny.misty.bukkit.utils.TeamEx;
-import me.lotiny.misty.bukkit.utils.UHCUtils;
+import me.lotiny.misty.bukkit.utils.*;
 import me.lotiny.misty.bukkit.utils.elo.EloUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -33,7 +32,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerDeathListener implements Listener {
@@ -45,7 +46,20 @@ public class PlayerDeathListener implements Listener {
     @Autowired
     private static TeamManager teamManager;
     @Autowired
+    private static ConfigManager configManager;
+    @Autowired
     private static StorageRegistry storageRegistry;
+
+    private final boolean playerHeadEnabled;
+    private final float playerHeadConsumeTime;
+    private final List<PotionEffect> playerHeadConsumeEffects;
+
+    public PlayerDeathListener() {
+        MainConfig.Healing.HealingItem healingItem = configManager.get(MainConfig.class).getHealing().getPlayerHead();
+        this.playerHeadEnabled = healingItem.isEnabled();
+        this.playerHeadConsumeTime = healingItem.getTime();
+        this.playerHeadConsumeEffects = healingItem.getPotionEffects();
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void handlePlayerDeathEvent(PlayerDeathEvent event) {
@@ -180,6 +194,10 @@ public class PlayerDeathListener implements Listener {
         ItemStack skull = ItemBuilder.of(XMaterial.PLAYER_HEAD)
                 .skull(player.getName())
                 .build();
+
+        if (VersionUtils.isHigher(21, 4) && playerHeadEnabled) {
+            skull = FastFoodUtils.of(skull, playerHeadConsumeTime, playerHeadConsumeEffects);
+        }
 
         UHCUtils.dropItem(player.getLocation(), skull);
     }

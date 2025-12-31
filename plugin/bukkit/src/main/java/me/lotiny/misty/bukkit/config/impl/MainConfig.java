@@ -270,7 +270,7 @@ public final class MainConfig extends BaseConfig {
             @Comment("Skin URL for the head texture. This is only used if the material is set to PLAYER_HEAD.")
             private String skinUrl;
 
-            @Comment("How long player consume this item in seconds.")
+            @Comment("How long player consume this item in seconds (Only work on 1.21.4+).")
             private float time;
 
             @Comment("The display name of the item.")

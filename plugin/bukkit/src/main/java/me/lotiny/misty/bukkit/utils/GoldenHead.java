@@ -36,8 +36,8 @@ public class GoldenHead {
 
         ItemStack result = builder.build();
 
-        if (VersionUtils.isHigher(21, 3)) {
-            result = FastFoodUtils.of(result, config.getTime());
+        if (VersionUtils.isHigher(21, 4)) {
+            result = FastFoodUtils.of(result, config.getTime(), config.getPotionEffects());
         }
 
         item = result;

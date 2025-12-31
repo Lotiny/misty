@@ -2,7 +2,6 @@ package me.lotiny.misty.bukkit.game.listeners;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XPotion;
-import com.cryptomorin.xseries.XSound;
 import com.cryptomorin.xseries.XTag;
 import io.fairyproject.Fairy;
 import io.fairyproject.bukkit.events.player.EntityDamageByPlayerEvent;
@@ -22,7 +21,10 @@ import me.lotiny.misty.bukkit.enums.Message;
 import me.lotiny.misty.bukkit.manager.WorldManager;
 import me.lotiny.misty.bukkit.storage.StorageRegistry;
 import me.lotiny.misty.bukkit.task.GameTask;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.ItemStackUtils;
+import me.lotiny.misty.bukkit.utils.PlayerUtils;
+import me.lotiny.misty.bukkit.utils.ReflectionUtils;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -38,12 +40,8 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.potion.PotionEffect;
-
-import java.util.Collection;
 
 public class GameListener implements Listener {
 
@@ -107,85 +105,6 @@ public class GameListener implements Listener {
             PlayerUtils.setItemInHand(player, null);
             player.sendMessage(CC.translate("&cThis potion is not allowed!"));
         }
-    }
-
-    @EventHandler
-    public void handleItemConsume(PlayerItemConsumeEvent event) {
-        Player player = event.getPlayer();
-        ItemStack item = event.getItem();
-
-        MainConfig.Healing.HealingItem healingItem = getHealingItem(item);
-        if (healingItem == null || !healingItem.isEnabled()) return;
-
-        applyEffects(player, healingItem.getPotionEffects());
-    }
-
-    @SuppressWarnings({"UnstableApiUsage", "removal"})
-    @EventHandler
-    public void handleHealingItemInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        ItemStack item = PlayerUtils.getItemInHand(player);
-
-        MainConfig.Healing.HealingItem heal = getHealingItem(item);
-        if (heal == null || !isInstantConsume(heal)) return;
-
-        PlayerItemConsumeEvent consumeEvent;
-        if (VersionUtils.isHigher(21, 0)) {
-            consumeEvent = new PlayerItemConsumeEvent(player, item, event.getHand() == null ? EquipmentSlot.HAND : event.getHand());
-        } else {
-            consumeEvent = new PlayerItemConsumeEvent(player, item);
-        }
-
-        Bukkit.getPluginManager().callEvent(consumeEvent);
-
-        if (consumeEvent.isCancelled()) return;
-
-        consumeItem(player, item);
-        PlayerUtils.playSound(
-                player.getLocation(),
-                XSound.ENTITY_PLAYER_BURP,
-                XSound.ENTITY_GENERIC_EAT
-        );
-    }
-
-    private MainConfig.Healing.HealingItem getHealingItem(ItemStack item) {
-        if (item == null) {
-            return null;
-        }
-
-        if (goldenHead.isEnabled() && GoldenHead.build().isSimilar(item)) {
-            return goldenHead;
-        }
-
-        if (goldenApple.isEnabled() && XMaterial.GOLDEN_APPLE.isSimilar(item)) {
-            return goldenApple;
-        }
-
-        if (playerHead.isEnabled() && XMaterial.PLAYER_HEAD.isSimilar(item)) {
-            return playerHead;
-        }
-
-        return null;
-    }
-
-    private void applyEffects(Player player, Collection<PotionEffect> effects) {
-        for (PotionEffect effect : effects) {
-            player.removePotionEffect(effect.getType());
-            player.addPotionEffect(effect);
-        }
-    }
-
-    private void consumeItem(Player player, ItemStack item) {
-        if (item.getAmount() <= 1) {
-            PlayerUtils.setItemInHand(player, null);
-        } else {
-            item.setAmount(item.getAmount() - 1);
-            PlayerUtils.setItemInHand(player, item);
-        }
-    }
-
-    private boolean isInstantConsume(MainConfig.Healing.HealingItem heal) {
-        return heal.isEnabled() && heal.getTime() == 0.0F;
     }
 
     @EventHandler
