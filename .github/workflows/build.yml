@@ -37,7 +37,7 @@ jobs:
         with:
           tag_name: v${{ env.VERSION }}
           name: "Misty v${{ env.VERSION }}"
-          files: plugin/dist/build/libs/*.jar
+          files: plugin/dist/build/libs/Misty-${{ env.VERSION }}.jar
           draft: false
           prerelease: false
         env:
