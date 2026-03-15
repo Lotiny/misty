@@ -30,10 +30,7 @@ public class ChumpCharityScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.OAK_LEAVES)
                 .name("&b" + getName())
-                .lore(
-                        "&7Every 10 minutes the player with lowest",
-                        "&7health will be healed."
-                )
+                .lore("&7Every 10 minutes the player with lowest", "&7health will be healed.")
                 .build();
     }
 
@@ -55,8 +52,7 @@ public class ChumpCharityScenario extends Scenario {
                 lowest.setHealth(PlayerUtils.getMaxHealth(lowest));
                 lowest.sendMessage(Message.CHUMP_CHARITY_PLAYER);
 
-                Utilities.broadcast(Message.CHUMP_CHARITY_BROADCAST
-                        .replace("<player>", lowest.getName()));
+                Utilities.broadcast(Message.CHUMP_CHARITY_BROADCAST.replace("<player>", lowest.getName()));
             }
         }
     }

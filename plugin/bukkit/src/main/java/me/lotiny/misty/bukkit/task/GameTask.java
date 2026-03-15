@@ -54,9 +54,12 @@ public class GameTask extends AbstractScheduleTask {
             }
 
             if (getSeconds() % 60 == 0) {
-                MCSchedulers.getGlobalScheduler().schedule(() -> {
-                    Bukkit.getPluginManager().callEvent(new UHCMinuteEvent(getSeconds() / 60));
-                }, 1L);
+                MCSchedulers.getGlobalScheduler()
+                        .schedule(
+                                () -> {
+                                    Bukkit.getPluginManager().callEvent(new UHCMinuteEvent(getSeconds() / 60));
+                                },
+                                1L);
             }
         };
     }
@@ -64,15 +67,18 @@ public class GameTask extends AbstractScheduleTask {
     private void sendCountdown(int targetSeconds, ConfigType configType) {
         int remaining = targetSeconds - getSeconds();
 
-        if (remaining == 600 || remaining == 300 || remaining == 60 ||
-                remaining == 30 || remaining == 10 ||
-                (remaining <= 5 && remaining > 0)) {
+        if (remaining == 600
+                || remaining == 300
+                || remaining == 60
+                || remaining == 30
+                || remaining == 10
+                || (remaining <= 5 && remaining > 0)) {
             if (configType == ConfigType.GRACE_PERIOD) {
-                Utilities.broadcast(Message.GRACE_PERIOD_TIME
-                        .replace("<time>", TimeFormatUtils.formatTimeUnit(remaining)));
+                Utilities.broadcast(
+                        Message.GRACE_PERIOD_TIME.replace("<time>", TimeFormatUtils.formatTimeUnit(remaining)));
             } else {
-                Utilities.broadcast(Message.FINAL_HEAL_TIME
-                        .replace("<time>", TimeFormatUtils.formatTimeUnit(remaining)));
+                Utilities.broadcast(
+                        Message.FINAL_HEAL_TIME.replace("<time>", TimeFormatUtils.formatTimeUnit(remaining)));
             }
         }
     }
@@ -83,4 +89,3 @@ public class GameTask extends AbstractScheduleTask {
         Utilities.broadcast(Message.GAME_STATED);
     }
 }
-

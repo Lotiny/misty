@@ -16,10 +16,7 @@ import java.util.UUID;
 @Configuration
 public final class UHCConfig extends BaseConfig {
 
-    private Map<UUID, GameConfig> gameConfig = Map.of(
-            UUID.randomUUID(),
-            new GameConfig()
-    );
+    private Map<UUID, GameConfig> gameConfig = Map.of(UUID.randomUUID(), new GameConfig());
 
     @Getter
     @Setter

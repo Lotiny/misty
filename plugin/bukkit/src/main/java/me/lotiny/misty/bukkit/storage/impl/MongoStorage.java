@@ -3,7 +3,11 @@ package me.lotiny.misty.bukkit.storage.impl;
 import com.google.gson.JsonObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.*;
+import com.mongodb.client.model.BulkWriteOptions;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOneModel;
+import com.mongodb.client.model.ReplaceOptions;
+import com.mongodb.client.model.WriteModel;
 import com.mongodb.client.result.DeleteResult;
 import io.fairyproject.log.Log;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +16,11 @@ import me.lotiny.misty.bukkit.storage.StorageRegistry;
 import me.lotiny.misty.bukkit.storage.StorageSerializer;
 import org.bson.Document;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,8 +38,7 @@ public class MongoStorage<T> implements Storage<T> {
 
     @Override
     public void init() {
-        String name = collectionName.replace("/", "_")
-                .replace("-", "_");
+        String name = collectionName.replace("/", "_").replace("-", "_");
         collection = storageRegistry.getMongoDatabase().getCollection(name);
     }
 
@@ -80,10 +87,7 @@ public class MongoStorage<T> implements Storage<T> {
     @Override
     public void load(T object) {
         String key = serializer.getKey(object);
-        find(uniqueKey, key).ifPresentOrElse(
-                loadedObject -> cache.put(key, loadedObject),
-                () -> create(key)
-        );
+        find(uniqueKey, key).ifPresentOrElse(loadedObject -> cache.put(key, loadedObject), () -> create(key));
     }
 
     @Override
@@ -107,7 +111,11 @@ public class MongoStorage<T> implements Storage<T> {
     public Map<Integer, T> getTops(int count, String key) {
         Map<Integer, T> tops = new ConcurrentHashMap<>();
 
-        List<Document> documents = collection.find().limit(count).sort(new BasicDBObject("stats." + key, -1)).into(new ArrayList<>());
+        List<Document> documents = collection
+                .find()
+                .limit(count)
+                .sort(new BasicDBObject("stats." + key, -1))
+                .into(new ArrayList<>());
         for (int i = 0; i < documents.size(); i++) {
             int place = i + 1;
             Document document = documents.get(i);
@@ -156,11 +164,8 @@ public class MongoStorage<T> implements Storage<T> {
             JsonObject jsonObject = serializer.toJson(object);
             Document document = Document.parse(StorageRegistry.GSON.toJson(jsonObject));
 
-            ReplaceOneModel<Document> model = new ReplaceOneModel<>(
-                    Filters.eq(uniqueKey, key),
-                    document,
-                    new ReplaceOptions().upsert(true)
-            );
+            ReplaceOneModel<Document> model =
+                    new ReplaceOneModel<>(Filters.eq(uniqueKey, key), document, new ReplaceOptions().upsert(true));
 
             operations.add(model);
         }

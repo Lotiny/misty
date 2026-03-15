@@ -35,9 +35,7 @@ public class PlayerSwapScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.END_PORTAL_FRAME)
                 .name("&b" + getName())
-                .lore(
-                        "&7Every 5 minutes 2 random player will be swap the location."
-                )
+                .lore("&7Every 5 minutes 2 random player will be swap the location.")
                 .build();
     }
 
@@ -77,11 +75,9 @@ public class PlayerSwapScenario extends Scenario {
                 player2.teleport(location1);
             });
 
-            player1.sendMessage(Message.PLAYER_SWAP_PLAYER
-                    .replace("<player>", player2.getName()));
+            player1.sendMessage(Message.PLAYER_SWAP_PLAYER.replace("<player>", player2.getName()));
 
-            player2.sendMessage(Message.PLAYER_SWAP_PLAYER
-                    .replace("<player>", player1.getName()));
+            player2.sendMessage(Message.PLAYER_SWAP_PLAYER.replace("<player>", player1.getName()));
 
             Utilities.broadcast(Message.PLAYER_SWAP_BROADCAST
                     .replace("<player1>", player1.getName())

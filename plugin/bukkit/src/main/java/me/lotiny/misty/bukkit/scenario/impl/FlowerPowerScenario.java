@@ -29,9 +29,7 @@ public class FlowerPowerScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.POPPY)
                 .name("&b" + getName())
-                .lore(
-                        "&7Item will drop randomly when break the flower."
-                )
+                .lore("&7Item will drop randomly when break the flower.")
                 .build();
     }
 

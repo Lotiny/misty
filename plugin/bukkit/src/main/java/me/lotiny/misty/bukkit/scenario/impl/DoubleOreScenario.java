@@ -39,9 +39,7 @@ public class DoubleOreScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.REDSTONE_ORE)
                 .name("&b" + getName())
-                .lore(
-                        "&7Ores are drop doubled."
-                )
+                .lore("&7Ores are drop doubled.")
                 .build();
     }
 

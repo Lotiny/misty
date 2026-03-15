@@ -21,10 +21,7 @@ public class CupidScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.BOW)
                 .name("&b" + getName())
-                .lore(
-                        "&7Every time you shoot and hit a player with your",
-                        "&7bow, you gain 1% of your health back."
-                )
+                .lore("&7Every time you shoot and hit a player with your", "&7bow, you gain 1% of your health back.")
                 .build();
     }
 

@@ -28,9 +28,7 @@ public class PermanightScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.COAL_BLOCK)
                 .name("&b" + getName())
-                .lore(
-                        "&7No day time!"
-                )
+                .lore("&7No day time!")
                 .build();
     }
 

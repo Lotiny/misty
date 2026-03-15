@@ -21,9 +21,7 @@ public class ZoomiesScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.ZOMBIE_HEAD)
                 .name("&b" + getName())
-                .lore(
-                        "&7All mobs will spawn with Speed III effect."
-                )
+                .lore("&7All mobs will spawn with Speed III effect.")
                 .build();
     }
 

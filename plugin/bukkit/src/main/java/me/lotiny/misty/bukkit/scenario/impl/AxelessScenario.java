@@ -22,9 +22,7 @@ public class AxelessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.IRON_AXE)
                 .name("&b" + getName())
-                .lore(
-                        "&7Axe cannot be used."
-                )
+                .lore("&7Axe cannot be used.")
                 .build();
     }
 
@@ -36,7 +34,8 @@ public class AxelessScenario extends Scenario {
             PlayerUtils.setItemInHand(player, null);
         }
 
-        if (VersionUtils.isHigher(9, 0) && XTag.AXES.isTagged(XMaterial.matchXMaterial(PlayerUtils.getItemInOffHand(player)))) {
+        if (VersionUtils.isHigher(9, 0)
+                && XTag.AXES.isTagged(XMaterial.matchXMaterial(PlayerUtils.getItemInOffHand(player)))) {
             PlayerUtils.setItemInOffHand(player, null);
         }
     }

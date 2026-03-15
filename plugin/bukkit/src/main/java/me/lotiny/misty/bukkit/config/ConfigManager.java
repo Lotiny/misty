@@ -6,7 +6,14 @@ import io.fairyproject.container.PostInitialize;
 import io.fairyproject.container.PreDestroy;
 import io.fairyproject.log.Log;
 import lombok.Getter;
-import me.lotiny.misty.bukkit.config.impl.*;
+import me.lotiny.misty.bukkit.config.impl.HotBarConfig;
+import me.lotiny.misty.bukkit.config.impl.MainConfig;
+import me.lotiny.misty.bukkit.config.impl.MessageConfig;
+import me.lotiny.misty.bukkit.config.impl.PracticeConfig;
+import me.lotiny.misty.bukkit.config.impl.ScenarioConfig;
+import me.lotiny.misty.bukkit.config.impl.ScoreboardConfig;
+import me.lotiny.misty.bukkit.config.impl.StorageConfig;
+import me.lotiny.misty.bukkit.config.impl.UHCConfig;
 
 import java.util.HashMap;
 import java.util.Map;

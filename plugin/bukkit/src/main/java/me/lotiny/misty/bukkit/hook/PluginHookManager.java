@@ -1,5 +1,6 @@
 package me.lotiny.misty.bukkit.hook;
 
+import io.fairyproject.container.Autowired;
 import io.fairyproject.container.InjectableComponent;
 import io.fairyproject.container.PostInitialize;
 import io.fairyproject.log.Log;
@@ -7,6 +8,7 @@ import io.fairyproject.mc.MCPlayer;
 import io.fairyproject.util.CC;
 import io.github.retrooper.packetevents.util.viaversion.ViaVersionUtil;
 import lombok.Getter;
+import me.lotiny.misty.api.game.GameManager;
 import me.lotiny.misty.bukkit.hook.impl.apollo.ApolloHook;
 import me.lotiny.misty.bukkit.hook.impl.chunk.ChunkLoader;
 import me.lotiny.misty.bukkit.hook.impl.chunk.chunky.ChunkyHook;
@@ -15,6 +17,7 @@ import me.lotiny.misty.bukkit.hook.impl.placeholderapi.PlaceholderAPIHook;
 import me.lotiny.misty.bukkit.hook.impl.placeholderapi.PlaceholderAPISupport;
 import me.lotiny.misty.bukkit.hook.impl.svc.SVCHook;
 import me.lotiny.misty.bukkit.hook.impl.viaversion.ViaVersionHook;
+import me.lotiny.misty.bukkit.manager.WorldManager;
 import me.lotiny.misty.bukkit.utils.Utilities;
 import me.lotiny.misty.bukkit.utils.VersionUtils;
 import org.bukkit.Bukkit;
@@ -23,6 +26,12 @@ import org.bukkit.entity.Player;
 @Getter
 @InjectableComponent
 public class PluginHookManager {
+
+    @Autowired
+    private static GameManager gameManager;
+
+    @Autowired
+    private static WorldManager worldManager;
 
     private ApolloHook apolloHook;
     private PlaceholderAPISupport placeholderApi;
@@ -50,9 +59,11 @@ public class PluginHookManager {
                 hook.register();
                 legacySupport = ViaVersionUtil.isAvailable();
             }
+        }
 
+        if (VersionUtils.isBetween(8, 8, 12, 2)) {
             if (this.hasPlugin("WorldBorder")) {
-                WorldBorderHook hook = new WorldBorderHook();
+                WorldBorderHook hook = new WorldBorderHook(gameManager, worldManager);
                 hook.register();
                 chunkLoader = hook;
             }
@@ -63,18 +74,17 @@ public class PluginHookManager {
                 SVCHook hook = new SVCHook();
                 hook.register();
             }
-        }
 
-        if (VersionUtils.isHigher(16, 5)) {
             if (this.hasPlugin("Chunky") && this.hasPlugin("ChunkyBorder")) {
-                ChunkyHook hook = new ChunkyHook();
+                ChunkyHook hook = new ChunkyHook(gameManager, worldManager);
                 hook.register();
                 chunkLoader = hook;
             }
         }
 
         if (chunkLoader == null) {
-            Log.error("Chunk Loader plugin not found! Please install 'WorldBorder' for 1.8.8 or 'Chunky' + 'ChunkyBorder' for 1.21.4!");
+            Log.error("Chunk Loader plugin not found.");
+            Log.error("Please install 'WorldBorder' for 1.8.8 or 'Chunky' + 'ChunkyBorder' for 1.21.4!");
             Utilities.disable();
         }
     }
@@ -88,6 +98,7 @@ public class PluginHookManager {
     }
 
     private boolean hasPlugin(String plugin) {
-        return Bukkit.getPluginManager().getPlugin(plugin) != null && Bukkit.getPluginManager().isPluginEnabled(plugin);
+        return Bukkit.getPluginManager().getPlugin(plugin) != null
+                && Bukkit.getPluginManager().isPluginEnabled(plugin);
     }
 }

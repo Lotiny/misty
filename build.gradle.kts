@@ -3,20 +3,23 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
-    //Java plugin
+    // Java plugin
     id("java-library")
 
-    //Fairy framework plugin
+    // Fairy framework plugin
     id("io.fairyproject") version "0.8.4b1-SNAPSHOT" apply false
 
     // Dependency management plugin
     id("io.spring.dependency-management") version "1.1.0"
 
-    //Shadow plugin, provides the ability to shade fairy and other dependencies to compiled jar
+    // Shadow plugin, provides the ability to shade fairy and other dependencies to compiled jar
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
 
-    // Lombok
+    // Lombok plugin
     id("io.freefair.lombok") version "9.1.0" apply false
+
+    // Spotless plugin
+    id("com.diffplug.spotless") version "8.2.1"
 }
 
 allprojects {
@@ -47,11 +50,12 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "com.github.johnrengelman.shadow")
     apply(plugin = "io.freefair.lombok")
+    apply(plugin = "com.diffplug.spotless")
 
     // Configure dependencies
     dependencies {
-        compileOnlyApi("io.fairyproject:bukkit-platform")
         api("io.fairyproject:bukkit-bootstrap")
+        compileOnlyApi("io.fairyproject:bukkit-platform")
         compileOnlyApi("io.fairyproject:mc-animation")
         compileOnlyApi("io.fairyproject:bukkit-command")
         compileOnlyApi("io.fairyproject:bukkit-gui")
@@ -67,15 +71,29 @@ subprojects {
         compileOnlyApi("io.fairyproject:mc-tablist")
     }
 
+    // Spotless configuration
+    spotless {
+        java {
+            palantirJavaFormat()
+
+            formatAnnotations()
+            removeUnusedImports()
+            importOrderFile(rootProject.file(".spotless/misty.importorder"))
+
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+    }
+
     // Configure ShadowJar task
     tasks.withType(ShadowJar::class) {
         archiveFileName.set("Misty-${properties("version")}.jar")
 
         // Relocate fairy to avoid plugin conflict
-        relocate("net.wesjd.anvilgui", "${properties("group")}.anvilgui")
         relocate("io.fairyproject.bootstrap", "${properties("group")}.fairy.bootstrap")
         relocate("io.fairyproject.bukkit.menu", "${properties("group")}.fairy.menu")
         relocate("io.fairyproject.bukkit.storage", "${properties("group")}.fairy.storage")
+        relocate("net.wesjd.anvilgui", "${properties("group")}.anvilgui")
         relocate("net.kyori", "io.fairyproject.libs.kyori")
         relocate("com.cryptomorin.xseries", "io.fairyproject.libs.xseries")
         relocate("org.yaml.snakeyaml", "io.fairyproject.libs.snakeyaml")

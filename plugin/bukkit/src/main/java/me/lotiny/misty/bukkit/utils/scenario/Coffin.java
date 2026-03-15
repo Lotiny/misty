@@ -14,7 +14,12 @@ import lombok.RequiredArgsConstructor;
 import me.lotiny.misty.api.scenario.ScenarioManager;
 import me.lotiny.misty.bukkit.scenario.impl.SafelootScenario;
 import me.lotiny.misty.bukkit.scenario.impl.TimebombScenario;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.GoldenHead;
+import me.lotiny.misty.bukkit.utils.Message;
+import me.lotiny.misty.bukkit.utils.PlayerUtils;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
+import me.lotiny.misty.bukkit.utils.Utilities;
+import me.lotiny.misty.bukkit.utils.VersionUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -50,14 +55,14 @@ public class Coffin {
         }
 
         Block anotherChest;
-        int totalSlot = armors.length + items.length + scenarioManager.getDroppedItems().size() + 1;
+        int totalSlot =
+                armors.length + items.length + scenarioManager.getDroppedItems().size() + 1;
         if (totalSlot > 27) {
             anotherChest = chest.getRelative(BlockFace.EAST);
             anotherChest.setType(Material.CHEST);
             anotherChest.getRelative(BlockFace.UP).setType(Material.AIR);
             if (VersionUtils.isHigher(21, 0)) {
-                new DoubleChestConnector(chest, anotherChest)
-                        .connect();
+                new DoubleChestConnector(chest, anotherChest).connect();
             }
 
             Metadata.provideForBlock(anotherChest).put(TimebombScenario.CHEST_KEY, anotherChest.getLocation());
@@ -93,36 +98,39 @@ public class Coffin {
         hologramLocation.setYaw(-180);
         hologramLocation.setPitch(0);
 
-
         Position hologramPos = BukkitPos.toMCPos(hologramLocation);
         Hologram hologram = Hologram.create(hologramPos)
                 .line(HologramLine.create(Component.text("30...", NamedTextColor.GREEN)))
                 .spawn();
-        ScheduledTask<String> schedule = MCSchedulers.getGlobalScheduler().scheduleAtFixedRate(() -> {
-            --time;
+        ScheduledTask<String> schedule = MCSchedulers.getGlobalScheduler()
+                .scheduleAtFixedRate(
+                        () -> {
+                            --time;
 
-            if (time == 0) {
-                return TaskResponse.success(victim.getName());
-            }
+                            if (time == 0) {
+                                return TaskResponse.success(victim.getName());
+                            }
 
-            TextColor color;
-            if (time <= 5) {
-                XSound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON.play(hologramLocation);
-                color = NamedTextColor.DARK_RED;
-            } else if (time <= 10) {
-                color = NamedTextColor.RED;
-            } else if (time <= 15) {
-                color = NamedTextColor.GOLD;
-            } else if (time <= 20) {
-                color = NamedTextColor.YELLOW;
-            } else {
-                color = NamedTextColor.GREEN;
-            }
+                            TextColor color;
+                            if (time <= 5) {
+                                XSound.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON.play(hologramLocation);
+                                color = NamedTextColor.DARK_RED;
+                            } else if (time <= 10) {
+                                color = NamedTextColor.RED;
+                            } else if (time <= 15) {
+                                color = NamedTextColor.GOLD;
+                            } else if (time <= 20) {
+                                color = NamedTextColor.YELLOW;
+                            } else {
+                                color = NamedTextColor.GREEN;
+                            }
 
-            hologram.line(0, HologramLine.create(Component.text(time + "...", color)));
+                            hologram.line(0, HologramLine.create(Component.text(time + "...", color)));
 
-            return TaskResponse.continueTask();
-        }, 0L, 20L);
+                            return TaskResponse.continueTask();
+                        },
+                        0L,
+                        20L);
 
         schedule.getFuture().whenComplete((s, throwable) -> {
             delete(chest);
@@ -132,8 +140,7 @@ public class Coffin {
 
             hologram.remove();
             PlayerUtils.playSound(chest.getLocation(), XSound.ENTITY_GENERIC_EXPLODE);
-            Utilities.broadcast(Message.TIMEBOMB_EXPLODE
-                    .replace("<player>", s));
+            Utilities.broadcast(Message.TIMEBOMB_EXPLODE.replace("<player>", s));
         });
     }
 

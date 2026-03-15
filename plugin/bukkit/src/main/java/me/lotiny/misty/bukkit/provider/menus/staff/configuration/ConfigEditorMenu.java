@@ -32,8 +32,10 @@ public class ConfigEditorMenu extends MistyMenu {
     private static final int SLOT_RENAME = 10;
     private static final int SLOT_DEFAULT = 13;
     private static final int SLOT_DELETE = 16;
+
     @Autowired
     private static GameManager gameManager;
+
     private final GameSetting setting;
 
     @Override
@@ -61,11 +63,7 @@ public class ConfigEditorMenu extends MistyMenu {
         return MenuItem.of(
                 ItemBuilder.of(XMaterial.NAME_TAG)
                         .name("&6Rename")
-                        .lore(
-                                " ",
-                                "&7Click to rename this config.",
-                                " "
-                        )
+                        .lore(" ", "&7Click to rename this config.", " ")
                         .build(),
                 (player, clickType) -> {
                     if (!player.hasPermission(Permission.HOST_PERMISSION)) return;
@@ -78,8 +76,7 @@ public class ConfigEditorMenu extends MistyMenu {
                             .text("Enter Config Name")
                             .plugin(BukkitPlugin.INSTANCE)
                             .open(player);
-                }
-        );
+                });
     }
 
     private void handleRename(Player player, String name) {
@@ -88,14 +85,11 @@ public class ConfigEditorMenu extends MistyMenu {
         setting.setConfigName(name);
 
         UHCConfig config = Config.getUhcConfig();
-        config.getGameConfig()
-                .get(setting.getConfigId())
-                .setName(name);
+        config.getGameConfig().get(setting.getConfigId()).setName(name);
         config.save();
 
         PlayerUtils.playSound(player, XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
-        player.sendMessage(Message.CONFIG_EDIT_NAME
-                .replace("<name>", name));
+        player.sendMessage(Message.CONFIG_EDIT_NAME.replace("<name>", name));
     }
 
     private MenuItem buildDefaultButton() {
@@ -108,12 +102,14 @@ public class ConfigEditorMenu extends MistyMenu {
                                 "&7use as default config.",
                                 " ",
                                 "&fCurrently&7: " + (setting.isDef() ? "&aEnabled" : "&cDisabled"),
-                                " "
-                        ).build(),
+                                " ")
+                        .build(),
                 (player, clickType) -> {
                     if (!player.hasPermission(Permission.HOST_PERMISSION)) return;
                     if (setting.isDef()) {
-                        player.sendMessage(CC.RED + "You have to set other configuration to the default config, and this will no longer be the default config.");
+                        player.sendMessage(
+                                CC.RED
+                                        + "You have to set other configuration to the default config, and this will no longer be the default config.");
                         return;
                     }
 
@@ -129,19 +125,14 @@ public class ConfigEditorMenu extends MistyMenu {
 
                     playClick(player);
                     open(player);
-                }
-        );
+                });
     }
 
     private MenuItem buildDeleteButton() {
         return MenuItem.of(
                 ItemBuilder.of(XMaterial.REDSTONE)
                         .name("&cDelete Config")
-                        .lore(
-                                " ",
-                                "&7Shift-Click to delete this config.",
-                                " "
-                        )
+                        .lore(" ", "&7Shift-Click to delete this config.", " ")
                         .build(),
                 (player, clickType) -> {
                     if (!player.hasPermission(Permission.HOST_PERMISSION) || !clickType.isShiftClick()) return;
@@ -150,7 +141,6 @@ public class ConfigEditorMenu extends MistyMenu {
                         playClick(player);
                         player.closeInventory();
                     }
-                }
-        );
+                });
     }
 }

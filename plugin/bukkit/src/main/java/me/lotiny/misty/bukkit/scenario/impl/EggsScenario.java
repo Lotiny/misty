@@ -6,7 +6,11 @@ import io.fairyproject.bukkit.util.items.ItemBuilder;
 import me.lotiny.misty.api.scenario.Scenario;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -29,8 +33,7 @@ public class EggsScenario extends Scenario {
                 .lore(
                         "&7When you throw an egg any mob/animal in the",
                         "&7game can come out of the egg. Chicken have",
-                        "&730% chance to drop an egg."
-                )
+                        "&730% chance to drop an egg.")
                 .build();
     }
 

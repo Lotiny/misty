@@ -21,9 +21,7 @@ public class NoFallScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.FEATHER)
                 .name("&b" + getName())
-                .lore(
-                        "&7Fall damage is disabled."
-                )
+                .lore("&7Fall damage is disabled.")
                 .build();
     }
 

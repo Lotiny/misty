@@ -23,8 +23,7 @@ public class SpeedDemonScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7When player get a kill they will get speed effect",
-                        "&7and get higher speed level when get another kill."
-                )
+                        "&7and get higher speed level when get another kill.")
                 .build();
     }
 

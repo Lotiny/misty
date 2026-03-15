@@ -18,7 +18,9 @@ import me.lotiny.misty.bukkit.utils.Message;
 
 @InjectableComponent
 @RequiredArgsConstructor
-@Command(value = {"uhchologram", "uhcholo", "uhcholograms"}, permissionNode = "misty.command.hologram")
+@Command(
+        value = {"uhchologram", "uhcholo", "uhcholograms"},
+        permissionNode = "misty.command.hologram")
 @CommandPresence(MistyPresenceProvider.class)
 public class HologramCommand extends AbstractCommand {
 
@@ -31,14 +33,15 @@ public class HologramCommand extends AbstractCommand {
                 CC.CHAT_BAR,
                 "&b/uhcholo create <leaderboard> &7- &fCreate a leaderboard hologram",
                 "&b/uhcholo delete <leaderboard> &7- &fDelete a leaderboard hologram",
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 
     @Command("create")
     public void onCreate(BukkitCommandContext context, @Arg("leaderboard") Leaderboard leaderboard) {
         mustBePlayer(context, player -> {
-            storageRegistry.getLeaderboardHologramStorage().getAsync(leaderboard.getStatType().getData())
+            storageRegistry
+                    .getLeaderboardHologramStorage()
+                    .getAsync(leaderboard.getStatType().getData())
                     .thenAccept(hologram -> {
                         if (hologram.getHologram() != null) {
                             hologram.move(player.getLocation());
@@ -47,20 +50,20 @@ public class HologramCommand extends AbstractCommand {
                         hologram.spawn();
                     });
 
-            player.sendMessage(Message.HOLOGRAM_CREATE
-                    .replace("<type>", leaderboard.getDisplayName()));
+            player.sendMessage(Message.HOLOGRAM_CREATE.replace("<type>", leaderboard.getDisplayName()));
         });
     }
 
     @Command("delete")
     public void onDelete(BukkitCommandContext context, @Arg("leaderboard") Leaderboard leaderboard) {
         mustBePlayer(context, player -> {
-            LeaderboardHologram hologram = storageRegistry.getLeaderboardHologramStorage().get(leaderboard.getStatType().getData());
+            LeaderboardHologram hologram = storageRegistry
+                    .getLeaderboardHologramStorage()
+                    .get(leaderboard.getStatType().getData());
             storageRegistry.getLeaderboardHologramStorage().delete(hologram);
             hologram.remove();
 
-            player.sendMessage(Message.HOLOGRAM_DELETE
-                    .replace("<type>", leaderboard.getDisplayName()));
+            player.sendMessage(Message.HOLOGRAM_DELETE.replace("<type>", leaderboard.getDisplayName()));
         });
     }
 }

@@ -29,10 +29,7 @@ public class AbsorptionPartnerScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.GOLDEN_CARROT)
                 .name("&b" + getName())
-                .lore(
-                        "&7Whenever you eat a golden apple, your teammate",
-                        "&7will gain an absorption heart."
-                )
+                .lore("&7Whenever you eat a golden apple, your teammate", "&7will gain an absorption heart.")
                 .build();
     }
 

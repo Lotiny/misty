@@ -27,7 +27,11 @@ import me.lotiny.misty.bukkit.manager.PracticeManager;
 import me.lotiny.misty.bukkit.provider.hotbar.HotBar;
 import me.lotiny.misty.bukkit.storage.StorageRegistry;
 import me.lotiny.misty.bukkit.task.StartTask;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.GoldenHead;
+import me.lotiny.misty.bukkit.utils.LocationEx;
+import me.lotiny.misty.bukkit.utils.PlayerUtils;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
+import me.lotiny.misty.bukkit.utils.VersionUtils;
 import me.lotiny.misty.shared.event.PlayerPickupItemEvent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -77,10 +81,7 @@ public class PlayerListener {
         this.autoStartTime = config.getAutoStart().getTimer();
         this.minPlayers = config.getAutoStart().getMinPlayers();
 
-        this.eventNode = EventNode.type(
-                "player-listeners",
-                BukkitEventFilter.ALL
-        );
+        this.eventNode = EventNode.type("player-listeners", BukkitEventFilter.ALL);
 
         EventListener<PlayerJoinEvent> playerJoinListener = EventListener.builder(PlayerJoinEvent.class)
                 .expireWhen(event -> gameManager.getRegistry().getState() == GameState.INGAME)
@@ -88,7 +89,9 @@ public class PlayerListener {
                     Player player = event.getPlayer();
                     UUID uuid = player.getUniqueId();
 
-                    storageRegistry.getProfileStorage().getAsync(uuid.toString())
+                    storageRegistry
+                            .getProfileStorage()
+                            .getAsync(uuid.toString())
                             .thenAccept(profile -> profile.setName(player.getName()));
 
                     event.setJoinMessage(null);
@@ -102,7 +105,9 @@ public class PlayerListener {
                     handleJoinMessage(player);
                     HotBar.get().apply(player);
 
-                    if (autoStart && registry.getStartTask() == null && registry.getPlayers().size() >= minPlayers) {
+                    if (autoStart
+                            && registry.getStartTask() == null
+                            && registry.getPlayers().size() >= minPlayers) {
                         if (autoStartTime <= 60 && practiceManager.isOpened()) {
                             practiceManager.setOpened(false, Bukkit.getConsoleSender());
                         }
@@ -197,7 +202,8 @@ public class PlayerListener {
 
         eventNode.addListener(playerDamageEvent);
 
-        EventListener<PlayerDamageByPlayerEvent> playerDamageByPlayerEvent = EventListener.builder(PlayerDamageByPlayerEvent.class)
+        EventListener<PlayerDamageByPlayerEvent> playerDamageByPlayerEvent = EventListener.builder(
+                        PlayerDamageByPlayerEvent.class)
                 .expireWhen(event -> gameManager.getRegistry().getState() == GameState.INGAME)
                 .handler(event -> {
                     Player player = event.getPlayer();
@@ -243,7 +249,8 @@ public class PlayerListener {
 
                     event.setDeathMessage(null);
 
-                    MCSchedulers.getGlobalScheduler().schedule(() -> player.spigot().respawn(), 5L);
+                    MCSchedulers.getGlobalScheduler()
+                            .schedule(() -> player.spigot().respawn(), 5L);
                 })
                 .build();
 
@@ -260,7 +267,8 @@ public class PlayerListener {
                     practiceManager.getPlayers().remove(player.getUniqueId());
                     event.setRespawnLocation(LocationEx.LOBBY.getLocation());
 
-                    MCSchedulers.getGlobalScheduler().schedule(() -> HotBar.get().apply(player), 5L);
+                    MCSchedulers.getGlobalScheduler()
+                            .schedule(() -> HotBar.get().apply(player), 5L);
                 })
                 .build();
 
@@ -284,10 +292,16 @@ public class PlayerListener {
                             Placeholder.parsed("player", player.getName()),
                             Placeholder.parsed("host", gameManager.getRegistry().getHostName()),
                             Placeholder.parsed("version", VersionUtils.getPluginVersion()),
-                            Placeholder.parsed("border", String.valueOf(gameManager.getGame().getSetting().getBorderSize())),
+                            Placeholder.parsed(
+                                    "border",
+                                    String.valueOf(
+                                            gameManager.getGame().getSetting().getBorderSize())),
                             Placeholder.parsed("type", UHCUtils.getGameType()),
-                            Placeholder.parsed("scenario", Arrays.toString(scenarios.toArray()).replace("[", "").replace("]", ""))
-                    )
+                            Placeholder.parsed(
+                                    "scenario",
+                                    Arrays.toString(scenarios.toArray())
+                                            .replace("[", "")
+                                            .replace("]", "")))
                     .build();
 
             joinMessage.forEach(message -> {

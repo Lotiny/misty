@@ -51,8 +51,7 @@ public final class ScenarioConfig extends BaseConfig {
             new Homework(XMaterial.STONE, 8, 64),
             new Homework(XMaterial.SUGAR, 1, 32),
             new Homework(XMaterial.CLOCK, 1, 3),
-            new Homework(XMaterial.DIAMOND, 1, 4)
-    );
+            new Homework(XMaterial.DIAMOND, 1, 4));
 
     @Getter
     @Configuration
@@ -62,12 +61,12 @@ public final class ScenarioConfig extends BaseConfig {
         private int chance = 10;
 
         @Comment({
-                "A weighted table of brewing ingredients and their relative drop chances.",
-                "The values represent weights, not exact percentages — higher numbers = more likely.",
-                "For example, with the defaults:",
-                "- NETHER_WART has weight 20 → highest chance to drop.",
-                "- SUGAR_CANE has weight 5 → lower chance to drop.",
-                "All weights are summed, and the probability is calculated proportionally."
+            "A weighted table of brewing ingredients and their relative drop chances.",
+            "The values represent weights, not exact percentages — higher numbers = more likely.",
+            "For example, with the defaults:",
+            "- NETHER_WART has weight 20 → highest chance to drop.",
+            "- SUGAR_CANE has weight 5 → lower chance to drop.",
+            "All weights are summed, and the probability is calculated proportionally."
         })
         private Map<XMaterial, Integer> ingredients = Map.of(
                 XMaterial.BLAZE_ROD, 15,
@@ -77,8 +76,7 @@ public final class ScenarioConfig extends BaseConfig {
                 XMaterial.GLASS_BOTTLE, 10,
                 XMaterial.BREWING_STAND, 10,
                 XMaterial.GUNPOWDER, 10,
-                XMaterial.NETHER_WART, 20
-        );
+                XMaterial.NETHER_WART, 20);
     }
 
     @Getter
@@ -97,8 +95,8 @@ public final class ScenarioConfig extends BaseConfig {
     public static class FlowerPower {
 
         @Comment({
-                "The amount of experience points given when Flower Power drops.",
-                "0 = no experience, 1 = 1 XP, 2 = 2 XP, etc."
+            "The amount of experience points given when Flower Power drops.",
+            "0 = no experience, 1 = 1 XP, 2 = 2 XP, etc."
         })
         private int expDrop = 1;
 
@@ -106,8 +104,8 @@ public final class ScenarioConfig extends BaseConfig {
         private int maxDrop = 64;
 
         @Comment({
-                "Items that are not allowed to be dropped by Flower Power.",
-                "You can also list individual items using their Material name."
+            "Items that are not allowed to be dropped by Flower Power.",
+            "You can also list individual items using their Material name."
         })
         private List<XMaterial> banned = createDefaultBannedList();
 

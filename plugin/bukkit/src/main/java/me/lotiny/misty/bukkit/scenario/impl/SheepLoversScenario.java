@@ -23,9 +23,7 @@ public class SheepLoversScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.SHEARS)
                 .name("&b" + getName())
-                .lore(
-                        "&7Shearing sheep have 5% chance to drop gold ingot."
-                )
+                .lore("&7Shearing sheep have 5% chance to drop gold ingot.")
                 .build();
     }
 
@@ -33,9 +31,9 @@ public class SheepLoversScenario extends Scenario {
     public void handleSheepShear(PlayerInteractAtEntityEvent event) {
         Player player = event.getPlayer();
 
-        if (event.getRightClicked() instanceof Sheep sheep &&
-                XMaterial.SHEARS.isSimilar(PlayerUtils.getItemInHand(player)) &&
-                !sheep.isSheared()) {
+        if (event.getRightClicked() instanceof Sheep sheep
+                && XMaterial.SHEARS.isSimilar(PlayerUtils.getItemInHand(player))
+                && !sheep.isSheared()) {
             if (Fairy.random().nextInt(100) < 5) {
                 UHCUtils.dropItem(sheep.getLocation(), XMaterial.GOLD_INGOT.parseItem());
             }

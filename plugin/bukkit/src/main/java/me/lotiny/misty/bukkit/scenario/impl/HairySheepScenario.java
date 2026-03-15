@@ -21,10 +21,7 @@ public class HairySheepScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.STRING)
                 .name("&b" + getName())
-                .lore(
-                        "&7Sheep will always drop string when sheared",
-                        "&7or died if they didn't sheared."
-                )
+                .lore("&7Sheep will always drop string when sheared", "&7or died if they didn't sheared.")
                 .build();
     }
 

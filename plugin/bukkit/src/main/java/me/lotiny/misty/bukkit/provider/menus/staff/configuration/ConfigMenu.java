@@ -39,8 +39,10 @@ public class ConfigMenu extends MistyPaginatedMenu {
     private static final String VALUE_SEPARATOR = "&7: &f";
     private static final int SLOT_HOST = 4;
     private static final int SLOT_SCENARIOS = 40;
+
     @Autowired
     private static GameManager gameManager;
+
     private final GameSetting setting;
 
     @Override
@@ -68,15 +70,12 @@ public class ConfigMenu extends MistyPaginatedMenu {
 
         for (PotionConfig potion : PotionConfig.values()) {
             boolean current = potion.getCurrent(setting);
-            buttons.add(MenuItem.of(
-                    buildPotionConfigItem(potion, current),
-                    (clickedPlayer, clickType) -> {
-                        if (!player.hasPermission(Permission.HOST_PERMISSION)) return;
-                        setting.setConfig(potion.getConfigType(), !potion.getCurrent(setting), player);
-                        playClick(clickedPlayer);
-                        open(player);
-                    })
-            );
+            buttons.add(MenuItem.of(buildPotionConfigItem(potion, current), (clickedPlayer, clickType) -> {
+                if (!player.hasPermission(Permission.HOST_PERMISSION)) return;
+                setting.setConfig(potion.getConfigType(), !potion.getCurrent(setting), player);
+                playClick(clickedPlayer);
+                open(player);
+            }));
         }
 
         return buttons;
@@ -85,24 +84,29 @@ public class ConfigMenu extends MistyPaginatedMenu {
     @Override
     public Map<Integer, MenuItem> getBorderButtons(Player player, NormalPane topPane, NormalPane bottomPane, Gui gui) {
         return Map.of(
-                SLOT_HOST, MenuItem.of(
-                        ItemBuilder.of(Utilities.createSkull("http://textures.minecraft.net/texture/5a559548dacceefb14ee938de2cd76a3d0c23ce053041bf48780088dda6d4c18"))
-                                .name(gameManager.getRegistry().getHost() == null ?
-                                        "&eHost &cTBD" :
-                                        "&eHost &f" + gameManager.getRegistry().getHost().getName())
+                SLOT_HOST,
+                        MenuItem.of(ItemBuilder.of(
+                                        Utilities.createSkull(
+                                                "http://textures.minecraft.net/texture/5a559548dacceefb14ee938de2cd76a3d0c23ce053041bf48780088dda6d4c18"))
+                                .name(
+                                        gameManager.getRegistry().getHost() == null
+                                                ? "&eHost &cTBD"
+                                                : "&eHost &f"
+                                                        + gameManager
+                                                                .getRegistry()
+                                                                .getHost()
+                                                                .getName())
                                 .lore(new ArrayList<>())
-                                .build()
-                ),
-                SLOT_SCENARIOS, MenuItem.of(
-                        ItemBuilder.of(XMaterial.BOOK)
-                                .name("&2Scenarios")
-                                .build(),
-                        (clickedPlayer, clickType) -> {
-                            new ScenariosMenu().open(clickedPlayer);
-                            playClick(clickedPlayer);
-                        }
-                )
-        );
+                                .build()),
+                SLOT_SCENARIOS,
+                        MenuItem.of(
+                                ItemBuilder.of(XMaterial.BOOK)
+                                        .name("&2Scenarios")
+                                        .build(),
+                                (clickedPlayer, clickType) -> {
+                                    new ScenariosMenu().open(clickedPlayer);
+                                    playClick(clickedPlayer);
+                                }));
     }
 
     private MenuItem buildTeamSizeButton() {
@@ -120,8 +124,7 @@ public class ConfigMenu extends MistyPaginatedMenu {
 
                     new ConfigChangeMenu(configType, setting.getTeamSize()).open(player);
                     playClick(player);
-                })
-        );
+                }));
     }
 
     private MenuItem buildBorderButton() {
@@ -133,8 +136,7 @@ public class ConfigMenu extends MistyPaginatedMenu {
                     if (!player.hasPermission(Permission.HOST_PERMISSION)) return;
                     new BorderSizeMenu().open(player);
                     playClick(player);
-                }
-        );
+                });
     }
 
     private MenuItem buildConfigButton(ConfigType configType, Object value) {
@@ -157,8 +159,7 @@ public class ConfigMenu extends MistyPaginatedMenu {
                     }
 
                     playClick(player);
-                })
-        );
+                }));
     }
 
     private ItemStack buildPotionConfigItem(PotionConfig potion, boolean config) {
@@ -186,7 +187,6 @@ public class ConfigMenu extends MistyPaginatedMenu {
 
     @RequiredArgsConstructor
     private enum PotionConfig {
-
         SPEED_1(8194, XPotion.SPEED, "Speed 1", ConfigType.SPEED_1, GameSetting::isSpeed1),
         SPEED_2(8226, XPotion.SPEED, "Speed 2", ConfigType.SPEED_2, GameSetting::isSpeed2),
         STRENGTH_1(8201, XPotion.STRENGTH, "Strength 1", ConfigType.STRENGTH_1, GameSetting::isStrength1),
@@ -196,12 +196,16 @@ public class ConfigMenu extends MistyPaginatedMenu {
 
         @Getter
         private final int legacyData;
+
         @Getter
         private final XPotion potion;
+
         @Getter
         private final String name;
+
         @Getter
         private final ConfigType configType;
+
         private final Function<GameSetting, Boolean> valueExtractor;
 
         public boolean getCurrent(GameSetting setting) {

@@ -26,10 +26,7 @@ public class WebcageScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.COBWEB)
                 .name("&b" + getName())
-                .lore(
-                        "&7Whenever a player dies, a sphere of cobwebs",
-                        "&7will spawn on where the player has died."
-                )
+                .lore("&7Whenever a player dies, a sphere of cobwebs", "&7will spawn on where the player has died.")
                 .build();
     }
 

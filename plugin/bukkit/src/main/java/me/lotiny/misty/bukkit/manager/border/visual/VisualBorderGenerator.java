@@ -24,7 +24,9 @@ public class VisualBorderGenerator implements VisualBlockGenerator {
     private final BorderProvider overworldBorderProvider, netherBorderProvider;
 
     public VisualBorderGenerator() {
-        this.borderVisualType = MaterialVisualType.builder().material(borderManager.getVisualBorderBlock()).build();
+        this.borderVisualType = MaterialVisualType.builder()
+                .material(borderManager.getVisualBorderBlock())
+                .build();
         this.overworldBorderProvider = new OverworldBorderProvider();
         this.netherBorderProvider = new NetherBorderProvider();
     }
@@ -34,9 +36,8 @@ public class VisualBorderGenerator implements VisualBlockGenerator {
         World world = location.getWorld();
         if (world == null) return;
 
-        BorderProvider borderProvider = world.getEnvironment() == World.Environment.NETHER
-                ? netherBorderProvider
-                : overworldBorderProvider;
+        BorderProvider borderProvider =
+                world.getEnvironment() == World.Environment.NETHER ? netherBorderProvider : overworldBorderProvider;
 
         int minX = borderProvider.getMinX();
         int maxX = borderProvider.getMaxX();
@@ -66,7 +67,15 @@ public class VisualBorderGenerator implements VisualBlockGenerator {
         }
     }
 
-    private void generateBorderLine(Collection<VisualPosition> positions, World world, int fixedX, int baseY, int fixedZ, int min, int max, boolean isXAxis) {
+    private void generateBorderLine(
+            Collection<VisualPosition> positions,
+            World world,
+            int fixedX,
+            int baseY,
+            int fixedZ,
+            int min,
+            int max,
+            boolean isXAxis) {
         int verticalRange = 5;
 
         for (int yOffset = -verticalRange; yOffset <= verticalRange; yOffset++) {
@@ -78,8 +87,7 @@ public class VisualBorderGenerator implements VisualBlockGenerator {
                     int z = isXAxis ? variableCoord : fixedZ;
                     int y = baseY + yOffset;
 
-                    positions.add(new VisualPosition(x, y, z,
-                            world.getName(), borderVisualType));
+                    positions.add(new VisualPosition(x, y, z, world.getName(), borderVisualType));
                 }
             }
         }

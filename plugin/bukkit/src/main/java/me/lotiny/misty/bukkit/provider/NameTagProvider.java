@@ -27,8 +27,10 @@ public class NameTagProvider extends NameTagAdapter {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static RankManager rankManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
 
@@ -52,7 +54,8 @@ public class NameTagProvider extends NameTagAdapter {
         Team team = UHCUtils.getTeam(targetPlayer);
 
         if (isTeamGame && team != null && !scenarioManager.isEnabled("Red vs Blue")) {
-            prefix = Config.getMainConfig().getNameTag().getTeamPrefix().replace("<team>", String.valueOf(team.getId()));
+            prefix =
+                    Config.getMainConfig().getNameTag().getTeamPrefix().replace("<team>", String.valueOf(team.getId()));
         } else if (VersionUtils.is(8, 8)) {
             prefix = " ";
         }

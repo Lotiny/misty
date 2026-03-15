@@ -19,10 +19,7 @@ public class KillSwitchScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.STONE_SWORD)
                 .name("&b" + getName())
-                .lore(
-                        "&7Everytime you get a kill your inventory",
-                        "&7will switched with victim's inventory"
-                )
+                .lore("&7Everytime you get a kill your inventory", "&7will switched with victim's inventory")
                 .build();
     }
 

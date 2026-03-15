@@ -70,43 +70,43 @@ public class InspectMenu extends MistyMenu {
             putIfNotNull(buttons, SLOT_OFFHAND, inventory.getItem(EquipmentSlot.OFF_HAND));
         }
 
-        buttons.put(SLOT_POTIONS, MenuItem.of(
-                ItemBuilder.of(XMaterial.BLAZE_POWDER)
+        buttons.put(
+                SLOT_POTIONS,
+                MenuItem.of(ItemBuilder.of(XMaterial.BLAZE_POWDER)
                         .name("&aActive Potions")
                         .lore(
                                 target.getActivePotionEffects().isEmpty()
                                         ? List.of("&cPlayer doesn't have any", "&cpotion effects")
                                         : target.getActivePotionEffects().stream()
-                                        .map(effect -> XPotion.of(effect.getType()).friendlyName()
-                                                + " " + (effect.getAmplifier() + 1)
-                                                + " &7(&b" + formatDuration(effect.getDuration()) + "&7)")
-                                        .collect(Collectors.toList())
-                        )
-                        .build()
-        ));
+                                                .map(effect -> XPotion.of(effect.getType())
+                                                                .friendlyName()
+                                                        + " " + (effect.getAmplifier() + 1)
+                                                        + " &7(&b" + formatDuration(effect.getDuration()) + "&7)")
+                                                .collect(Collectors.toList()))
+                        .build()));
 
-        buttons.put(SLOT_LEVEL, MenuItem.of(
-                ItemBuilder.of(target.getLevel() == 0 ? XMaterial.GLASS_BOTTLE : XMaterial.EXPERIENCE_BOTTLE)
-                        .amount(getItemAmount(target.getLevel()))
-                        .name("&bLevel &f" + target.getLevel())
-                        .build()
-        ));
+        buttons.put(
+                SLOT_LEVEL,
+                MenuItem.of(
+                        ItemBuilder.of(target.getLevel() == 0 ? XMaterial.GLASS_BOTTLE : XMaterial.EXPERIENCE_BOTTLE)
+                                .amount(getItemAmount(target.getLevel()))
+                                .name("&bLevel &f" + target.getLevel())
+                                .build()));
 
-        buttons.put(SLOT_HEALTH, MenuItem.of(
-                ItemBuilder.of(XMaterial.GLISTERING_MELON_SLICE)
+        buttons.put(
+                SLOT_HEALTH,
+                MenuItem.of(ItemBuilder.of(XMaterial.GLISTERING_MELON_SLICE)
                         .amount(getItemAmount((int) Math.round(target.getHealth())))
-                        .name(String.format("&aHealth &f%.1f/%.0f",
-                                target.getHealth(),
-                                PlayerUtils.getMaxHealth(target)))
-                        .build()
-        ));
+                        .name(String.format(
+                                "&aHealth &f%.1f/%.0f", target.getHealth(), PlayerUtils.getMaxHealth(target)))
+                        .build()));
 
-        buttons.put(SLOT_FOOD, MenuItem.of(
-                ItemBuilder.of(XMaterial.COOKED_BEEF)
+        buttons.put(
+                SLOT_FOOD,
+                MenuItem.of(ItemBuilder.of(XMaterial.COOKED_BEEF)
                         .name("&6Food &f" + target.getFoodLevel() + "/20")
                         .lore("&7Saturation: &f" + target.getSaturation())
-                        .build()
-        ));
+                        .build()));
 
         return buttons;
     }

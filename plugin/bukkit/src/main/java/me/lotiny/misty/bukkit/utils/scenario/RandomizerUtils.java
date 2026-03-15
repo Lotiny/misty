@@ -18,7 +18,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @InjectableComponent
@@ -69,8 +75,8 @@ public class RandomizerUtils {
             for (int i = 0; i < lootTableHelper.getLootTables().size(); i++) {
                 XMaterial xMaterial = materials.removeFirst();
 
-                if (!xMaterial.isSupported() || pluginHookManager.isLegacySupport() && MaterialUtils.isModern(xMaterial))
-                    continue;
+                if (!xMaterial.isSupported()
+                        || pluginHookManager.isLegacySupport() && MaterialUtils.isModern(xMaterial)) continue;
 
                 Material material = xMaterial.get();
                 if (material == null || !material.isBlock()) continue;

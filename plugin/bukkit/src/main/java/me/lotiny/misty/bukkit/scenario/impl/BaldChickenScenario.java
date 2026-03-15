@@ -22,8 +22,7 @@ public class BaldChickenScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7Chickens do not drop feathers, instead skeletons",
-                        "&7will always drop 3 arrows upon their death."
-                )
+                        "&7will always drop 3 arrows upon their death.")
                 .build();
     }
 

@@ -43,7 +43,7 @@ dependencies {
     // HikariCP dependency
     compileOnly("com.zaxxer:HikariCP:7.0.2")
     // Apollo dependency
-    compileOnly("com.lunarclient:apollo-api:1.2.1")
+    compileOnly("com.lunarclient:apollo-api:1.2.3")
     // SLF4J dependency
     compileOnly("org.slf4j:slf4j-api:2.0.17")
     compileOnly("org.slf4j:slf4j-jdk14:2.0.17")

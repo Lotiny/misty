@@ -50,10 +50,9 @@ public class KitMenu extends MistyPaginatedMenu {
                                     " ",
                                     "&7Click to preview the kit.",
                                     "&7Shift-click to delete the kit.",
-                                    CC.MENU_BAR
-                            )
-                            .build()
-                    , (clickedPlayer, clickType) -> {
+                                    CC.MENU_BAR)
+                            .build(),
+                    (clickedPlayer, clickType) -> {
                         if (clickType.isShiftClick()) {
                             kitManager.getKits().remove(id);
                             clickedPlayer.sendMessage(CC.translate("&cRemoved Kit #" + id));
@@ -63,8 +62,7 @@ public class KitMenu extends MistyPaginatedMenu {
                             clickedPlayer.getInventory().setContents(kit.getItems());
                             clickedPlayer.sendMessage(CC.translate("&aSet your items to Kit #" + id));
                         }
-                    }
-            ));
+                    }));
         });
 
         return buttons;
@@ -73,17 +71,18 @@ public class KitMenu extends MistyPaginatedMenu {
     @Override
     public Map<Integer, MenuItem> getBorderButtons(Player player, NormalPane topPane, NormalPane bottomPane, Gui gui) {
         return Map.of(
-                39, MenuItem.of(
+                39,
+                MenuItem.of(
                         ItemBuilder.of(XMaterial.EMERALD_BLOCK)
                                 .name("&aCreate Kit")
-                                .build()
-                        , (clickedPlayer, clickPlayer) -> {
+                                .build(),
+                        (clickedPlayer, clickPlayer) -> {
                             int id = kitManager.findAvailableId(kitManager.getKits());
-                            Kit kit = new Kit(clickedPlayer.getInventory().getArmorContents(), clickedPlayer.getInventory().getContents());
+                            Kit kit = new Kit(
+                                    clickedPlayer.getInventory().getArmorContents(),
+                                    clickedPlayer.getInventory().getContents());
                             kitManager.getKits().put(id, kit);
                             clickedPlayer.sendMessage(CC.translate("&aSuccessfully created a new Kit #" + id));
-                        }
-                )
-        );
+                        }));
     }
 }

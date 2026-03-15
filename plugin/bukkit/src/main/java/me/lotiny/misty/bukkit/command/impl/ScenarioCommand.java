@@ -26,7 +26,9 @@ public class ScenarioCommand extends AbstractCommand {
         mustBePlayer(bukkitContext, player -> new ScenariosMenu().open(player));
     }
 
-    @Command(value = {"admin", "list"}, permissionNode = "misty.command.scenario")
+    @Command(
+            value = {"admin", "list"},
+            permissionNode = "misty.command.scenario")
     public void onList(BukkitCommandContext context) {
         mustBePlayer(context, player -> new ScenariosAdminMenu().open(player));
     }

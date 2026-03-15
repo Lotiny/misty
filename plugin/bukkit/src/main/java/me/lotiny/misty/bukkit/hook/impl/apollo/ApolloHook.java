@@ -14,7 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -37,7 +37,8 @@ public class ApolloHook implements PluginHook {
                 .map(this::createTeamMember)
                 .collect(Collectors.toList());
 
-        team.getMembers(true).forEach(uuid -> Apollo.getPlayerManager().getPlayer(uuid)
+        team.getMembers(true).forEach(uuid -> Apollo.getPlayerManager()
+                .getPlayer(uuid)
                 .ifPresent(apolloPlayer -> teamModule.updateTeamMembers(apolloPlayer, teammates)));
     }
 

@@ -29,9 +29,7 @@ public class LoveAtFirstSightScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.ROSE_BUSH)
                 .name("&b" + getName())
-                .lore(
-                        "&7The first person you right-click to will be your teammate!"
-                )
+                .lore("&7The first person you right-click to will be your teammate!")
                 .build();
     }
 
@@ -43,8 +41,9 @@ public class LoveAtFirstSightScenario extends Scenario {
             Team playerTeam = UHCUtils.getTeam(player);
             Team targetTeam = UHCUtils.getTeam(target);
 
-            if (!UHCUtils.isAlive(player.getUniqueId()) || !UHCUtils.isAlive(target.getUniqueId()) || playerTeam.getMembers(false).size() == 2)
-                return;
+            if (!UHCUtils.isAlive(player.getUniqueId())
+                    || !UHCUtils.isAlive(target.getUniqueId())
+                    || playerTeam.getMembers(false).size() == 2) return;
 
             if (targetTeam.getMembers(false).size() == 2) {
                 player.sendMessage(Message.LOVE_AT_FIRST_SIGHT_ALREADY_HAVE_TEAM);
@@ -53,10 +52,8 @@ public class LoveAtFirstSightScenario extends Scenario {
 
             teamManager.getTeams().remove(targetTeam.getId());
             playerTeam.addMember(target);
-            player.sendMessage(Message.LOVE_AT_FIRST_SIGHT_TEAM_WITH
-                    .replace("<player>", target.getName()));
-            target.sendMessage(Message.LOVE_AT_FIRST_SIGHT_TEAM_WITH
-                    .replace("<player>", player.getName()));
+            player.sendMessage(Message.LOVE_AT_FIRST_SIGHT_TEAM_WITH.replace("<player>", target.getName()));
+            target.sendMessage(Message.LOVE_AT_FIRST_SIGHT_TEAM_WITH.replace("<player>", player.getName()));
         }
     }
 }

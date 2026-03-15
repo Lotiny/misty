@@ -32,8 +32,10 @@ public class TeamManagerImpl implements TeamManager {
 
     @Getter
     private Map<Integer, Team> teams;
+
     @Getter
     private List<TeamInvitation> invitations;
+
     @Getter
     private TeamInvitationCooldown invitationCooldown;
 
@@ -45,8 +47,14 @@ public class TeamManagerImpl implements TeamManager {
         this.invitationCooldown = new TeamInvitationCooldown(30_000L, invitation -> {
             invitations.remove(invitation);
             if (!invitation.isFinished()) {
-                invitation.getInviter().sendMessage(CC.translate("&cThe team invite send to " + invitation.getInvited().getName() + " has been expired!"));
-                invitation.getInvited().sendMessage(CC.translate("&cThe team invite from " + invitation.getInviter().getName() + " has been expired!"));
+                invitation
+                        .getInviter()
+                        .sendMessage(CC.translate("&cThe team invite send to "
+                                + invitation.getInvited().getName() + " has been expired!"));
+                invitation
+                        .getInvited()
+                        .sendMessage(CC.translate("&cThe team invite from "
+                                + invitation.getInviter().getName() + " has been expired!"));
             }
         });
     }

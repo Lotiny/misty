@@ -18,8 +18,16 @@ import me.lotiny.misty.bukkit.Permission;
 import me.lotiny.misty.bukkit.manager.WorldManager;
 import me.lotiny.misty.bukkit.storage.StorageRegistry;
 import me.lotiny.misty.bukkit.task.GameTask;
-import me.lotiny.misty.bukkit.utils.*;
-import org.bukkit.*;
+import me.lotiny.misty.bukkit.utils.ItemStackUtils;
+import me.lotiny.misty.bukkit.utils.Message;
+import me.lotiny.misty.bukkit.utils.PlayerUtils;
+import me.lotiny.misty.bukkit.utils.ReflectionUtils;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,7 +40,11 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -41,8 +53,10 @@ public class GameListener implements Listener {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
+
     @Autowired
     private static WorldManager worldManager;
 
@@ -75,13 +89,14 @@ public class GameListener implements Listener {
         int level = ReflectionUtils.get().getPotionEffectLevel(item);
         GameSetting setting = gameManager.getGame().getSetting();
 
-        boolean shouldRemove = switch (xPotion) {
-            case SPEED -> (level == 1 && !setting.isSpeed1()) || (level == 2 && !setting.isSpeed2());
-            case STRENGTH -> (level == 1 && !setting.isStrength1()) || (level == 2 && !setting.isStrength2());
-            case POISON -> !setting.isPoison();
-            case INVISIBILITY -> !setting.isInvisible();
-            default -> false;
-        };
+        boolean shouldRemove =
+                switch (xPotion) {
+                    case SPEED -> (level == 1 && !setting.isSpeed1()) || (level == 2 && !setting.isSpeed2());
+                    case STRENGTH -> (level == 1 && !setting.isStrength1()) || (level == 2 && !setting.isStrength2());
+                    case POISON -> !setting.isPoison();
+                    case INVISIBILITY -> !setting.isInvisible();
+                    default -> false;
+                };
 
         if (shouldRemove) {
             event.setCancelled(true);
@@ -122,7 +137,9 @@ public class GameListener implements Listener {
     public void handleBlockPlaceEvent(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         GameRegistry registry = gameManager.getRegistry();
-        if (player.getGameMode() == GameMode.CREATIVE) return;
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
 
         if (!UHCUtils.isAlive(player.getUniqueId())) {
             event.setCancelled(true);
@@ -131,15 +148,20 @@ public class GameListener implements Listener {
 
         Block placedBlock = event.getBlockPlaced();
 
-        if (placedBlock.getType() != Material.FIRE) return;
+        if (placedBlock.getType() != Material.FIRE) {
+            return;
+        }
 
         if (!registry.isPvpEnabled()) {
             for (Entity entity : player.getNearbyEntities(5, 5, 5)) {
                 if (entity instanceof Player target) {
-                    if (!UHCUtils.isAlive(target.getUniqueId())) return;
+                    if (!UHCUtils.isAlive(target.getUniqueId())) {
+                        return;
+                    }
 
                     event.setCancelled(true);
-                    player.sendMessage(CC.translate("&cYou are not allowed to place or fire in grace period to prevent iPvP."));
+                    player.sendMessage(
+                            CC.translate("&cYou are not allowed to place or fire in grace period to prevent iPvP."));
                     UHCUtils.sendAlert("&c" + player.getName() + " try to iPvP " + target.getName() + "!");
                     return;
                 }
@@ -160,7 +182,8 @@ public class GameListener implements Listener {
                     if (!UHCUtils.isAlive(target.getUniqueId())) return;
 
                     event.setCancelled(true);
-                    player.sendMessage(CC.translate("&cYou are not allowed to place lava or fire in grace period to prevent iPvP."));
+                    player.sendMessage(CC.translate(
+                            "&cYou are not allowed to place lava or fire in grace period to prevent iPvP."));
                     UHCUtils.sendAlert("&c" + player.getName() + " try to iPvP " + target.getName() + "!");
                 }
             }
@@ -206,9 +229,9 @@ public class GameListener implements Listener {
             return;
         }
 
-        if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE &&
-                player.getHealth() - event.getFinalDamage() > 0.0D &&
-                event.getDamage() > 0) {
+        if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE
+                && player.getHealth() - event.getFinalDamage() > 0.0D
+                && event.getDamage() > 0) {
             damager.sendMessage(Message.HEALTH
                     .replace("<target>", player.getName())
                     .replace("<health>", String.valueOf(Math.round(player.getHealth()))));
@@ -270,7 +293,8 @@ public class GameListener implements Listener {
         int netherTime = setting.getNetherTime() * 60;
         if (gameTask != null && gameTask.getSeconds() < netherTime) {
             event.setCancelled(true);
-            player.sendMessage(CC.RED + "You can't access the nether before " + setting.getNetherTime() + " minute(s).");
+            player.sendMessage(
+                    CC.RED + "You can't access the nether before " + setting.getNetherTime() + " minute(s).");
             return;
         }
 
@@ -281,7 +305,12 @@ public class GameListener implements Listener {
         }
 
         if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) {
-            ReflectionUtils.get().handleNetherPortal(event, Bukkit.getWorld(uhcWorld), Bukkit.getWorld(uhcNether), worldManager.getNetherScale());
+            ReflectionUtils.get()
+                    .handleNetherPortal(
+                            event,
+                            Bukkit.getWorld(uhcWorld),
+                            Bukkit.getWorld(uhcNether),
+                            worldManager.getNetherScale());
         }
     }
 

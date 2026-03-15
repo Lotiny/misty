@@ -25,6 +25,7 @@ import java.util.Map;
 public class AlivePlayersMenu extends MistyPaginatedMenu {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#0.0");
+
     @Autowired
     private static GameManager gameManager;
 
@@ -59,13 +60,13 @@ public class AlivePlayersMenu extends MistyPaginatedMenu {
                         .skull(target.getName())
                         .lore(
                                 CC.MENU_BAR,
-                                "&eHealth &a" + DECIMAL_FORMAT.format(target.getHealth()) + "/" + DECIMAL_FORMAT.format(PlayerUtils.getMaxHealth(target)),
+                                "&eHealth &a" + DECIMAL_FORMAT.format(target.getHealth()) + "/"
+                                        + DECIMAL_FORMAT.format(PlayerUtils.getMaxHealth(target)),
                                 "&eFood Level &a" + target.getFoodLevel() + "/20",
                                 "&eLevel &a" + target.getLevel(),
                                 " ",
                                 "&7&oLeft Click to teleport!",
-                                CC.MENU_BAR
-                        )
+                                CC.MENU_BAR)
                         .build(),
                 (player, clickType) -> {
                     if (clickType.isLeftClick()) {
@@ -74,8 +75,7 @@ public class AlivePlayersMenu extends MistyPaginatedMenu {
                     } else if (clickType.isRightClick() && player.hasPermission(Permission.HOST_PERMISSION)) {
                         new InspectMenu(target).open(player);
                     }
-                }
-        );
+                });
     }
 
     @Override

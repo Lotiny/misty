@@ -68,9 +68,7 @@ public class v1_8_8 implements ReflectionManager {
     }
 
     @Override
-    public void setItemInOffHand(Player player, ItemStack item) {
-
-    }
+    public void setItemInOffHand(Player player, ItemStack item) {}
 
     @Override
     public ShapedRecipe createShapedRecipe(MistyShapedRecipe recipe) {
@@ -121,7 +119,8 @@ public class v1_8_8 implements ReflectionManager {
             case Material mat -> material = mat;
             case null -> throw new IllegalArgumentException("Ingredient object cannot be null.");
             default ->
-                    throw new IllegalArgumentException("Unsupported ingredient type: " + ingredientObject.getClass().getName());
+                throw new IllegalArgumentException("Unsupported ingredient type: "
+                        + ingredientObject.getClass().getName());
         }
 
         ConditionUtils.notNull(material, "Ingredient material cannot be null. Input: " + ingredientObject);

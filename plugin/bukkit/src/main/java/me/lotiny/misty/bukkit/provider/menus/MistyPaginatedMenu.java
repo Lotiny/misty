@@ -28,7 +28,8 @@ public abstract class MistyPaginatedMenu {
 
     public abstract List<MenuItem> getButtons(Player player, PaginatedPane pane, Gui gui);
 
-    public abstract Map<Integer, MenuItem> getBorderButtons(Player player, NormalPane topPane, NormalPane bottomPane, Gui gui);
+    public abstract Map<Integer, MenuItem> getBorderButtons(
+            Player player, NormalPane topPane, NormalPane bottomPane, Gui gui);
 
     public boolean isFilled(Player player) {
         return true;
@@ -57,14 +58,18 @@ public abstract class MistyPaginatedMenu {
         centerPane.setPage(Math.min(centerPane.getMaxPage(), page));
 
         if (centerPane.getMaxPage() > 1) {
-            GuiSlot prev = GuiSlot.previousPage(centerPane, ItemBuilder.of(XMaterial.ARROW)
-                    .name("&aPrevious Page")
-                    .lore(" ", "&7Click to go to previous page.", " ")
-                    .build());
-            GuiSlot next = GuiSlot.nextPage(centerPane, ItemBuilder.of(XMaterial.ARROW)
-                    .name("&aNext Page")
-                    .lore(" ", "&7Click to go to next page.", " ")
-                    .build());
+            GuiSlot prev = GuiSlot.previousPage(
+                    centerPane,
+                    ItemBuilder.of(XMaterial.ARROW)
+                            .name("&aPrevious Page")
+                            .lore(" ", "&7Click to go to previous page.", " ")
+                            .build());
+            GuiSlot next = GuiSlot.nextPage(
+                    centerPane,
+                    ItemBuilder.of(XMaterial.ARROW)
+                            .name("&aNext Page")
+                            .lore(" ", "&7Click to go to next page.", " ")
+                            .build());
 
             topPane.setSlot(0, prev);
             topPane.setSlot(8, next);

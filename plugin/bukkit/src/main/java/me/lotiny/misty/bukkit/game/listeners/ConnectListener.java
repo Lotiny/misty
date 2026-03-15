@@ -32,8 +32,10 @@ public class ConnectListener implements Listener {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static TeamManager teamManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
 
@@ -42,7 +44,9 @@ public class ConnectListener implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        storageRegistry.getProfileStorage().getAsync(uuid.toString())
+        storageRegistry
+                .getProfileStorage()
+                .getAsync(uuid.toString())
                 .thenAccept(profile -> profile.setName(player.getName()));
 
         event.setJoinMessage(null);
@@ -57,13 +61,16 @@ public class ConnectListener implements Listener {
         if (loggerOpt.isEmpty()) {
             Players.clear(player);
 
-            MCSchedulers.getGlobalScheduler().schedule(() -> {
-                player.setAllowFlight(true);
-                player.setFlying(true);
-                player.setGameMode(GameMode.ADVENTURE);
-                player.teleport(UHCUtils.getCenter());
-                HotBar.get().apply(player);
-            }, 5L);
+            MCSchedulers.getGlobalScheduler()
+                    .schedule(
+                            () -> {
+                                player.setAllowFlight(true);
+                                player.setFlying(true);
+                                player.setGameMode(GameMode.ADVENTURE);
+                                player.teleport(UHCUtils.getCenter());
+                                HotBar.get().apply(player);
+                            },
+                            5L);
 
         } else {
             CombatLogger logger = loggerOpt.get();

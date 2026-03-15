@@ -35,6 +35,7 @@ public class FlowerPowerUtils {
 
     @Getter
     private Set<ItemStack> items;
+
     @Getter
     private int dropXp;
 
@@ -72,7 +73,8 @@ public class FlowerPowerUtils {
 
         XMaterial xMaterial = XMaterial.matchXMaterial(item);
         ConditionUtils.notNull(xMaterial.get(), "Material '" + xMaterial + "' not found");
-        int maxDrop = Math.min(config.getFlowerPower().getMaxDrop(), xMaterial.get().getMaxStackSize());
+        int maxDrop =
+                Math.min(config.getFlowerPower().getMaxDrop(), xMaterial.get().getMaxStackSize());
         return ItemStackUtils.of(xMaterial, random.nextInt(maxDrop) + 1);
     }
 }

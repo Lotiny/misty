@@ -21,8 +21,16 @@ import me.lotiny.misty.bukkit.config.Config;
 import me.lotiny.misty.bukkit.config.impl.MainConfig;
 import me.lotiny.misty.bukkit.hook.PluginHookManager;
 import me.lotiny.misty.bukkit.manager.WorldManager;
-import me.lotiny.misty.bukkit.utils.*;
-import org.bukkit.*;
+import me.lotiny.misty.bukkit.utils.MaterialUtils;
+import me.lotiny.misty.bukkit.utils.Message;
+import me.lotiny.misty.bukkit.utils.ReflectionUtils;
+import me.lotiny.misty.bukkit.utils.Utilities;
+import me.lotiny.misty.bukkit.utils.VersionUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
@@ -63,7 +71,8 @@ public class BorderManager {
         this.randomTeleport = border.getRandomTeleport();
         this.borderHeight = border.getHeight();
         this.borderInterval = border.getInterval();
-        this.allowedBorderSizes = border.getAllowedSize().stream().mapToInt(i -> i).toArray();
+        this.allowedBorderSizes =
+                border.getAllowedSize().stream().mapToInt(i -> i).toArray();
         this.visualBorderBlock = border.getVisualBorder();
         this.borderBlock = border.getBlock();
     }
@@ -121,7 +130,8 @@ public class BorderManager {
                 world.setTime(1000);
                 ReflectionUtils.get().setGameRule(world, "doDaylightCycle", false);
                 Utilities.broadcast("&bPermanently Day &ehas been enabled!");
-            } else if (size == lastBorderSize && gameManager.getGame().getSetting().isLastBorderFlat()) {
+            } else if (size == lastBorderSize
+                    && gameManager.getGame().getSetting().isLastBorderFlat()) {
                 createFlatGround(world, lastBorderSize);
                 gameManager.getRegistry().getAlivePlayers().stream()
                         .map(Bukkit::getPlayer)
@@ -129,7 +139,8 @@ public class BorderManager {
                         .filter(player -> player.getLocation().getBlockY() >= 60 && isInBorder(player, size))
                         .forEach(player -> {
                             Location location = player.getLocation();
-                            int highestY = player.getWorld().getHighestBlockYAt(location.getBlockX(), location.getBlockZ());
+                            int highestY =
+                                    player.getWorld().getHighestBlockYAt(location.getBlockX(), location.getBlockZ());
                             Location target = location.clone();
                             target.setY(highestY);
                             player.teleport(target);
@@ -138,7 +149,8 @@ public class BorderManager {
                 gameManager.getRegistry().setCanShrink(false);
             }
 
-            MCSchedulers.getGlobalScheduler().schedule(() -> pluginHookManager.getChunkLoader().setSize(worldName, size), 20L);
+            MCSchedulers.getGlobalScheduler()
+                    .schedule(() -> pluginHookManager.getChunkLoader().setSize(worldName, size), 20L);
 
             Bukkit.getPluginManager().callEvent(new BorderShrunkEvent(size, world));
             checkBorder(size, world, size <= randomTeleport);
@@ -193,7 +205,8 @@ public class BorderManager {
                 List<LivingEntity> outsideEntities = team.getMembers(true).stream()
                         .map(uuid -> getLivingEntity(uuid, registry))
                         .filter(Objects::nonNull)
-                        .filter(entity -> !isInBorder(entity, size) || (entity.getLocation().getBlockY() < 55 && size < 100))
+                        .filter(entity -> !isInBorder(entity, size)
+                                || (entity.getLocation().getBlockY() < 55 && size < 100))
                         .toList();
 
                 if (outsideEntities.isEmpty()) continue;
@@ -283,17 +296,17 @@ public class BorderManager {
     }
 
     private boolean isBlockedWallBlocks(XMaterial xMaterial) {
-        return XTag.LEAVES.isTagged(xMaterial) ||
-                XTag.LOGS.isTagged(xMaterial) ||
-                XTag.FLOWERS.isTagged(xMaterial) ||
-                xMaterial == XMaterial.AIR ||
-                xMaterial == XMaterial.BROWN_MUSHROOM_BLOCK ||
-                xMaterial == XMaterial.RED_MUSHROOM_BLOCK ||
-                xMaterial == XMaterial.CACTUS ||
-                xMaterial == XMaterial.DEAD_BUSH ||
-                xMaterial == XMaterial.SUGAR_CANE ||
-                xMaterial == XMaterial.ICE ||
-                xMaterial == XMaterial.SNOW;
+        return XTag.LEAVES.isTagged(xMaterial)
+                || XTag.LOGS.isTagged(xMaterial)
+                || XTag.FLOWERS.isTagged(xMaterial)
+                || xMaterial == XMaterial.AIR
+                || xMaterial == XMaterial.BROWN_MUSHROOM_BLOCK
+                || xMaterial == XMaterial.RED_MUSHROOM_BLOCK
+                || xMaterial == XMaterial.CACTUS
+                || xMaterial == XMaterial.DEAD_BUSH
+                || xMaterial == XMaterial.SUGAR_CANE
+                || xMaterial == XMaterial.ICE
+                || xMaterial == XMaterial.SNOW;
     }
 
     private void setBorderBlock(Location location) {
@@ -315,47 +328,51 @@ public class BorderManager {
         AtomicInteger phase = new AtomicInteger(0);
         AtomicInteger counter = new AtomicInteger(-radius);
 
-        ScheduledTask<?> task = MCSchedulers.getGlobalScheduler().scheduleAtFixedRate(() -> {
-            int currentPhase = phase.get();
-            int start = counter.get();
-            int end = Math.min(start + BATCH_SIZE, radius);
+        ScheduledTask<?> task = MCSchedulers.getGlobalScheduler()
+                .scheduleAtFixedRate(
+                        () -> {
+                            int currentPhase = phase.get();
+                            int start = counter.get();
+                            int end = Math.min(start + BATCH_SIZE, radius);
 
-            switch (currentPhase) {
-                case 0 -> {
-                    for (int z = start; z <= end; z++) {
-                        figureOutBlockToMakeBedrock(world, -radius, z);
-                    }
-                    nextPhase(end, 1, counter, phase, radius);
-                }
-                case 1 -> {
-                    for (int z = start; z <= end; z++) {
-                        figureOutBlockToMakeBedrock(world, radius, z);
-                    }
-                    nextPhase(end, 2, counter, phase, radius);
-                }
-                case 2 -> {
-                    for (int x = start; x <= end; x++) {
-                        if (x != -radius && x != radius) {
-                            figureOutBlockToMakeBedrock(world, x, -radius);
-                        }
-                    }
-                    nextPhase(end, 3, counter, phase, radius - 1);
-                }
-                case 3 -> {
-                    for (int x = start; x <= end; x++) {
-                        if (x != -radius && x != radius) {
-                            figureOutBlockToMakeBedrock(world, x, radius);
-                        }
-                    }
+                            switch (currentPhase) {
+                                case 0 -> {
+                                    for (int z = start; z <= end; z++) {
+                                        figureOutBlockToMakeBedrock(world, -radius, z);
+                                    }
+                                    nextPhase(end, 1, counter, phase, radius);
+                                }
+                                case 1 -> {
+                                    for (int z = start; z <= end; z++) {
+                                        figureOutBlockToMakeBedrock(world, radius, z);
+                                    }
+                                    nextPhase(end, 2, counter, phase, radius);
+                                }
+                                case 2 -> {
+                                    for (int x = start; x <= end; x++) {
+                                        if (x != -radius && x != radius) {
+                                            figureOutBlockToMakeBedrock(world, x, -radius);
+                                        }
+                                    }
+                                    nextPhase(end, 3, counter, phase, radius - 1);
+                                }
+                                case 3 -> {
+                                    for (int x = start; x <= end; x++) {
+                                        if (x != -radius && x != radius) {
+                                            figureOutBlockToMakeBedrock(world, x, radius);
+                                        }
+                                    }
 
-                    if (end >= radius - 1) {
-                        taskRef.get().cancel();
-                    } else {
-                        counter.set(end + 1);
-                    }
-                }
-            }
-        }, 0L, PROCESSING_DELAY_TICKS);
+                                    if (end >= radius - 1) {
+                                        taskRef.get().cancel();
+                                    } else {
+                                        counter.set(end + 1);
+                                    }
+                                }
+                            }
+                        },
+                        0L,
+                        PROCESSING_DELAY_TICKS);
 
         taskRef.set(task);
     }

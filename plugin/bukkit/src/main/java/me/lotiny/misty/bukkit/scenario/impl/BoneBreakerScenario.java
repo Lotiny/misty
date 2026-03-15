@@ -24,10 +24,7 @@ public class BoneBreakerScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.BONE)
                 .name("&b" + getName())
-                .lore(
-                        "&7If a player takes Fall Damage, they",
-                        "&7receive a Slowness IV effect for 30 seconds."
-                )
+                .lore("&7If a player takes Fall Damage, they", "&7receive a Slowness IV effect for 30 seconds.")
                 .build();
     }
 

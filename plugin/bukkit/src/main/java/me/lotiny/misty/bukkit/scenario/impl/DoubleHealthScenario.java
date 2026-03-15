@@ -21,9 +21,7 @@ public class DoubleHealthScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.GOLDEN_APPLE)
                 .name("&b" + getName())
-                .lore(
-                        "&7Everyone will start with 20 hearts!"
-                )
+                .lore("&7Everyone will start with 20 hearts!")
                 .build();
     }
 

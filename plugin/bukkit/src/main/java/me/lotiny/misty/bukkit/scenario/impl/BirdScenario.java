@@ -22,9 +22,7 @@ public class BirdScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.ELYTRA)
                 .name("&b" + getName())
-                .lore(
-                        "&7Everyone get the elytra at start!"
-                )
+                .lore("&7Everyone get the elytra at start!")
                 .build();
     }
 

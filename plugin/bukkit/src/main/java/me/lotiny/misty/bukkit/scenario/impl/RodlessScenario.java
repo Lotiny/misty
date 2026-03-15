@@ -21,9 +21,7 @@ public class RodlessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.FISHING_ROD)
                 .name("&b" + getName())
-                .lore(
-                        "&7Fishing Rod cannot be used."
-                )
+                .lore("&7Fishing Rod cannot be used.")
                 .build();
     }
 

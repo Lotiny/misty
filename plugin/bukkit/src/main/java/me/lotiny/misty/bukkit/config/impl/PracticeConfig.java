@@ -38,17 +38,18 @@ public final class PracticeConfig extends BaseConfig {
     @SerializeWith(serializer = KitSerializer.class)
     @Comment("The kit for the player. (Use /practice setkit to set new loadout)")
     private Kit kit = new Kit(
-            new ItemStack[]{
-                    ItemStackUtils.of(XMaterial.DIAMOND_HELMET),
-                    ItemStackUtils.of(XMaterial.IRON_CHESTPLATE),
-                    ItemStackUtils.of(XMaterial.IRON_LEGGINGS),
-                    ItemStackUtils.of(XMaterial.DIAMOND_BOOTS)
+            new ItemStack[] {
+                ItemStackUtils.of(XMaterial.DIAMOND_HELMET),
+                ItemStackUtils.of(XMaterial.IRON_CHESTPLATE),
+                ItemStackUtils.of(XMaterial.IRON_LEGGINGS),
+                ItemStackUtils.of(XMaterial.DIAMOND_BOOTS)
             },
-            Arrays.copyOf(new ItemStack[]{
-                    ItemStackUtils.of(XMaterial.IRON_SWORD),
-                    ItemStackUtils.of(XMaterial.BOW),
-                    ItemStackUtils.of(XMaterial.GOLDEN_APPLE, 3),
-                    ItemStackUtils.of(XMaterial.ARROW, 4)
-            }, 36)
-    );
+            Arrays.copyOf(
+                    new ItemStack[] {
+                        ItemStackUtils.of(XMaterial.IRON_SWORD),
+                        ItemStackUtils.of(XMaterial.BOW),
+                        ItemStackUtils.of(XMaterial.GOLDEN_APPLE, 3),
+                        ItemStackUtils.of(XMaterial.ARROW, 4)
+                    },
+                    36));
 }

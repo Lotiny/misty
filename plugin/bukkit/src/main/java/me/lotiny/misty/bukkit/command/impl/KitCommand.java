@@ -27,8 +27,7 @@ public class KitCommand extends AbstractCommand {
                 CC.CHAT_BAR,
                 "&b/kit gui &7- &fOpen Kit gui",
                 "&b/kit default <id> &7- &fSet the kit to default kit",
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 
     @Command("gui")

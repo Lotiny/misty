@@ -29,10 +29,7 @@ public class ArcaneArchivesScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.LAPIS_LAZULI)
                 .name("&b" + getName())
-                .lore(
-                        "&7Mining a Lapis Lazuli ore have a chance to drop",
-                        "&7a Book or Exp Bottle."
-                )
+                .lore("&7Mining a Lapis Lazuli ore have a chance to drop", "&7a Book or Exp Bottle.")
                 .build();
     }
 
@@ -55,8 +52,7 @@ public class ArcaneArchivesScenario extends Scenario {
 
             PlayerUtils.playSound(player, XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
             UHCUtils.dropItem(block.getLocation(), ItemStackUtils.of(material));
-            player.sendMessage(Message.ARCANE_ARCHIVES_DROP
-                    .replace("<item>", material.friendlyName()));
+            player.sendMessage(Message.ARCANE_ARCHIVES_DROP.replace("<item>", material.friendlyName()));
         }
     }
 }

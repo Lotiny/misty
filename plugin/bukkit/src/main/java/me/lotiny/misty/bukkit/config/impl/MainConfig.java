@@ -45,16 +45,18 @@ public final class MainConfig extends BaseConfig {
     @Comment("The timezone of your server, used for handling time-based systems.")
     private String timeZone = "Asia/Bangkok";
 
-    @Comment("Choose the size for pre generate the world 500 means 500x500 from the center x:0, z:0 (Use -1 for using current border size).")
+    @Comment(
+            "Choose the size for pre generate the world 500 means 500x500 from the center x:0, z:0 (Use -1 for using current border size).")
     private int preGenerateWorldSize = 500;
 
-    @Comment("The countdown after scattering finishes. This is recommended at 20 seconds to let the server's TPS stabilize.")
+    @Comment(
+            "The countdown after scattering finishes. This is recommended at 20 seconds to let the server's TPS stabilize.")
     private int stabilizeSeconds = 20;
 
     @Comment({
-            "Defines the scale for nether compare to the overworld.",
-            "Normally 8 blocks in nether is equals 1 blocks in overworld (8:1).",
-            "NOTE: It is recommended to set it to 2 for UHC gameplay (2:1)."
+        "Defines the scale for nether compare to the overworld.",
+        "Normally 8 blocks in nether is equals 1 blocks in overworld (8:1).",
+        "NOTE: It is recommended to set it to 2 for UHC gameplay (2:1)."
     })
     private int netherScale = 2;
 
@@ -73,8 +75,7 @@ public final class MainConfig extends BaseConfig {
             "<white>Host<gray>: <aqua><host>",
             "<white>Game Type<gray>: <aqua><type>",
             "<white>Border<gray>: <aqua><border>",
-            "<gray><st>-------------------------"
-    );
+            "<gray><st>-------------------------");
 
     @Comment("Customize the kit player players.")
     private KitConfig kit = new KitConfig();
@@ -151,13 +152,10 @@ public final class MainConfig extends BaseConfig {
         @SerializeWith(serializer = KitSerializer.class, nesting = 1)
         @Comment("Available kits.")
         private Map<Integer, Kit> kits = Map.of(
-                0, new Kit(
+                0,
+                new Kit(
                         new ItemStack[4],
-                        Arrays.copyOf(new ItemStack[]{
-                                ItemStackUtils.of(XMaterial.COOKED_BEEF, 10)
-                        }, 36)
-                )
-        );
+                        Arrays.copyOf(new ItemStack[] {ItemStackUtils.of(XMaterial.COOKED_BEEF, 10)}, 36)));
     }
 
     @Getter
@@ -223,11 +221,7 @@ public final class MainConfig extends BaseConfig {
                 null,
                 1.6F,
                 null,
-                List.of(
-                        XPotion.REGENERATION.buildPotionEffect(200, 2),
-                        XPotion.ABSORPTION.buildPotionEffect(3000, 1)
-                )
-        );
+                List.of(XPotion.REGENERATION.buildPotionEffect(200, 2), XPotion.ABSORPTION.buildPotionEffect(3000, 1)));
 
         @Comment("Settings for Player Heads.")
         private HealingItem playerHead = new HealingItem(
@@ -236,11 +230,7 @@ public final class MainConfig extends BaseConfig {
                 null,
                 0.0F,
                 null,
-                List.of(
-                        XPotion.SPEED.buildPotionEffect(280, 2),
-                        XPotion.REGENERATION.buildPotionEffect(100, 2)
-                )
-        );
+                List.of(XPotion.SPEED.buildPotionEffect(280, 2), XPotion.REGENERATION.buildPotionEffect(100, 2)));
 
         @Comment("Settings for Golden Heads.")
         private HealingItem goldenHead = new HealingItem(
@@ -249,11 +239,7 @@ public final class MainConfig extends BaseConfig {
                 "http://textures.minecraft.net/texture/2a26a2e579ad480e90f89ec04cda38e5662b95d113d6f2da34846f892ffc2e5b",
                 0.5F,
                 "&6&lGolden Head",
-                List.of(
-                        XPotion.REGENERATION.buildPotionEffect(200, 3),
-                        XPotion.ABSORPTION.buildPotionEffect(3000, 1)
-                )
-        );
+                List.of(XPotion.REGENERATION.buildPotionEffect(200, 3), XPotion.ABSORPTION.buildPotionEffect(3000, 1)));
 
         @Getter
         @AllArgsConstructor

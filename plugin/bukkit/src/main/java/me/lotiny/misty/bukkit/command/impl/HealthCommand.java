@@ -21,8 +21,7 @@ public class HealthCommand extends AbstractCommand {
     public void onCommand(BukkitCommandContext context, @Arg(value = "target", defaultValue = "self") Player target) {
         mustBePlayer(context, player -> {
             if (scenarioManager.isEnabled("Secret Health")) {
-                player.sendMessage(Message.SCENARIO_BLOCK_ACTION
-                        .replace("<scenario>", "Secret Health"));
+                player.sendMessage(Message.SCENARIO_BLOCK_ACTION.replace("<scenario>", "Secret Health"));
                 return;
             }
 

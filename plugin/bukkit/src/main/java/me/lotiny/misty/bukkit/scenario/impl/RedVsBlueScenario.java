@@ -18,9 +18,7 @@ public class RedVsBlueScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.BLUE_WOOL)
                 .name("&b" + getName())
-                .lore(
-                        "&7All players will be spit to 2 teams."
-                )
+                .lore("&7All players will be spit to 2 teams.")
                 .build();
     }
 }

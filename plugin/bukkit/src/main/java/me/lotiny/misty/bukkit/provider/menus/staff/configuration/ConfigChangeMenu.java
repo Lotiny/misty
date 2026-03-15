@@ -55,16 +55,17 @@ public class ConfigChangeMenu extends MistyMenu {
         buttons.put(15, buildAdjustButton(5, "&a+5"));
         buttons.put(16, buildAdjustButton(10, "&a+10"));
 
-        buttons.put(26, MenuItem.of(
-                ItemBuilder.of(XMaterial.EMERALD_BLOCK)
-                        .name("&aConfirm & Save")
-                        .build(),
-                (clickedPlayer, clickType) -> {
-                    gameManager.getGame().getSetting().setConfig(configType, currentAmount, clickedPlayer);
-                    PlayerUtils.playSound(clickedPlayer, XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
-                    new ConfigMenu(gameManager.getGame().getSetting()).open(clickedPlayer);
-                }
-        ));
+        buttons.put(
+                26,
+                MenuItem.of(
+                        ItemBuilder.of(XMaterial.EMERALD_BLOCK)
+                                .name("&aConfirm & Save")
+                                .build(),
+                        (clickedPlayer, clickType) -> {
+                            gameManager.getGame().getSetting().setConfig(configType, currentAmount, clickedPlayer);
+                            PlayerUtils.playSound(clickedPlayer, XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
+                            new ConfigMenu(gameManager.getGame().getSetting()).open(clickedPlayer);
+                        }));
 
         return buttons;
     }
@@ -72,25 +73,18 @@ public class ConfigChangeMenu extends MistyMenu {
     private MenuItem buildAdjustButton(int amount, String displayName) {
         XMaterial material = amount > 0 ? XMaterial.GREEN_STAINED_GLASS_PANE : XMaterial.RED_STAINED_GLASS_PANE;
 
-        return MenuItem.of(
-                ItemBuilder.of(material)
-                        .name(displayName)
-                        .build(),
-                (clickedPlayer, clickType) -> {
-                    if (amount < 0 && currentAmount == 1) return;
+        return MenuItem.of(ItemBuilder.of(material).name(displayName).build(), (clickedPlayer, clickType) -> {
+            if (amount < 0 && currentAmount == 1) return;
 
-                    currentAmount = Math.max(1, currentAmount + amount);
-                    playClick(clickedPlayer);
-                    open(clickedPlayer);
-                }
-        );
+            currentAmount = Math.max(1, currentAmount + amount);
+            playClick(clickedPlayer);
+            open(clickedPlayer);
+        });
     }
 
     private MenuItem buildInfoButton() {
-        return MenuItem.of(
-                ItemBuilder.of(configType.getMaterial())
-                        .name("&b" + Utilities.getFormattedName(configType.name()) + "&7: &f" + currentAmount)
-                        .build()
-        );
+        return MenuItem.of(ItemBuilder.of(configType.getMaterial())
+                .name("&b" + Utilities.getFormattedName(configType.name()) + "&7: &f" + currentAmount)
+                .build());
     }
 }

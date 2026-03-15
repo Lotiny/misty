@@ -28,10 +28,7 @@ public class StockUpScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.GOLDEN_PICKAXE)
                 .name("&b" + getName())
-                .lore(
-                        "&7When player died other alive players will",
-                        "&7receive 1 full heart."
-                )
+                .lore("&7When player died other alive players will", "&7receive 1 full heart.")
                 .build();
     }
 

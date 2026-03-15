@@ -15,7 +15,11 @@ import me.lotiny.misty.bukkit.utils.Message;
 import me.lotiny.misty.bukkit.utils.UHCUtils;
 import org.bukkit.Bukkit;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @InjectableComponent
 @RequiredArgsConstructor
@@ -50,8 +54,7 @@ public class KillTopCommand extends AbstractCommand {
             for (UUID uuid : topTen) {
                 int kills = this.getGameKills(uuid);
                 String name = Bukkit.getOfflinePlayer(uuid).getName();
-                String message = "&7- " + (UHCUtils.isAlive(uuid) ? "&a" : "&c") +
-                        name + "&7: &b" + kills + " Kills";
+                String message = "&7- " + (UHCUtils.isAlive(uuid) ? "&a" : "&c") + name + "&7: &b" + kills + " Kills";
                 player.sendMessage(CC.translate(message));
             }
 
@@ -60,6 +63,8 @@ public class KillTopCommand extends AbstractCommand {
     }
 
     private int getGameKills(UUID uuid) {
-        return Metadata.provideForPlayer(uuid).getOrDefault(KeyEx.GAME_KILLS_KEY, new Stats()).getAmount();
+        return Metadata.provideForPlayer(uuid)
+                .getOrDefault(KeyEx.GAME_KILLS_KEY, new Stats())
+                .getAmount();
     }
 }

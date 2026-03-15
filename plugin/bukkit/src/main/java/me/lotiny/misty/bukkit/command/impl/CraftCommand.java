@@ -14,7 +14,12 @@ import me.lotiny.misty.bukkit.command.AbstractCommand;
 import me.lotiny.misty.bukkit.utils.ItemStackUtils;
 import me.lotiny.misty.bukkit.utils.ReflectionUtils;
 import me.lotiny.misty.bukkit.utils.VersionUtils;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.List;
 import java.util.Map;
@@ -72,7 +77,8 @@ public class CraftCommand extends AbstractCommand {
                                 continue;
                             }
 
-                            if (ItemStackUtils.isSimilar(content, required) && !customItemRegistry.isCustomItem(content)) {
+                            if (ItemStackUtils.isSimilar(content, required)
+                                    && !customItemRegistry.isCustomItem(content)) {
                                 ItemStack input = content.clone();
                                 input.setAmount(1);
                                 inventory.setItem(craftingSlot, input);
@@ -105,7 +111,8 @@ public class CraftCommand extends AbstractCommand {
                                 continue;
                             }
 
-                            if (ItemStackUtils.isSimilar(content, ingredient) && !customItemRegistry.isCustomItem(content)) {
+                            if (ItemStackUtils.isSimilar(content, ingredient)
+                                    && !customItemRegistry.isCustomItem(content)) {
                                 ItemStack input = content.clone();
                                 input.setAmount(1);
                                 inventory.setItem(craftingSlot++, input);

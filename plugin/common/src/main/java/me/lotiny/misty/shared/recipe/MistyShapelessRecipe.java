@@ -13,5 +13,4 @@ public class MistyShapelessRecipe {
     private String namespace;
     private ItemStack result;
     private Map<Object, Integer> ingredients;
-
 }

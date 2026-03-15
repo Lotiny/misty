@@ -22,9 +22,7 @@ public class PyroScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.FIRE_CHARGE)
                 .name("&b" + getName())
-                .lore(
-                        "&7Player start with Fire Aspect and Flame book."
-                )
+                .lore("&7Player start with Fire Aspect and Flame book.")
                 .build();
     }
 

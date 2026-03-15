@@ -23,9 +23,7 @@ public class SecretHealthScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.TRIPWIRE_HOOK)
                 .name("&b" + getName())
-                .lore(
-                        "&7You cannot see other player health."
-                )
+                .lore("&7You cannot see other player health.")
                 .build();
     }
 

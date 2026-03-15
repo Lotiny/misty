@@ -23,6 +23,7 @@ public class ScenariosAdminMenu extends MistyPaginatedMenu {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
 
@@ -41,16 +42,13 @@ public class ScenariosAdminMenu extends MistyPaginatedMenu {
         List<MenuItem> buttons = new ArrayList<>();
 
         for (Scenario scenario : scenarioManager.getScenarios()) {
-            buttons.add(MenuItem.of(
-                    buildScenarioItem(scenario),
-                    (clickedPlayer, clickType) -> {
-                        if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
+            buttons.add(MenuItem.of(buildScenarioItem(scenario), (clickedPlayer, clickType) -> {
+                if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
 
-                        toggleScenario(scenario, clickedPlayer);
-                        playClick(clickedPlayer);
-                        open(clickedPlayer, pane.getPage());
-                    }
-            ));
+                toggleScenario(scenario, clickedPlayer);
+                playClick(clickedPlayer);
+                open(clickedPlayer, pane.getPage());
+            }));
         }
 
         return buttons;

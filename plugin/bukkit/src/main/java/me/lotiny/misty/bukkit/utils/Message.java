@@ -208,7 +208,8 @@ public class Message {
         WHITELIST_OFF = format(Config.getMessageConfig().getWhitelistOff(), prefix);
         WHITELIST_EMPTY = format(Config.getMessageConfig().getWhitelistEmpty(), prefix);
         WHITELIST_PLAYER_NOT_WHITELISTED = format(Config.getMessageConfig().getWhitelistPlayerNotWhitelisted(), prefix);
-        WHITELIST_PLAYER_ALREADY_WHITELISTED = format(Config.getMessageConfig().getWhitelistPlayerAlreadyWhitelisted(), prefix);
+        WHITELIST_PLAYER_ALREADY_WHITELISTED =
+                format(Config.getMessageConfig().getWhitelistPlayerAlreadyWhitelisted(), prefix);
         WHITELIST_ADD = format(Config.getMessageConfig().getWhitelistAdd(), prefix);
         WHITELIST_REMOVE = format(Config.getMessageConfig().getWhitelistRemove(), prefix);
         WHITELIST_CANCEL = format(Config.getMessageConfig().getWhitelistCancel(), prefix);
@@ -268,7 +269,8 @@ public class Message {
         SCENARIO_BLOCK_ACTION = format(Config.getMessageConfig().getScenarioBlockAction(), prefix);
 
         LOVE_AT_FIRST_SIGHT_TEAM_WITH = format(Config.getMessageConfig().getLoveAtFirstSightTeamWith(), prefix);
-        LOVE_AT_FIRST_SIGHT_ALREADY_HAVE_TEAM = format(Config.getMessageConfig().getLoveAtFirstSightAlreadyHaveTeam(), prefix);
+        LOVE_AT_FIRST_SIGHT_ALREADY_HAVE_TEAM =
+                format(Config.getMessageConfig().getLoveAtFirstSightAlreadyHaveTeam(), prefix);
 
         ULTRA_PARANOID_BROADCAST = format(Config.getMessageConfig().getUltraParanoidBroadcast(), prefix);
 
@@ -312,7 +314,8 @@ public class Message {
         PLAYER_SWAP_PLAYER = format(Config.getMessageConfig().getPlayerSwapPlayer(), prefix);
         PLAYER_SWAP_BROADCAST = format(Config.getMessageConfig().getPlayerSwapBroadcast(), prefix);
 
-        AUTOSTART_ANNOUNCE_MESSAGE = format(Config.getMainConfig().getAutoStart().getAnnounce().getMessage(), prefix);
+        AUTOSTART_ANNOUNCE_MESSAGE =
+                format(Config.getMainConfig().getAutoStart().getAnnounce().getMessage(), prefix);
     }
 
     private String format(String text, String prefix) {

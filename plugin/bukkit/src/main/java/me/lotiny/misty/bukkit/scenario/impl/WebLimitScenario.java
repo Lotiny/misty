@@ -21,10 +21,7 @@ public class WebLimitScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.COBWEB)
                 .name("&b" + getName())
-                .lore(
-                        "&7Players will be limited to having",
-                        "&78 cobwebs in their inventory at one time."
-                )
+                .lore("&7Players will be limited to having", "&78 cobwebs in their inventory at one time.")
                 .build();
     }
 

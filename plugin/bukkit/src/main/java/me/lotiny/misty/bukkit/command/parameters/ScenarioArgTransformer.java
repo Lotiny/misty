@@ -19,7 +19,7 @@ public class ScenarioArgTransformer extends BukkitArgTransformer<Scenario> {
 
     @Override
     public Class[] type() {
-        return new Class[]{Scenario.class};
+        return new Class[] {Scenario.class};
     }
 
     @Override
@@ -34,8 +34,7 @@ public class ScenarioArgTransformer extends BukkitArgTransformer<Scenario> {
 
     @Override
     public List<String> tabComplete(Player player, String source) {
-        return scenarioManager.getScenarios()
-                .stream()
+        return scenarioManager.getScenarios().stream()
                 .map(scenario -> StringUtils.rb(scenario.getName()))
                 .toList();
     }

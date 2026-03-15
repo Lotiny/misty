@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 
 @InjectableComponent
 @RequiredArgsConstructor
-@Command(value = {"border", "uhcborder"}, permissionNode = "misty.command.border")
+@Command(
+        value = {"border", "uhcborder"},
+        permissionNode = "misty.command.border")
 public class BorderCommand extends AbstractCommand {
 
     private final GameManager gameManager;
@@ -30,9 +32,8 @@ public class BorderCommand extends AbstractCommand {
 
     @PostInitialize
     public void onPostInit() {
-        this.allowedSizes = Arrays.stream(borderManager.getAllowedBorderSizes())
-                .boxed()
-                .collect(Collectors.toSet());
+        this.allowedSizes =
+                Arrays.stream(borderManager.getAllowedBorderSizes()).boxed().collect(Collectors.toSet());
     }
 
     @Command("#")
@@ -52,8 +53,7 @@ public class BorderCommand extends AbstractCommand {
             borderTask.setForceShrink(true);
             borderTask.setSize(size);
 
-            player.sendMessage(Message.BORDER_FORCE_SHRINK_SHRUNK
-                    .replace("<size>", String.valueOf(size)));
+            player.sendMessage(Message.BORDER_FORCE_SHRINK_SHRUNK.replace("<size>", String.valueOf(size)));
         });
     }
 

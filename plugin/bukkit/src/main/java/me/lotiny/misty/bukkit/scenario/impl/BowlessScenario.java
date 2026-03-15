@@ -23,9 +23,7 @@ public class BowlessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.BOW)
                 .name("&b" + getName())
-                .lore(
-                        "&7Bow cannot be used."
-                )
+                .lore("&7Bow cannot be used.")
                 .build();
     }
 

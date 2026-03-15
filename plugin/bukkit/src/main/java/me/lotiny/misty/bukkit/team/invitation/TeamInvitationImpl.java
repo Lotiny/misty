@@ -39,8 +39,7 @@ public class TeamInvitationImpl implements TeamInvitation {
             Component component = Component.text()
                     .append(LegacyAdventureUtil.decode(Message.TEAM_INVITE_RECEIVED
                             .replace("<invited>", invited.getName())
-                            .replace("<inviter>", inviter.getName())
-                    ))
+                            .replace("<inviter>", inviter.getName())))
                     .clickEvent(ClickEvent.runCommand("/team accept " + inviter.getName()))
                     .hoverEvent(Component.text("Click to join", NamedTextColor.GREEN))
                     .asComponent();

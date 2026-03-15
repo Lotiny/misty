@@ -24,10 +24,7 @@ public class UltraParanoidScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.FIREWORK_ROCKET)
                 .name("&b" + getName())
-                .lore(
-                        "&7Whenever you mined Diamond Ore or Gold Ore",
-                        "&7it will send your location to all players."
-                )
+                .lore("&7Whenever you mined Diamond Ore or Gold Ore", "&7it will send your location to all players.")
                 .build();
     }
 

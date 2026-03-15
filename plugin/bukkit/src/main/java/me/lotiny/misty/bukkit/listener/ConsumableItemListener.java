@@ -42,10 +42,7 @@ public class ConsumableItemListener {
     @SuppressWarnings("deprecation")
     @PostInitialize
     public void onPostInit() {
-        this.eventNode = EventNode.type(
-                "consumable-item-listeners",
-                BukkitEventFilter.ALL
-        );
+        this.eventNode = EventNode.type("consumable-item-listeners", BukkitEventFilter.ALL);
 
         if (VersionUtils.isHigher(21, 4)) {
             eventNode.addListener(BlockPlaceEvent.class, event -> {
@@ -80,7 +77,8 @@ public class ConsumableItemListener {
 
                 PlayerItemConsumeEvent consumeEvent;
                 if (VersionUtils.isHigher(21, 0)) {
-                    consumeEvent = new PlayerItemConsumeEvent(player, item, event.getHand() == null ? EquipmentSlot.HAND : event.getHand());
+                    consumeEvent = new PlayerItemConsumeEvent(
+                            player, item, event.getHand() == null ? EquipmentSlot.HAND : event.getHand());
                 } else {
                     consumeEvent = new PlayerItemConsumeEvent(player, item);
                 }
@@ -90,11 +88,7 @@ public class ConsumableItemListener {
                 if (consumeEvent.isCancelled()) return;
 
                 consumeItem(player, item);
-                PlayerUtils.playSound(
-                        player.getLocation(),
-                        XSound.ENTITY_PLAYER_BURP,
-                        XSound.ENTITY_GENERIC_EAT
-                );
+                PlayerUtils.playSound(player.getLocation(), XSound.ENTITY_PLAYER_BURP, XSound.ENTITY_GENERIC_EAT);
             });
         }
 

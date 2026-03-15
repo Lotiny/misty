@@ -30,7 +30,8 @@ public class Utilities {
 
         for (String word : words) {
             if (!word.isEmpty()) {
-                formattedName.append(Character.toUpperCase(word.charAt(0)))
+                formattedName
+                        .append(Character.toUpperCase(word.charAt(0)))
                         .append(word.substring(1).toLowerCase())
                         .append(" ");
             }
@@ -40,11 +41,13 @@ public class Utilities {
     }
 
     public void stop(long delayTicks) {
-        MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop"), delayTicks);
+        MCSchedulers.getGlobalScheduler()
+                .schedule(() -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop"), delayTicks);
     }
 
     public void disable() {
-        MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.getPluginManager().disablePlugin(BukkitPlugin.INSTANCE));
+        MCSchedulers.getGlobalScheduler()
+                .schedule(() -> Bukkit.getPluginManager().disablePlugin(BukkitPlugin.INSTANCE));
     }
 
     public int getFortuneDrop(XMaterial material, int fortuneLevel) {

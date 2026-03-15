@@ -27,10 +27,7 @@ public class DiamondlessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.DIAMOND)
                 .name("&b" + getName())
-                .lore(
-                        "&7You cannot mined diamond ore player",
-                        "&7will drop 1 diamond when they died."
-                )
+                .lore("&7You cannot mined diamond ore player", "&7will drop 1 diamond when they died.")
                 .build();
     }
 

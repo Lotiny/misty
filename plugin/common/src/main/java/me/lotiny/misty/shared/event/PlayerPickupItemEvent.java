@@ -16,10 +16,12 @@ public class PlayerPickupItemEvent extends Event implements Cancellable {
 
     @Getter
     private static final HandlerList handlerList = new HandlerList();
+
     private final Player player;
     private final Item item;
     private final int remaining;
     private final Event bukkitPickupItemEvent;
+
     @Setter
     private boolean cancelled;
 

@@ -13,7 +13,7 @@ public class StringArgTransformer extends BukkitArgTransformer<String> {
 
     @Override
     public Class[] type() {
-        return new Class[]{String.class};
+        return new Class[] {String.class};
     }
 
     @Override
@@ -27,9 +27,6 @@ public class StringArgTransformer extends BukkitArgTransformer<String> {
 
     @Override
     public List<String> tabComplete(Player player, String source) {
-        return Bukkit.getOnlinePlayers()
-                .stream()
-                .map(Player::getName)
-                .toList();
+        return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
     }
 }

@@ -22,9 +22,7 @@ public class LuckyLeavesScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.OAK_LEAVES)
                 .name("&b" + getName())
-                .lore(
-                        "&7Leaves have a chance to drop a Golden Apple"
-                )
+                .lore("&7Leaves have a chance to drop a Golden Apple")
                 .build();
     }
 

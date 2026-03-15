@@ -69,6 +69,7 @@ public class WorldListener {
 
     private boolean isLobbyWorld(World world) {
         GameRegistry registry = gameManager.getRegistry();
-        return !registry.getUhcWorld().equals(world.getName()) && !registry.getNetherWorld().equals(world.getName());
+        return !registry.getUhcWorld().equals(world.getName())
+                && !registry.getNetherWorld().equals(world.getName());
     }
 }

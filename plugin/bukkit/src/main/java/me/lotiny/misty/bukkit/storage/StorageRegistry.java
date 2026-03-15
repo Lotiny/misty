@@ -2,7 +2,11 @@ package me.lotiny.misty.bukkit.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mongodb.*;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoException;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -43,6 +47,7 @@ public class StorageRegistry {
 
     @Getter
     private MongoDatabase mongoDatabase;
+
     private MongoClient mongoClient;
 
     @Getter
@@ -50,6 +55,7 @@ public class StorageRegistry {
 
     @Getter
     private Storage<Profile> profileStorage;
+
     @Getter
     private Storage<LeaderboardHologram> leaderboardHologramStorage;
 
@@ -65,7 +71,8 @@ public class StorageRegistry {
         profileStorage = createStorage(storageType, "uniqueId", "player", new ProfileSerializer());
         profileStorage.init();
 
-        leaderboardHologramStorage = createStorage(storageType, "leaderboardType", "holograms", new LeaderboardHologramSerializer());
+        leaderboardHologramStorage =
+                createStorage(storageType, "leaderboardType", "holograms", new LeaderboardHologramSerializer());
         leaderboardHologramStorage.init();
         leaderboardHologramStorage.loadAll();
     }
@@ -91,7 +98,8 @@ public class StorageRegistry {
         return profileStorage.get(uuid.toString());
     }
 
-    private <T> Storage<T> createStorage(StorageType storageType, String uniqueId, String collection, StorageSerializer<T> serializer) {
+    private <T> Storage<T> createStorage(
+            StorageType storageType, String uniqueId, String collection, StorageSerializer<T> serializer) {
         if (storageType == StorageType.MONGODB) {
             return new MongoStorage<>(this, uniqueId, collection, serializer);
         } else {
@@ -102,9 +110,7 @@ public class StorageRegistry {
     public void connectMongoDB() {
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         StorageConfig.MongoDB mongoDB = Config.getStorageConfig().getMongoDb();
-        ServerApi serverApi = ServerApi.builder()
-                .version(ServerApiVersion.V1)
-                .build();
+        ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
 
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(mongoDB.getConnection()))
@@ -128,8 +134,8 @@ public class StorageRegistry {
         try {
             HikariConfig hikariConfig = new HikariConfig();
 
-            String jdbcUrl = "jdbc:mysql://" + mySql.getHost() + ":" + mySql.getPort() +
-                    "/" + mySql.getDatabase() + "?useSSL=" + mySql.isUseSsl();
+            String jdbcUrl = "jdbc:mysql://" + mySql.getHost() + ":" + mySql.getPort() + "/" + mySql.getDatabase()
+                    + "?useSSL=" + mySql.isUseSsl();
 
             hikariConfig.setJdbcUrl(jdbcUrl);
             hikariConfig.setUsername(mySql.getUsername());

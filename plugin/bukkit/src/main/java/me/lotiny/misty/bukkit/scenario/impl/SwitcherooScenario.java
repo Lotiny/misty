@@ -26,8 +26,7 @@ public class SwitcherooScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7Everytime you shoot an arrow and hit the player",
-                        "&7you and that player will switch the location."
-                )
+                        "&7you and that player will switch the location.")
                 .build();
     }
 

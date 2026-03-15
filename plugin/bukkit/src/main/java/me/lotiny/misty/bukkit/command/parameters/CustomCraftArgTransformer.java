@@ -18,7 +18,7 @@ public class CustomCraftArgTransformer extends BukkitArgTransformer<CustomItem> 
 
     @Override
     public Class[] type() {
-        return new Class[]{CustomItem.class};
+        return new Class[] {CustomItem.class};
     }
 
     @Override
@@ -33,8 +33,6 @@ public class CustomCraftArgTransformer extends BukkitArgTransformer<CustomItem> 
 
     @Override
     public List<String> tabComplete(Player player, String source) {
-        return customItemRegistry.getCustomItems().keySet()
-                .stream()
-                .toList();
+        return customItemRegistry.getCustomItems().keySet().stream().toList();
     }
 }

@@ -34,10 +34,20 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.material.MaterialData;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 @SuppressWarnings("deprecation")
 @IncompatibleWith({BarebonesScenario.class, GoldRushScenario.class})
@@ -45,6 +55,7 @@ public class CustomCraftScenario extends Scenario {
 
     @Autowired
     private static CustomItemRegistry customItemRegistry;
+
     @Autowired
     private static ScenarioManager scenarioManager;
 
@@ -59,10 +70,7 @@ public class CustomCraftScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.CRAFTING_TABLE)
                 .name("&b" + getName())
-                .lore(
-                        "&7Added Custom Craft to the game!",
-                        "&7You can view the recipes by /recipes"
-                )
+                .lore("&7Added Custom Craft to the game!", "&7You can view the recipes by /recipes")
                 .build();
     }
 
@@ -127,7 +135,8 @@ public class CustomCraftScenario extends Scenario {
             int maxCraft = limit.getAmount();
             if (limit.isUnique()) {
                 PlayerUtils.playSound(XSound.UI_TOAST_CHALLENGE_COMPLETE, XSound.ENTITY_ENDER_DRAGON_DEATH);
-                Utilities.broadcast("&b" + player.getName() + "&e has crafted the &6" + item.getName() + "&e! This item cannot be crafted again!");
+                Utilities.broadcast("&b" + player.getName() + "&e has crafted the &6" + item.getName()
+                        + "&e! This item cannot be crafted again!");
 
                 maxCraft = 1;
             }
@@ -146,9 +155,12 @@ public class CustomCraftScenario extends Scenario {
             if (calledEvent.isCancelled()) return;
 
             item.getPlayerCrafts().put(player.getUniqueId(), toCraftAmount);
-            player.sendMessage(CC.translate("&aYou crafted &f" + item.getName() + "&e (" + toCraftAmount + "/" + maxCraft + ")"));
+            player.sendMessage(
+                    CC.translate("&aYou crafted &f" + item.getName() + "&e (" + toCraftAmount + "/" + maxCraft + ")"));
 
-            if (item.isRemoveResult() || event.getClick().isKeyboardClick() || event.getClick().isShiftClick()) {
+            if (item.isRemoveResult()
+                    || event.getClick().isKeyboardClick()
+                    || event.getClick().isShiftClick()) {
                 event.setCurrentItem(null);
 
                 ItemStack[] newMatrix = new ItemStack[size];
@@ -229,13 +241,17 @@ public class CustomCraftScenario extends Scenario {
                     Component component = Component.text()
                             .appendSpace()
                             .appendNewline()
-                            .append(LegacyAdventureUtil.decode(MessageUtils.centeredMessage("&fYou have all the items")))
+                            .append(LegacyAdventureUtil.decode(
+                                    MessageUtils.centeredMessage("&fYou have all the items")))
                             .appendNewline()
-                            .append(LegacyAdventureUtil.decode(MessageUtils.centeredMessage("&fto craft a " + craft.getName())))
+                            .append(LegacyAdventureUtil.decode(
+                                    MessageUtils.centeredMessage("&fto craft a " + craft.getName())))
                             .appendNewline()
-                            .append(LegacyAdventureUtil.decode(MessageUtils.centeredMessage("&e&lCLICK HERE &r&fto craft it!")))
+                            .append(LegacyAdventureUtil.decode(
+                                    MessageUtils.centeredMessage("&e&lCLICK HERE &r&fto craft it!")))
                             .clickEvent(ClickEvent.runCommand("/itemcraft " + craft.getId()))
-                            .hoverEvent(HoverEvent.showText(Component.text("Click to craft " + craft.getName(), NamedTextColor.YELLOW)))
+                            .hoverEvent(HoverEvent.showText(
+                                    Component.text("Click to craft " + craft.getName(), NamedTextColor.YELLOW)))
                             .asComponent();
 
                     mcPlayer.sendMessage(component);
@@ -268,7 +284,8 @@ public class CustomCraftScenario extends Scenario {
                         if (hasPotion) {
                             Map<Character, Object> ingredientMap = new HashMap<>();
 
-                            for (Map.Entry<Character, ItemStack> entry : shapedRecipe.getIngredientMap().entrySet()) {
+                            for (Map.Entry<Character, ItemStack> entry :
+                                    shapedRecipe.getIngredientMap().entrySet()) {
                                 ItemStack item = entry.getValue();
                                 if (item == null) continue;
 
@@ -279,7 +296,8 @@ public class CustomCraftScenario extends Scenario {
                                 }
                             }
 
-                            Recipe fixedRecipe = customItemRegistry.getCustomItemRecipeCreator(customItem)
+                            Recipe fixedRecipe = customItemRegistry
+                                    .getCustomItemRecipeCreator(customItem)
                                     .createShaped(String.join("", shapedRecipe.getShape()), ingredientMap);
 
                             Bukkit.addRecipe(fixedRecipe);
@@ -295,14 +313,17 @@ public class CustomCraftScenario extends Scenario {
                             Map<Object, Integer> ingredientMap = new HashMap<>();
 
                             for (ItemStack ingredient : shapelessRecipe.getIngredientList()) {
-                                if (XMaterial.matchXMaterial(ingredient) == XMaterial.POTION && VersionUtils.isLower(12, 2)) {
-                                    ingredientMap.put(new MaterialData(ingredient.getType(), (byte) -1), ingredient.getAmount());
+                                if (XMaterial.matchXMaterial(ingredient) == XMaterial.POTION
+                                        && VersionUtils.isLower(12, 2)) {
+                                    ingredientMap.put(
+                                            new MaterialData(ingredient.getType(), (byte) -1), ingredient.getAmount());
                                 } else {
                                     ingredientMap.put(ingredient, ingredient.getAmount());
                                 }
                             }
 
-                            Recipe fixedRecipe = customItemRegistry.getCustomItemRecipeCreator(customItem)
+                            Recipe fixedRecipe = customItemRegistry
+                                    .getCustomItemRecipeCreator(customItem)
                                     .createShapeless(ingredientMap);
 
                             Bukkit.addRecipe(fixedRecipe);

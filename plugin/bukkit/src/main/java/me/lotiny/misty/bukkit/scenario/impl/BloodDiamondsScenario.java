@@ -22,9 +22,7 @@ public class BloodDiamondsScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.REDSTONE)
                 .name("&b" + getName())
-                .lore(
-                        "&7You will take 1 damage when mined diamond ore."
-                )
+                .lore("&7You will take 1 damage when mined diamond ore.")
                 .build();
     }
 

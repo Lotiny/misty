@@ -18,7 +18,12 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @InjectableComponent
 public class CustomItemRegistryImpl implements CustomItemRegistry {
@@ -59,9 +64,7 @@ public class CustomItemRegistryImpl implements CustomItemRegistry {
 
     @Override
     public ItemStack addCustomItemTag(ItemStack item, CustomItem customItem) {
-        return ItemBuilder.of(item)
-                .tag(customItemKey, customItem.getId())
-                .build();
+        return ItemBuilder.of(item).tag(customItemKey, customItem.getId()).build();
     }
 
     @Override

@@ -22,10 +22,7 @@ public class VengefulSpiritScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.SKELETON_SKULL)
                 .name("&b" + getName())
-                .lore(
-                        "&7When a player dies, a Charged Creeper spawns",
-                        "&7directly on their corpse."
-                )
+                .lore("&7When a player dies, a Charged Creeper spawns", "&7directly on their corpse.")
                 .build();
     }
 

@@ -18,9 +18,7 @@ public class TripleExpScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.EXPERIENCE_BOTTLE)
                 .name("&b" + getName())
-                .lore(
-                        "&7The experience you get from everything is tripled."
-                )
+                .lore("&7The experience you get from everything is tripled.")
                 .build();
     }
 

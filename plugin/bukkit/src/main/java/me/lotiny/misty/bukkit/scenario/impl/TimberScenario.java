@@ -16,7 +16,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class TimberScenario extends Scenario {
@@ -30,9 +36,7 @@ public class TimberScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.WOODEN_AXE)
                 .name("&b" + getName())
-                .lore(
-                        "&7When you break a tree, the entire logs of that tree will come off."
-                )
+                .lore("&7When you break a tree, the entire logs of that tree will come off.")
                 .build();
     }
 
@@ -44,30 +48,35 @@ public class TimberScenario extends Scenario {
 
         Block block = event.getBlock();
         if (XTag.LOGS.isTagged(XMaterial.matchXMaterial(block.getType()))) {
-            List<Vector> treeLogs = new ArrayList<>(floodFind(block,
-                    b -> XTag.LOGS.isTagged(XMaterial.matchXMaterial(b.getType()))));
+            List<Vector> treeLogs =
+                    new ArrayList<>(floodFind(block, b -> XTag.LOGS.isTagged(XMaterial.matchXMaterial(b.getType()))));
 
             World world = block.getWorld();
-            treeLogs.sort(Comparator.comparingDouble(v -> v.distance(block.getLocation().toVector())));
+            treeLogs.sort(Comparator.comparingDouble(
+                    v -> v.distance(block.getLocation().toVector())));
 
             final int[] index = {0};
             final ScheduledTask<?>[] taskHolder = new ScheduledTask<?>[1];
-            taskHolder[0] = MCSchedulers.getGlobalScheduler().scheduleAtFixedRate(() -> {
-                if (index[0] >= treeLogs.size()) {
-                    taskHolder[0].cancel();
-                    return;
-                }
+            taskHolder[0] = MCSchedulers.getGlobalScheduler()
+                    .scheduleAtFixedRate(
+                            () -> {
+                                if (index[0] >= treeLogs.size()) {
+                                    taskHolder[0].cancel();
+                                    return;
+                                }
 
-                Vector v = treeLogs.get(index[0]);
-                Block wood = world.getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+                                Vector v = treeLogs.get(index[0]);
+                                Block wood = world.getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
 
-                if (XTag.LOGS.isTagged(XMaterial.matchXMaterial(wood.getType()))) {
-                    wood.breakNaturally();
-                    wood.getWorld().playEffect(wood.getLocation(), Effect.STEP_SOUND, wood.getType());
-                }
+                                if (XTag.LOGS.isTagged(XMaterial.matchXMaterial(wood.getType()))) {
+                                    wood.breakNaturally();
+                                    wood.getWorld().playEffect(wood.getLocation(), Effect.STEP_SOUND, wood.getType());
+                                }
 
-                index[0]++;
-            }, 0L, 4L);
+                                index[0]++;
+                            },
+                            0L,
+                            4L);
         }
     }
 

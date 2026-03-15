@@ -1,8 +1,10 @@
 package me.lotiny.misty.bukkit.scenario;
 
+import com.google.common.reflect.ClassPath;
 import io.fairyproject.bootstrap.bukkit.BukkitPlugin;
 import io.fairyproject.container.Autowired;
 import io.fairyproject.container.InjectableComponent;
+import io.fairyproject.log.Log;
 import io.fairyproject.util.CC;
 import lombok.Getter;
 import me.lotiny.misty.api.game.ConfigType;
@@ -13,7 +15,11 @@ import me.lotiny.misty.api.scenario.ScenarioManager;
 import me.lotiny.misty.api.team.TeamManager;
 import me.lotiny.misty.bukkit.scenario.annotations.IncompatibleWith;
 import me.lotiny.misty.bukkit.scenario.annotations.Required;
-import me.lotiny.misty.bukkit.scenario.impl.*;
+import me.lotiny.misty.bukkit.scenario.impl.AbsorptionPartnerScenario;
+import me.lotiny.misty.bukkit.scenario.impl.BackpacksScenario;
+import me.lotiny.misty.bukkit.scenario.impl.LoveAtFirstSightScenario;
+import me.lotiny.misty.bukkit.scenario.impl.RedVsBlueScenario;
+import me.lotiny.misty.bukkit.scenario.impl.SkyHighScenario;
 import me.lotiny.misty.bukkit.utils.Message;
 import me.lotiny.misty.bukkit.utils.StringUtils;
 import me.lotiny.misty.bukkit.utils.UHCUtils;
@@ -26,6 +32,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.Nullable;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,97 +46,36 @@ public class ScenarioManagerImpl implements ScenarioManager {
 
     private final List<Scenario> scenarios = new ArrayList<>();
     private final List<String> scenariosToEnable = new ArrayList<>();
+
     @Getter
     private final List<ItemStack> droppedItems = new ArrayList<>();
 
     @Override
     public void registerScenarios() {
-        List.of(
-                new CutCleanScenario(),
-                new NoCleanScenario(),
-                new TimberScenario(),
-                new TimebombScenario(),
-                new SafelootScenario(),
-                new HasteyBabiesScenario(),
-                new HasteyBoysScenario(),
-                new HasteyMenScenario(),
-                new DoNotDisturbScenario(),
-                new FlowerPowerScenario(),
-                new RandomizerScenario(),
-                new BackpacksScenario(),
-                new DoubleOreScenario(),
-                new TripleOreScenario(),
-                new DoubleExpScenario(),
-                new TripleExpScenario(),
-                new LoveAtFirstSightScenario(),
-                new RedVsBlueScenario(),
-                new CompanionBenchScenario(),
-                new HairySheepScenario(),
-                new TrackerScenario(),
-                new DoubleHealthScenario(),
-                new AbsorptionlessScenario(),
-                new AbsorptionPartnerScenario(),
-                new BedBombScenario(),
-                new BarebonesScenario(),
-                new DiamondlessScenario(),
-                new GoldlessScenario(),
-                new AxelessScenario(),
-                new CustomCraftScenario(),
-                new NoFallScenario(),
-                new WebcageScenario(),
-                new LuckyLeavesScenario(),
-                new PearlGiverScenario(),
-                new PermanightScenario(),
-                new BlockedScenario(),
-                new WebLimitScenario(),
-                new BaldChickenScenario(),
-                new BatsScenario(),
-                new ArcaneArchivesScenario(),
-                new ForbiddenAlchemyScenario(),
-                new BleedingSweetsScenario(),
-                new BlockRushScenario(),
-                new BowlessScenario(),
-                new ChumpCharityScenario(),
-                new ColdWeaponScenario(),
-                new BetterEnchantScenario(),
-                new CreeperPongScenario(),
-                new CupidScenario(),
-                new EggsScenario(),
-                new ShieldlessScenario(),
-                new BoneBreakerScenario(),
-                new UltraParanoidScenario(),
-                new StockUpScenario(),
-                new FirelessScenario(),
-                new EnchantlessScenario(),
-                new EntropyScenario(),
-                new BloodDiamondsScenario(),
-                new FrozenInTimeScenario(),
-                new GapZapScenario(),
-                new GoldRushScenario(),
-                new GoneFishingScenario(),
-                new CentralEnchantmentScenario(),
-                new BirdScenario(),
-                new HomeworkScenario(),
-                new KillSwitchScenario(),
-                new LightOutScenario(),
-                new PlayerSwapScenario(),
-                new PuppyPowerScenario(),
-                new PyroScenario(),
-                new VengefulSpiritScenario(),
-                new RodlessScenario(),
-                new SecretHealthScenario(),
-                new SheepLoversScenario(),
-                new SkyHighScenario(),
-                new SoupScenario(),
-                new SpeedDemonScenario(),
-                new SwitcherooScenario(),
-                new SwordlessScenario(),
-                new ZoomiesScenario()
-        ).forEach(scenario -> {
-            if (scenario.shouldRegister()) {
-                scenarios.add(scenario);
-            }
-        });
+        try {
+            ClassPath classPath = ClassPath.from(getClass().getClassLoader());
+
+            classPath.getTopLevelClasses("me.lotiny.misty.bukkit.scenario.impl").forEach(classInfo -> {
+                try {
+                    Class<?> clazz = classInfo.load();
+
+                    if (Scenario.class.isAssignableFrom(clazz)
+                            && !clazz.isInterface()
+                            && !Modifier.isAbstract(clazz.getModifiers())) {
+                        Scenario scenario =
+                                (Scenario) clazz.getDeclaredConstructor().newInstance();
+
+                        if (scenario.shouldRegister()) {
+                            scenarios.add(scenario);
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.warn("Failed to load scenario: " + e.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            Log.warn("Failed to load scenarios: " + e.getMessage());
+        }
     }
 
     @Override
@@ -165,8 +111,7 @@ public class ScenarioManagerImpl implements ScenarioManager {
     @Override
     public Scenario getScenario(String name) {
         return scenarios.stream()
-                .filter(scenario -> StringUtils.rb(scenario.getName())
-                        .equalsIgnoreCase(StringUtils.rb(name)))
+                .filter(scenario -> StringUtils.rb(scenario.getName()).equalsIgnoreCase(StringUtils.rb(name)))
                 .findFirst()
                 .orElse(null);
     }
@@ -177,7 +122,8 @@ public class ScenarioManagerImpl implements ScenarioManager {
             IncompatibleWith annotation = scenario.getClass().getAnnotation(IncompatibleWith.class);
             Scenario conflict = getTargetScenario(annotation.value(), true);
             if (conflict != null) {
-                sender.sendMessage(CC.RED + "You cannot enable " + scenario.getName() + " while " + conflict.getName() + " is active.");
+                sender.sendMessage(CC.RED + "You cannot enable " + scenario.getName() + " while " + conflict.getName()
+                        + " is active.");
                 return;
             }
         }
@@ -186,17 +132,21 @@ public class ScenarioManagerImpl implements ScenarioManager {
             Required annotation = scenario.getClass().getAnnotation(Required.class);
             Scenario dependency = getTargetScenario(annotation.value(), false);
             if (dependency != null) {
-                sender.sendMessage(CC.RED + scenario.getName() + " requires " + dependency.getName() + " to be enabled first.");
+                sender.sendMessage(
+                        CC.RED + scenario.getName() + " requires " + dependency.getName() + " to be enabled first.");
                 return;
             }
         }
 
-        if (scenario.equals(SkyHighScenario.class) && gameManager.getGame().getSetting().getBorderSize() <= 500) {
-            sender.sendMessage(CC.RED + scenario.getName() + " scenario can't enabled while starting border size is lower than 500x500.");
+        if (scenario.equals(SkyHighScenario.class)
+                && gameManager.getGame().getSetting().getBorderSize() <= 500) {
+            sender.sendMessage(CC.RED + scenario.getName()
+                    + " scenario can't enabled while starting border size is lower than 500x500.");
             return;
         }
 
-        if ((scenario.equals(BackpacksScenario.class) || scenario.equals(AbsorptionPartnerScenario.class)) && gameManager.getGame().getSetting().getTeamSize() == 1) {
+        if ((scenario.equals(BackpacksScenario.class) || scenario.equals(AbsorptionPartnerScenario.class))
+                && gameManager.getGame().getSetting().getTeamSize() == 1) {
             sender.sendMessage(CC.RED + scenario.getName() + " scenario can only enable in Team game.");
             return;
         }

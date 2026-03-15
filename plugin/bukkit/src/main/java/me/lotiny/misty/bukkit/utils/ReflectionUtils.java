@@ -39,7 +39,8 @@ public class ReflectionUtils {
         }
 
         registerEvent();
-        Log.info("Loaded " + instance.getClass().getSimpleName() + " for server version " + MCServer.current().getVersion().getFormatted());
+        Log.info("Loaded " + instance.getClass().getSimpleName() + " for server version "
+                + MCServer.current().getVersion().getFormatted());
     }
 
     private void registerEvent() {

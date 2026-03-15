@@ -61,8 +61,7 @@ public class RescatterCommand extends AbstractCommand {
             int limit = this.getLimit(player);
             int usage = usages.getOrDefault(uuid, 0);
             if (usage >= limit) {
-                player.sendMessage(Message.RE_SCATTER_LIMITED
-                        .replace("<amount>", String.valueOf(limit)));
+                player.sendMessage(Message.RE_SCATTER_LIMITED.replace("<amount>", String.valueOf(limit)));
                 return;
             }
 
@@ -75,14 +74,15 @@ public class RescatterCommand extends AbstractCommand {
             Metadata.provideForPlayer(uuid).remove(KeyEx.SNAPSHOT_KEY);
 
             usages.put(uuid, usage + 1);
-            gameManager.teleportToRandomLocation(player, gameManager.getGame().getSetting().getBorderSize());
+            gameManager.teleportToRandomLocation(
+                    player, gameManager.getGame().getSetting().getBorderSize());
             Players.clear(player);
             UHCUtils.giveStarterItem(player);
 
-            MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.getPluginManager().callEvent(new PlayerScatterEvent(player, true)));
+            MCSchedulers.getGlobalScheduler()
+                    .schedule(() -> Bukkit.getPluginManager().callEvent(new PlayerScatterEvent(player, true)));
 
-            player.sendMessage(Message.RE_SCATTER_DONE
-                    .replace("<amount>", String.valueOf(limit - usage - 1)));
+            player.sendMessage(Message.RE_SCATTER_DONE.replace("<amount>", String.valueOf(limit - usage - 1)));
         });
     }
 

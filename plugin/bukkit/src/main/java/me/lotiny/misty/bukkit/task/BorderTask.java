@@ -19,6 +19,7 @@ public class BorderTask extends AbstractScheduleTask {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static BorderManager borderManager;
 
@@ -48,8 +49,8 @@ public class BorderTask extends AbstractScheduleTask {
     }
 
     private boolean shouldContinue() {
-        return gameManager.getRegistry().isCanShrink() &&
-                gameManager.getRegistry().getState() != GameState.ENDING;
+        return gameManager.getRegistry().isCanShrink()
+                && gameManager.getRegistry().getState() != GameState.ENDING;
     }
 
     private void handleFirstShrink() {
@@ -76,9 +77,14 @@ public class BorderTask extends AbstractScheduleTask {
     }
 
     private boolean isImportantSecondFirstShrink(int firstShrinkTime) {
-        return getSeconds() == firstShrinkTime - 60 || getSeconds() == firstShrinkTime - 30 || getSeconds() == firstShrinkTime - 10 ||
-                getSeconds() == firstShrinkTime - 5 || getSeconds() == firstShrinkTime - 4 || getSeconds() == firstShrinkTime - 3 ||
-                getSeconds() == firstShrinkTime - 2 || getSeconds() == firstShrinkTime - 1;
+        return getSeconds() == firstShrinkTime - 60
+                || getSeconds() == firstShrinkTime - 30
+                || getSeconds() == firstShrinkTime - 10
+                || getSeconds() == firstShrinkTime - 5
+                || getSeconds() == firstShrinkTime - 4
+                || getSeconds() == firstShrinkTime - 3
+                || getSeconds() == firstShrinkTime - 2
+                || getSeconds() == firstShrinkTime - 1;
     }
 
     private void createBorderMessageFirstShrink(int firstShrinkTime) {
@@ -109,17 +115,24 @@ public class BorderTask extends AbstractScheduleTask {
     }
 
     private boolean isImportantSecondRegularShrink(int seconds) {
-        return seconds == 240 || seconds == 180 || seconds == 120 || seconds == 60 || seconds == 30 || seconds == 10 ||
-                seconds == 5 || seconds == 4 || seconds == 3 || seconds == 2 || seconds == 1;
+        return seconds == 240
+                || seconds == 180
+                || seconds == 120
+                || seconds == 60
+                || seconds == 30
+                || seconds == 10
+                || seconds == 5
+                || seconds == 4
+                || seconds == 3
+                || seconds == 2
+                || seconds == 1;
     }
 
     private void createBorderMessageRegularShrink(int seconds) {
         String sizeValue = forceShrink ? String.valueOf(size) : String.valueOf(borderManager.getNextBorder());
         String timeValue = TimeFormatUtils.formatTimeUnit(seconds);
 
-        Utilities.broadcast(Message.BORDER_SHRINKING_TIME
-                .replace("<size>", sizeValue)
-                .replace("<time>", timeValue));
+        Utilities.broadcast(
+                Message.BORDER_SHRINKING_TIME.replace("<size>", sizeValue).replace("<time>", timeValue));
     }
 }
-

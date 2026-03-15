@@ -26,8 +26,7 @@ public class FrozenInTimeScenario extends Scenario {
                 .lore(
                         "&7Water and Lava will not flow.",
                         "&7Sand and Gravel will not fall from gravity.",
-                        "&7Leaves will not decay."
-                )
+                        "&7Leaves will not decay.")
                 .build();
     }
 

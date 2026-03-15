@@ -39,8 +39,10 @@ public class CombatLoggerListener implements Listener {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
 
@@ -69,10 +71,12 @@ public class CombatLoggerListener implements Listener {
     public void onEntityDamageByEntity(EntityDamageByPlayerEvent event) {
         if (Metadata.provideForEntity(event.getEntity()).has(CombatLoggerImpl.COMBAT_LOGGER_KEY)) {
             GameRegistry registry = gameManager.getRegistry();
-            CombatLogger logger = registry.getCombatLoggers().get(event.getEntity().getUniqueId());
+            CombatLogger logger =
+                    registry.getCombatLoggers().get(event.getEntity().getUniqueId());
 
             if (logger != null) {
-                Snapshot loggerData = Metadata.provideForPlayer(logger.getPlayerUniqueId()).getOrThrow(KeyEx.SNAPSHOT_KEY);
+                Snapshot loggerData =
+                        Metadata.provideForPlayer(logger.getPlayerUniqueId()).getOrThrow(KeyEx.SNAPSHOT_KEY);
 
                 if (registry.getState() != GameState.INGAME) {
                     event.setCancelled(true);
@@ -96,7 +100,9 @@ public class CombatLoggerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityPressurePlate(EntityInteractEvent event) {
-        if (XTag.PRESSURE_PLATES.isTagged(XMaterial.matchXMaterial(event.getBlock().getType())) && Metadata.provideForEntity(event.getEntity()).has(CombatLoggerImpl.COMBAT_LOGGER_KEY)) {
+        if (XTag.PRESSURE_PLATES.isTagged(
+                        XMaterial.matchXMaterial(event.getBlock().getType()))
+                && Metadata.provideForEntity(event.getEntity()).has(CombatLoggerImpl.COMBAT_LOGGER_KEY)) {
             event.setCancelled(true);
         }
     }
@@ -171,17 +177,15 @@ public class CombatLoggerListener implements Listener {
         dyingProfile.getStats(StatType.ELO).setAmount(newDyingElo);
     }
 
-    private void broadcastCombatLoggerDeath(Profile killerProfile, Profile dyingProfile, MetadataMap playerMeta, Player killer) {
-        int dyingKills = playerMeta.getOrDefault(KeyEx.GAME_KILLS_KEY, new Stats()).getAmount();
+    private void broadcastCombatLoggerDeath(
+            Profile killerProfile, Profile dyingProfile, MetadataMap playerMeta, Player killer) {
+        int dyingKills =
+                playerMeta.getOrDefault(KeyEx.GAME_KILLS_KEY, new Stats()).getAmount();
         int killerKills = UHCUtils.getGameKills(killer);
 
         Utilities.broadcast(String.format(
                 "&7(Combat-Logger) &c%s &7[&c%d&7]&e was slain by &a%s &7[&a%d&7]",
-                dyingProfile.getName(),
-                dyingKills,
-                killerProfile.getName(),
-                killerKills
-        ));
+                dyingProfile.getName(), dyingKills, killerProfile.getName(), killerKills));
     }
 
     private void finalizeDeath(GameRegistry registry, Snapshot snapshot, UUID entityId, Profile dyingProfile) {

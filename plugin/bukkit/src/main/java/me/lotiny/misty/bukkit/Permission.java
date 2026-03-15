@@ -10,5 +10,4 @@ public class Permission {
     public final String RESCATTER_USAGE = "misty.rescatter.usage.";
     public final String LATE_SCATTER_OTHER = "misty.latescatter.other";
     public final String LATE_SCATTER_BYPASS = "misty.latescatter.bypass";
-
 }

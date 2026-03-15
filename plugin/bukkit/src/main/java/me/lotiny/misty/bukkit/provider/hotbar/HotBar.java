@@ -64,8 +64,8 @@ public class HotBar {
     }
 
     public void createItem() {
-        BiConsumer<Map<String, Integer>, Map<Integer, HotBarConfig.HotBarItem>> createItems = (itemsMap, itemsConfig) ->
-                itemsConfig.forEach((slot, item) -> {
+        BiConsumer<Map<String, Integer>, Map<Integer, HotBarConfig.HotBarItem>> createItems =
+                (itemsMap, itemsConfig) -> itemsConfig.forEach((slot, item) -> {
                     String onClick = item.getOnClick();
                     String[] parts = null;
 
@@ -78,38 +78,42 @@ public class HotBar {
                             .item(ItemBuilder.of(item.getMaterial())
                                     .name(item.getName())
                                     .lore(item.getLore())
-                                    .itemFlag(ItemFlag.HIDE_ATTRIBUTES)
-                            );
+                                    .itemFlag(ItemFlag.HIDE_ATTRIBUTES));
 
                     if (parts != null && parts.length == 2) {
                         String type = parts[0].toLowerCase();
                         String value = parts[1];
 
-                        builder.behaviour(ItemBehaviour.interact(listenerRegistry, (player, itemStack, action, event) -> {
-                            switch (type) {
-                                case "cmd", "command":
-                                    player.performCommand(value);
-                                    break;
-                                case "act", "action":
-                                    switch (value.toLowerCase()) {
-                                        case "alive-players":
-                                            new AlivePlayersMenu().open(player);
+                        builder.behaviour(ItemBehaviour.interact(
+                                listenerRegistry,
+                                (player, itemStack, action, event) -> {
+                                    switch (type) {
+                                        case "cmd", "command":
+                                            player.performCommand(value);
                                             break;
-                                        case "teleport-center":
-                                            player.teleport(UHCUtils.getCenter());
-                                            break;
-                                        case "teleport-random-player":
-                                            Player randomPlayer = getRandomPlayer();
-                                            if (randomPlayer != null) {
-                                                player.teleport(randomPlayer);
-                                            } else {
-                                                player.sendMessage(CC.RED + "Teleporting to a random player has failed...");
+                                        case "act", "action":
+                                            switch (value.toLowerCase()) {
+                                                case "alive-players":
+                                                    new AlivePlayersMenu().open(player);
+                                                    break;
+                                                case "teleport-center":
+                                                    player.teleport(UHCUtils.getCenter());
+                                                    break;
+                                                case "teleport-random-player":
+                                                    Player randomPlayer = getRandomPlayer();
+                                                    if (randomPlayer != null) {
+                                                        player.teleport(randomPlayer);
+                                                    } else {
+                                                        player.sendMessage(CC.RED
+                                                                + "Teleporting to a random player has failed...");
+                                                    }
+                                                    break;
                                             }
                                             break;
                                     }
-                                    break;
-                            }
-                        }, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK));
+                                },
+                                Action.RIGHT_CLICK_AIR,
+                                Action.RIGHT_CLICK_BLOCK));
 
                         builder.behaviour(ItemBehaviour.ofEvent(PlayerInteractEntityEvent.class, (event, behaviour) -> {
                             Player player = event.getPlayer();

@@ -37,7 +37,9 @@ import java.util.UUID;
 
 @InjectableComponent
 @RequiredArgsConstructor
-@Command(value = {"uhc", "game"}, permissionNode = "misty.command.uhc")
+@Command(
+        value = {"uhc", "game"},
+        permissionNode = "misty.command.uhc")
 @CommandPresence(MistyPresenceProvider.class)
 public class UHCCommand extends AbstractCommand {
 
@@ -59,8 +61,7 @@ public class UHCCommand extends AbstractCommand {
                 "&b/uhc customitem <item> &7- &fGive yourself a customcraft",
                 "&b/uhc forcepvp &7- &fForce pvp to be enabled",
                 "&b/uhc forcefinalheal &7- &fForce final heal to be executed",
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 
     @Command("settings")
@@ -90,8 +91,7 @@ public class UHCCommand extends AbstractCommand {
                 }
             }
 
-            player.sendMessage(Message.CLEAR_LAG
-                    .replace("<world>", world.getName()));
+            player.sendMessage(Message.CLEAR_LAG.replace("<world>", world.getName()));
         });
     }
 
@@ -121,16 +121,14 @@ public class UHCCommand extends AbstractCommand {
 
             if (registry.getHost() == null) {
                 registry.setHost(storageRegistry.getProfile(uuid));
-                player.sendMessage(Message.HOST_SET_HOST
-                        .replace("<target>", target.getName()));
+                player.sendMessage(Message.HOST_SET_HOST.replace("<target>", target.getName()));
             } else {
                 if (registry.getHost().getUniqueId().equals(uuid)) {
                     registry.setHost(null);
-                    player.sendMessage(Message.HOST_REMOVE_HOST
-                            .replace("<target>", target.getName()));
+                    player.sendMessage(Message.HOST_REMOVE_HOST.replace("<target>", target.getName()));
                 } else {
-                    player.sendMessage(Message.HOST_ALREADY_HAVE_HOST
-                            .replace("<host>", registry.getHost().getName()));
+                    player.sendMessage(Message.HOST_ALREADY_HAVE_HOST.replace(
+                            "<host>", registry.getHost().getName()));
                 }
             }
         });
@@ -145,8 +143,7 @@ public class UHCCommand extends AbstractCommand {
             }
 
             if (!scenarioManager.isEnabled("Custom Craft")) {
-                player.sendMessage(Message.SCENARIO_NOT_ENABLED
-                        .replace("<scenario>", "Custom Craft"));
+                player.sendMessage(Message.SCENARIO_NOT_ENABLED.replace("<scenario>", "Custom Craft"));
                 return;
             }
 

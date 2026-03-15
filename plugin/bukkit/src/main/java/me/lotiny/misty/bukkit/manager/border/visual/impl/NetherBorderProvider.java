@@ -9,6 +9,7 @@ public class NetherBorderProvider implements BorderProvider {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static WorldManager worldManager;
 

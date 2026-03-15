@@ -22,9 +22,7 @@ public class SwordlessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.WOODEN_SWORD)
                 .name("&b" + getName())
-                .lore(
-                        "&7Sword cannot be used."
-                )
+                .lore("&7Sword cannot be used.")
                 .build();
     }
 
@@ -35,7 +33,8 @@ public class SwordlessScenario extends Scenario {
             PlayerUtils.setItemInHand(player, null);
         }
 
-        if (VersionUtils.isHigher(9, 0) && XTag.SWORDS.isTagged(XMaterial.matchXMaterial(PlayerUtils.getItemInOffHand(player)))) {
+        if (VersionUtils.isHigher(9, 0)
+                && XTag.SWORDS.isTagged(XMaterial.matchXMaterial(PlayerUtils.getItemInOffHand(player)))) {
             PlayerUtils.setItemInOffHand(player, null);
         }
     }

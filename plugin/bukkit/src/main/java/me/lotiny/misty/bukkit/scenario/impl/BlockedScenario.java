@@ -29,9 +29,7 @@ public class BlockedScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.BRICKS)
                 .name("&b" + getName())
-                .lore(
-                        "&7You cannot break block that you placed!"
-                )
+                .lore("&7You cannot break block that you placed!")
                 .build();
     }
 

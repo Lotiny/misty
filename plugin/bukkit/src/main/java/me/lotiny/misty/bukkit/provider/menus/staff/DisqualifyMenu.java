@@ -47,30 +47,30 @@ public class DisqualifyMenu extends MistyPaginatedMenu {
                                 .skull(logger.getPlayerName())
                                 .lore(
                                         CC.MENU_BAR,
-                                        "&eDuration left &c" + ((CombatLoggerCooldown) gameManager.getCombatLoggerCooldown()).getCooldownTimer(logger),
+                                        "&eDuration left &c"
+                                                + ((CombatLoggerCooldown) gameManager.getCombatLoggerCooldown())
+                                                        .getCooldownTimer(logger),
                                         " ",
                                         "&7Shift-Click to disqualify!",
-                                        CC.MENU_BAR
-                                ).build(),
+                                        CC.MENU_BAR)
+                                .build(),
                         (clickedPlayer, clickType) -> {
                             if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
 
                             if (clickType.isShiftClick()) {
                                 logger.remove();
-                                clickedPlayer.sendMessage(CC.translate("&cYou have disqualified &4" + logger.getPlayerName()));
+                                clickedPlayer.sendMessage(
+                                        CC.translate("&cYou have disqualified &4" + logger.getPlayerName()));
                                 playClick(clickedPlayer);
                                 open(clickedPlayer, pane.getPage());
                             }
-                        }
-                )));
+                        })));
 
         if (buttons.isEmpty()) {
-            buttons.add(MenuItem.of(
-                    ItemBuilder.of(XMaterial.BARRIER)
-                            .name("&cNo combat loggers found")
-                            .lore("&7Currently, no players are logged out in combat.")
-                            .build()
-            ));
+            buttons.add(MenuItem.of(ItemBuilder.of(XMaterial.BARRIER)
+                    .name("&cNo combat loggers found")
+                    .lore("&7Currently, no players are logged out in combat.")
+                    .build()));
         }
 
         return buttons;

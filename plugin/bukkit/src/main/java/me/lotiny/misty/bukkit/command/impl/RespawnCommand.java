@@ -15,7 +15,11 @@ import me.lotiny.misty.api.team.Team;
 import me.lotiny.misty.api.team.TeamManager;
 import me.lotiny.misty.bukkit.command.AbstractCommand;
 import me.lotiny.misty.bukkit.storage.StorageRegistry;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.KeyEx;
+import me.lotiny.misty.bukkit.utils.Message;
+import me.lotiny.misty.bukkit.utils.PlayerUtils;
+import me.lotiny.misty.bukkit.utils.Snapshot;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
@@ -23,7 +27,9 @@ import java.util.UUID;
 
 @InjectableComponent
 @RequiredArgsConstructor
-@Command(value = {"respawn", "revive"}, permissionNode = "misty.command.respawn")
+@Command(
+        value = {"respawn", "revive"},
+        permissionNode = "misty.command.respawn")
 public class RespawnCommand extends AbstractCommand {
 
     private final GameManager gameManager;
@@ -32,9 +38,7 @@ public class RespawnCommand extends AbstractCommand {
 
     @Command("#")
     public void onRespawn(BukkitCommandContext context, @Arg("target") Player target) {
-        mustBePlayer(context, player ->
-                handleRespawn(player, target)
-        );
+        mustBePlayer(context, player -> handleRespawn(player, target));
     }
 
     private void handleRespawn(Player player, Player target) {
@@ -79,7 +83,6 @@ public class RespawnCommand extends AbstractCommand {
         target.getInventory().setArmorContents(snapshot.getArmors());
         target.setLevel(snapshot.getLevel());
 
-        player.sendMessage(Message.RESPAWN_DONE
-                .replace("<player>", target.getName()));
+        player.sendMessage(Message.RESPAWN_DONE.replace("<player>", target.getName()));
     }
 }

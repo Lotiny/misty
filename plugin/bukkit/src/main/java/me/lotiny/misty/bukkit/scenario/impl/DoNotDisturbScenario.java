@@ -31,8 +31,7 @@ public class DoNotDisturbScenario extends Scenario {
                         "&7If you hit a player, it will lock you with that",
                         "&7player or team for 30 seconds. Every time you hit",
                         "&7that player or team, the timer will refresh until",
-                        "&7the 30 seconds are up and can be attacked by another player or team."
-                )
+                        "&7the 30 seconds are up and can be attacked by another player or team.")
                 .build();
     }
 
@@ -58,11 +57,11 @@ public class DoNotDisturbScenario extends Scenario {
     }
 
     private void sendLinkedMessage(Team damagerTeam, Team damagedTeam, String damagerName, String damagedName) {
-        String damagerMessage = (gameManager.getGame().getSetting().getTeamSize() > 1) ? "Team #" + damagedTeam.getId() : damagedName;
-        String damagedMessage = (gameManager.getGame().getSetting().getTeamSize() > 1) ? "Team #" + damagerTeam.getId() : damagerName;
-        damagerTeam.sendMessage(Message.DO_NOT_DISTURB_LINKED_WITH
-                .replace("<linked>", damagerMessage));
-        damagedTeam.sendMessage(Message.DO_NOT_DISTURB_LINKED_WITH
-                .replace("<linked>", damagedMessage));
+        String damagerMessage =
+                (gameManager.getGame().getSetting().getTeamSize() > 1) ? "Team #" + damagedTeam.getId() : damagedName;
+        String damagedMessage =
+                (gameManager.getGame().getSetting().getTeamSize() > 1) ? "Team #" + damagerTeam.getId() : damagerName;
+        damagerTeam.sendMessage(Message.DO_NOT_DISTURB_LINKED_WITH.replace("<linked>", damagerMessage));
+        damagedTeam.sendMessage(Message.DO_NOT_DISTURB_LINKED_WITH.replace("<linked>", damagedMessage));
     }
 }

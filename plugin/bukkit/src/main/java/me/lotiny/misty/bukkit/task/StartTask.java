@@ -18,7 +18,13 @@ import me.lotiny.misty.bukkit.config.impl.MainConfig;
 import me.lotiny.misty.bukkit.manager.PracticeManager;
 import me.lotiny.misty.bukkit.manager.WorldManager;
 import me.lotiny.misty.bukkit.manager.border.BorderManager;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.Message;
+import me.lotiny.misty.bukkit.utils.PlayerUtils;
+import me.lotiny.misty.bukkit.utils.ReflectionUtils;
+import me.lotiny.misty.bukkit.utils.TeamEx;
+import me.lotiny.misty.bukkit.utils.TimeFormatUtils;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
+import me.lotiny.misty.bukkit.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -31,14 +37,19 @@ public class StartTask extends AbstractScheduleTask {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static PracticeManager practiceManager;
+
     @Autowired
     private static WorldManager worldManager;
+
     @Autowired
     private static BorderManager borderManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Autowired
     private static TeamManager teamManager;
 
@@ -61,7 +72,8 @@ public class StartTask extends AbstractScheduleTask {
             MainConfig.AutoStart autoStart = config.getAutoStart();
 
             if (autoStart.isEnabled() && !force) {
-                if (autoStart.getMinPlayers() > gameManager.getRegistry().getPlayers().size()) {
+                if (autoStart.getMinPlayers()
+                        > gameManager.getRegistry().getPlayers().size()) {
                     if (autoStart.isCanceled()) {
                         cancelCountdown(autoStart);
                         return;
@@ -85,8 +97,8 @@ public class StartTask extends AbstractScheduleTask {
                     practiceManager.setOpened(false, Bukkit.getConsoleSender());
                 }
 
-                Utilities.broadcast(Message.SCATTER_TIME
-                        .replace("<time>", TimeFormatUtils.formatTimeUnit(currentSeconds)));
+                Utilities.broadcast(
+                        Message.SCATTER_TIME.replace("<time>", TimeFormatUtils.formatTimeUnit(currentSeconds)));
             }
         };
     }
@@ -129,13 +141,16 @@ public class StartTask extends AbstractScheduleTask {
         int height = borderManager.getBorderHeight();
         borderManager.shrinkBorder(world.getName(), borderSize, height);
 
-        MCSchedulers.getGlobalScheduler().schedule(() -> {
-            ReflectionUtils.get().setGameRule(world, "doDaylightCycle", false);
-            worldManager.unloadUnusedWorld();
+        MCSchedulers.getGlobalScheduler()
+                .schedule(
+                        () -> {
+                            ReflectionUtils.get().setGameRule(world, "doDaylightCycle", false);
+                            worldManager.unloadUnusedWorld();
 
-            processPlayersForScattering(world, borderSize);
-            new ScatterTask().run(false, 15L);
-        }, 20L);
+                            processPlayersForScattering(world, borderSize);
+                            new ScatterTask().run(false, 15L);
+                        },
+                        20L);
     }
 
     private void processPlayersForScattering(World world, int borderSize) {
@@ -187,8 +202,8 @@ public class StartTask extends AbstractScheduleTask {
             return teamManager.getTeams().get(1);
         }
 
-        Team smallerTeam = redTeam.getMembers(true).size() > blueTeam.getMembers(true).size()
-                ? blueTeam : redTeam;
+        Team smallerTeam =
+                redTeam.getMembers(true).size() > blueTeam.getMembers(true).size() ? blueTeam : redTeam;
 
         smallerTeam.addMember(player);
         return smallerTeam;
@@ -202,7 +217,9 @@ public class StartTask extends AbstractScheduleTask {
 
         for (Team allTeam : teamManager.getTeams().values()) {
             boolean isFill = allTeam.getStorage().getOrThrow(TeamEx.TEAM_FILL);
-            if (isFill && allTeam.getMembers(true).size() < gameManager.getGame().getSetting().getTeamSize()) {
+            if (isFill
+                    && allTeam.getMembers(true).size()
+                            < gameManager.getGame().getSetting().getTeamSize()) {
                 allTeam.addMember(player);
                 return allTeam;
             }

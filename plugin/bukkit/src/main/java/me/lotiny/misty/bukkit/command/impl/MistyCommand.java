@@ -44,8 +44,7 @@ public class MistyCommand extends AbstractCommand {
                 "&aMisty &fversion &a" + VersionUtils.getPluginVersion(),
                 "&fAuthor: &aLotiny",
                 "&fWebsite: &ahttps://github.com/Lotiny",
-                " "
-        );
+                " ");
     }
 
     @Command(value = "teaminfo", permissionNode = Permission.HOST_PERMISSION)

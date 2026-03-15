@@ -28,10 +28,7 @@ public class GoldlessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.GOLD_ORE)
                 .name("&b" + getName())
-                .lore(
-                        "&7You cannot mined gold ore player",
-                        "&7will drop 1 gold when they died."
-                )
+                .lore("&7You cannot mined gold ore player", "&7will drop 1 gold when they died.")
                 .build();
     }
 

@@ -25,7 +25,9 @@ import org.bukkit.entity.Player;
 
 @InjectableComponent
 @RequiredArgsConstructor
-@Command(value = {"lookforteam", "lft", "lookingforteam", "needteammate"}, permissionNode = "misty.command.lft")
+@Command(
+        value = {"lookforteam", "lft", "lookingforteam", "needteammate"},
+        permissionNode = "misty.command.lft")
 public class LookingForTeamCommand extends AbstractCommand {
 
     private final GameManager gameManager;
@@ -37,7 +39,9 @@ public class LookingForTeamCommand extends AbstractCommand {
             GameSetting setting = gameManager.getGame().getSetting();
             GameRegistry registry = gameManager.getRegistry();
             GameState gameState = registry.getState();
-            if (setting.getTeamSize() == 1 || scenarioManager.isEnabled("Red vs Blue") || scenarioManager.isEnabled("Love At First Sight")) {
+            if (setting.getTeamSize() == 1
+                    || scenarioManager.isEnabled("Red vs Blue")
+                    || scenarioManager.isEnabled("Love At First Sight")) {
                 player.sendMessage(Message.TEAM_DISABLED);
                 return;
             }
@@ -58,7 +62,8 @@ public class LookingForTeamCommand extends AbstractCommand {
                     return;
                 }
 
-                sendLookingForTeammateMessage(player, maxTeamSize - team.getMembers(true).size());
+                sendLookingForTeammateMessage(
+                        player, maxTeamSize - team.getMembers(true).size());
             }
         });
     }
@@ -75,7 +80,8 @@ public class LookingForTeamCommand extends AbstractCommand {
                 .appendNewline()
                 .append(LegacyAdventureUtil.decode(CC.CHAT_BAR))
                 .clickEvent(ClickEvent.runCommand("/team invite " + player.getName()))
-                .hoverEvent(HoverEvent.showText(Component.text("Click to invite this player to your team", NamedTextColor.GREEN)))
+                .hoverEvent(HoverEvent.showText(
+                        Component.text("Click to invite this player to your team", NamedTextColor.GREEN)))
                 .asComponent();
 
         Bukkit.getOnlinePlayers().forEach(online -> {
@@ -92,7 +98,8 @@ public class LookingForTeamCommand extends AbstractCommand {
                 .appendNewline()
                 .append(LegacyAdventureUtil.decode("&2&lLooking For Team!"))
                 .appendNewline()
-                .append(LegacyAdventureUtil.decode("&b" + player.getName() + "&e" + " is looking for &b" + remainingSpots + "&e more teammate!"))
+                .append(LegacyAdventureUtil.decode(
+                        "&b" + player.getName() + "&e" + " is looking for &b" + remainingSpots + "&e more teammate!"))
                 .appendNewline()
                 .append(LegacyAdventureUtil.decode("&7Click to request to join this team &a[Request]"))
                 .appendNewline()

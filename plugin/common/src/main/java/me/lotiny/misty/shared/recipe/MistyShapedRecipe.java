@@ -14,5 +14,4 @@ public class MistyShapedRecipe {
     private ItemStack result;
     private String shape;
     private Map<Character, Object> ingredients;
-
 }

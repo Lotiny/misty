@@ -32,8 +32,10 @@ public class SaveConfigsMenu extends MistyPaginatedMenu {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final int SLOT_CREATE = 22;
+
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
 
@@ -69,14 +71,14 @@ public class SaveConfigsMenu extends MistyPaginatedMenu {
                     } else if (clickType.isRightClick()) {
                         new ConfigEditorMenu(setting).open(player);
                     }
-                }
-        );
+                });
     }
 
     @Override
     public Map<Integer, MenuItem> getBorderButtons(Player player, NormalPane topPane, NormalPane bottomPane, Gui gui) {
         return Map.of(
-                SLOT_CREATE, MenuItem.of(
+                SLOT_CREATE,
+                MenuItem.of(
                         ItemBuilder.of(XMaterial.EMERALD_BLOCK)
                                 .name("&aCreate New Config")
                                 .lore("&7Click to save current config", "&7as new config.")
@@ -84,9 +86,7 @@ public class SaveConfigsMenu extends MistyPaginatedMenu {
                         (clickedPlayer, clickType) -> {
                             if (!player.hasPermission(Permission.HOST_PERMISSION)) return;
                             createNewConfig(clickedPlayer);
-                        }
-                )
-        );
+                        }));
     }
 
     private void createNewConfig(Player player) {

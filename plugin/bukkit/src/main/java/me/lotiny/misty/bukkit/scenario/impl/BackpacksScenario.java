@@ -16,11 +16,7 @@ public class BackpacksScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.CHEST)
                 .name("&b" + getName())
-                .lore(
-                        "&7Each team will have a shared extra inventory",
-                        "&7you can access to it by /bp"
-                )
+                .lore("&7Each team will have a shared extra inventory", "&7you can access to it by /bp")
                 .build();
     }
-
 }

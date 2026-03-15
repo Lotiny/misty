@@ -25,8 +25,7 @@ public class BatsScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7Whenever you kill a bat there is a 95% chance",
-                        "&7to drop 1 Golden Apple and a 5% chance to kill you."
-                )
+                        "&7to drop 1 Golden Apple and a 5% chance to kill you.")
                 .build();
     }
 

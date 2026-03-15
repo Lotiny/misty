@@ -13,12 +13,17 @@ import me.lotiny.misty.bukkit.provider.menus.MistyMenu;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ScenariosMenu extends MistyMenu {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
 
@@ -43,12 +48,11 @@ public class ScenariosMenu extends MistyMenu {
         List<Scenario> scenarios = scenarioManager.getEnabledScenarios();
 
         if (scenarios.isEmpty()) {
-            return Collections.singletonMap(0,
-                    MenuItem.of(
-                            ItemBuilder.of(XMaterial.REDSTONE_BLOCK)
-                                    .name("&cNone")
-                                    .build()
-                    ));
+            return Collections.singletonMap(
+                    0,
+                    MenuItem.of(ItemBuilder.of(XMaterial.REDSTONE_BLOCK)
+                            .name("&cNone")
+                            .build()));
         }
 
         Map<Integer, MenuItem> buttons = HashMap.newHashMap(scenarios.size());

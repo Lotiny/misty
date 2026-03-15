@@ -43,12 +43,10 @@ public class WhitelistMenu extends MistyPaginatedMenu {
         GameRegistry registry = gameManager.getRegistry();
 
         if (registry.getWhitelistPlayers().isEmpty()) {
-            buttons.add(MenuItem.of(
-                    ItemBuilder.of(XMaterial.BARRIER)
-                            .name("&cNo players whitelisted")
-                            .lore("&7Use &b/whitelist add <player> &7to add one.")
-                            .build()
-            ));
+            buttons.add(MenuItem.of(ItemBuilder.of(XMaterial.BARRIER)
+                    .name("&cNo players whitelisted")
+                    .lore("&7Use &b/whitelist add <player> &7to add one.")
+                    .build()));
             return buttons;
         }
 
@@ -57,23 +55,17 @@ public class WhitelistMenu extends MistyPaginatedMenu {
                     ItemBuilder.of(XMaterial.PLAYER_HEAD)
                             .name("&b" + whitelisted)
                             .skull(whitelisted)
-                            .lore(
-                                    " ",
-                                    "&7Click to remove this",
-                                    "&7player from whitelist.",
-                                    " "
-                            ).build(),
+                            .lore(" ", "&7Click to remove this", "&7player from whitelist.", " ")
+                            .build(),
                     (clickedPlayer, clickType) -> {
                         if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
 
                         registry.getWhitelistPlayers().remove(whitelisted);
                         PlayerUtils.playSound(clickedPlayer, XSound.BLOCK_ANVIL_BREAK, XSound.UI_BUTTON_CLICK);
-                        clickedPlayer.sendMessage(Message.WHITELIST_REMOVE
-                                .replace("<player>", whitelisted));
+                        clickedPlayer.sendMessage(Message.WHITELIST_REMOVE.replace("<player>", whitelisted));
 
                         open(clickedPlayer);
-                    }
-            ));
+                    }));
         }
 
         return buttons;

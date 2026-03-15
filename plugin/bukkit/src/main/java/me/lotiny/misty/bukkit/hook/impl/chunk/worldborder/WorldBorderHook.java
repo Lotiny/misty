@@ -4,10 +4,10 @@ import com.wimbli.WorldBorder.Events.WorldBorderFillFinishedEvent;
 import com.wimbli.WorldBorder.Events.WorldBorderFillStartEvent;
 import com.wimbli.WorldBorder.WorldFillTask;
 import io.fairyproject.bootstrap.bukkit.BukkitPlugin;
-import io.fairyproject.container.Autowired;
 import io.fairyproject.log.Log;
 import io.fairyproject.mc.scheduler.MCSchedulers;
 import io.fairyproject.scheduler.ScheduledTask;
+import lombok.RequiredArgsConstructor;
 import me.lotiny.misty.api.game.GameManager;
 import me.lotiny.misty.bukkit.config.Config;
 import me.lotiny.misty.bukkit.config.impl.MainConfig;
@@ -19,12 +19,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@RequiredArgsConstructor
 public class WorldBorderHook implements PluginHook, ChunkLoader, Listener {
 
-    @Autowired
-    private static GameManager gameManager;
-    @Autowired
-    private static WorldManager worldManager;
+    private final GameManager gameManager;
+    private final WorldManager worldManager;
 
     private ScheduledTask<?> task;
 
@@ -86,11 +85,14 @@ public class WorldBorderHook implements PluginHook, ChunkLoader, Listener {
         String nether = gameManager.getRegistry().getNetherWorld();
         Utilities.broadcast("&aFinished loading the world &2" + world + "&a!");
         if (world.equals(gameManager.getRegistry().getUhcWorld())) {
-            MCSchedulers.getGlobalScheduler().schedule(() -> {
-                int netherSize = size / worldManager.getNetherScale();
-                setSize(nether, netherSize);
-                fillWorld(nether, netherSize);
-            }, 20L);
+            MCSchedulers.getGlobalScheduler()
+                    .schedule(
+                            () -> {
+                                int netherSize = size / worldManager.getNetherScale();
+                                setSize(nether, netherSize);
+                                fillWorld(nether, netherSize);
+                            },
+                            20L);
         } else if (world.equals(nether)) {
             this.completed = true;
 
@@ -106,11 +108,15 @@ public class WorldBorderHook implements PluginHook, ChunkLoader, Listener {
 
     @EventHandler
     public void handleWorldBorderFillStart(WorldBorderFillStartEvent event) {
-        task = MCSchedulers.getAsyncScheduler().scheduleAtFixedRate(() -> {
-            WorldFillTask task = event.getFillTask();
-            this.world = task.refWorld();
-            this.progress = Math.round(task.getPercentageCompleted() * 10f) / 10f;
-            this.chunks = task.getChunksCompleted();
-        }, 0L, 2L);
+        task = MCSchedulers.getAsyncScheduler()
+                .scheduleAtFixedRate(
+                        () -> {
+                            WorldFillTask task = event.getFillTask();
+                            this.world = task.refWorld();
+                            this.progress = Math.round(task.getPercentageCompleted() * 10f) / 10f;
+                            this.chunks = task.getChunksCompleted();
+                        },
+                        0L,
+                        2L);
     }
 }

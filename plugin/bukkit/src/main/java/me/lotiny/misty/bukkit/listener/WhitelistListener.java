@@ -25,10 +25,7 @@ public class WhitelistListener {
 
     @PostInitialize
     public void onPostInit() {
-        this.eventNode = EventNode.type(
-                "whitelist-listeners",
-                BukkitEventFilter.ALL
-        );
+        this.eventNode = EventNode.type("whitelist-listeners", BukkitEventFilter.ALL);
 
         eventNode.addListener(AsyncPlayerPreLoginEvent.class, event -> {
             GameRegistry registry = gameManager.getRegistry();

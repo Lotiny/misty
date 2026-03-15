@@ -47,8 +47,7 @@ public class PracticeCommand extends AbstractCommand {
                 "&b/practice setmax <number> &7- &fSet practice's max slot",
                 "&b/practice setkit &7- &fSet practice's kit",
                 "&b/practice setlocation &7- &fSet practice's location",
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 
     @Command(value = "setlocation", permissionNode = "misty.command.practice")
@@ -75,8 +74,8 @@ public class PracticeCommand extends AbstractCommand {
     @Command(value = "setmax", permissionNode = "misty.command.practice")
     public void onSetMax(BukkitCommandContext context, @Arg("amount") int amount) {
         practiceManager.setMaxPlayers(amount);
-        context.sendMessage(MessageType.INFO, Message.PRACTICE_SET_MAX_PLAYERS
-                .replace("<amount>", String.valueOf(amount)));
+        context.sendMessage(
+                MessageType.INFO, Message.PRACTICE_SET_MAX_PLAYERS.replace("<amount>", String.valueOf(amount)));
     }
 
     @Command(value = "toggle", permissionNode = "misty.command.practice")

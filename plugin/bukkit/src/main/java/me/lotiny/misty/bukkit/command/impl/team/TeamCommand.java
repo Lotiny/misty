@@ -57,8 +57,7 @@ public class TeamCommand extends AbstractCommand {
                 "&b/team request <player> &7- &fSend request to join the team",
                 "&b/sendcoords &7- &fSend your coordinate to team member",
                 "&b/tc &7- &fToggle team chat",
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 
     @Command("create")
@@ -91,18 +90,21 @@ public class TeamCommand extends AbstractCommand {
             }
 
             Team targetTeam = UHCUtils.getTeam(target);
-            if (team.getMembers(false).contains(target.getUniqueId()) || targetTeam != null && targetTeam.getMembers(true).size() > 1) {
+            if (team.getMembers(false).contains(target.getUniqueId())
+                    || targetTeam != null && targetTeam.getMembers(true).size() > 1) {
                 player.sendMessage(Message.TEAM_INVITE_CANT);
                 return;
             }
 
-            if (team.getMembers(true).size() >= gameManager.getGame().getSetting().getTeamSize()) {
+            if (team.getMembers(true).size()
+                    >= gameManager.getGame().getSetting().getTeamSize()) {
                 player.sendMessage(Message.TEAM_FULL);
                 return;
             }
 
             GameRegistry registry = gameManager.getRegistry();
-            if (registry.getState() == GameState.INGAME && teamManager.getTeams().size() == 2) {
+            if (registry.getState() == GameState.INGAME
+                    && teamManager.getTeams().size() == 2) {
                 player.sendMessage(Message.WRONG_STATE);
                 return;
             }
@@ -110,7 +112,8 @@ public class TeamCommand extends AbstractCommand {
             List<TeamInvitation> invitations = teamManager.getInvitations();
             if (!invitations.isEmpty()) {
                 invitations.stream()
-                        .filter(invitation -> invitation.getInvited().equals(player) && invitation.getInviter().equals(target))
+                        .filter(invitation -> invitation.getInvited().equals(player)
+                                && invitation.getInviter().equals(target))
                         .findFirst()
                         .ifPresent(teamInvitationImpl -> player.sendMessage(Message.TEAM_INVITE_ALREADY_SEND));
             }
@@ -140,7 +143,8 @@ public class TeamCommand extends AbstractCommand {
             }
 
             TeamInvitation teamInvitation = invitations.stream()
-                    .filter(invitation -> invitation.getInvited().equals(player) && invitation.getInviter().equals(target))
+                    .filter(invitation -> invitation.getInvited().equals(player)
+                            && invitation.getInviter().equals(target))
                     .findFirst()
                     .orElse(null);
             if (teamInvitation == null) {
@@ -245,7 +249,8 @@ public class TeamCommand extends AbstractCommand {
                 return;
             }
 
-            if (targetTeam.getMembers(true).size() >= gameManager.getGame().getSetting().getTeamSize()) {
+            if (targetTeam.getMembers(true).size()
+                    >= gameManager.getGame().getSetting().getTeamSize()) {
                 player.sendMessage(Message.TEAM_FULL);
                 return;
             }
@@ -257,13 +262,15 @@ public class TeamCommand extends AbstractCommand {
                 Component component = Component.text()
                         .append(LegacyAdventureUtil.decode(CC.CHAT_BAR))
                         .appendNewline()
-                        .append(LegacyAdventureUtil.decode("&b" + player.getName() + "&e is requesting to join your team."))
+                        .append(LegacyAdventureUtil.decode(
+                                "&b" + player.getName() + "&e is requesting to join your team."))
                         .appendNewline()
                         .append(LegacyAdventureUtil.decode("&7Click to invite this player &a[Invite]"))
                         .appendNewline()
                         .append(LegacyAdventureUtil.decode(CC.CHAT_BAR))
                         .clickEvent(ClickEvent.runCommand("/team invite " + player.getName()))
-                        .hoverEvent(HoverEvent.showText(Component.text("Click to invite this player", NamedTextColor.GREEN)))
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text("Click to invite this player", NamedTextColor.GREEN)))
                         .asComponent();
 
                 mcTarget.sendMessage(component);
@@ -272,7 +279,9 @@ public class TeamCommand extends AbstractCommand {
     }
 
     private boolean isTeamDisabled(Player player) {
-        if (gameManager.getGame().getSetting().getTeamSize() == 1 || scenarioManager.isEnabled("Red vs Blue") || scenarioManager.isEnabled("Love At First Sight")) {
+        if (gameManager.getGame().getSetting().getTeamSize() == 1
+                || scenarioManager.isEnabled("Red vs Blue")
+                || scenarioManager.isEnabled("Love At First Sight")) {
             player.sendMessage(Message.TEAM_DISABLED);
             return true;
         }

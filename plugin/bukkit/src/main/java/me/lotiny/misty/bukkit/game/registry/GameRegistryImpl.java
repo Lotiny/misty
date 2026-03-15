@@ -16,7 +16,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
@@ -78,8 +82,7 @@ public class GameRegistryImpl implements GameRegistry {
 
     @Override
     public List<UUID> getAlivePlayers() {
-        return this.players.entrySet()
-                .stream()
+        return this.players.entrySet().stream()
                 .filter(Map.Entry::getValue)
                 .map(Map.Entry::getKey)
                 .toList();
@@ -87,8 +90,7 @@ public class GameRegistryImpl implements GameRegistry {
 
     @Override
     public List<UUID> getSpectators() {
-        return Bukkit.getOnlinePlayers()
-                .stream()
+        return Bukkit.getOnlinePlayers().stream()
                 .map(Player::getUniqueId)
                 .filter(uniqueId -> !this.players.getOrDefault(uniqueId, false))
                 .toList();
@@ -109,11 +111,9 @@ public class GameRegistryImpl implements GameRegistry {
 
         String player = sender instanceof Player ? sender.getName() : "Console";
         if (enabled) {
-            Utilities.broadcast(Message.WHITELIST_ON
-                    .replace("<player>", player));
+            Utilities.broadcast(Message.WHITELIST_ON.replace("<player>", player));
         } else {
-            Utilities.broadcast(Message.WHITELIST_OFF
-                    .replace("<player>", player));
+            Utilities.broadcast(Message.WHITELIST_OFF.replace("<player>", player));
         }
     }
 }

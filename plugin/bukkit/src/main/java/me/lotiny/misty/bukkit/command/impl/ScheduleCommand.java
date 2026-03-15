@@ -24,7 +24,9 @@ import java.util.regex.Pattern;
 
 @InjectableComponent
 @RequiredArgsConstructor
-@Command(value = {"schedule", "autostart"}, permissionNode = "misty.command.schedule")
+@Command(
+        value = {"schedule", "autostart"},
+        permissionNode = "misty.command.schedule")
 public class ScheduleCommand extends AbstractCommand {
 
     private final GameManager gameManager;
@@ -115,8 +117,8 @@ public class ScheduleCommand extends AbstractCommand {
         registry.setStartTask(task);
         task.run(true, 20L);
 
-        context.sendMessage(MessageType.INFO, Message.SCHEDULE_SET
-                .replace("<time>", FormatUtil.formatMillis(inputTime)));
+        context.sendMessage(
+                MessageType.INFO, Message.SCHEDULE_SET.replace("<time>", FormatUtil.formatMillis(inputTime)));
 
         if (seconds <= (Config.getMainConfig().getWhitelistOffBefore() * 60)) {
             if (registry.isWhitelist()) {

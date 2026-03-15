@@ -81,7 +81,9 @@ public class MistyPlaceholderAPIExpansion extends PlaceholderExpansion {
         // Check for a placeholder that lists enabled scenarios.
         // Example: %misty_scenarios%
         if (params.equalsIgnoreCase("scenarios")) {
-            return (scenarioManager.getEnabledScenarios().isEmpty() ? "None" : scenarioManager.getEnabledScenarios().toString());
+            return (scenarioManager.getEnabledScenarios().isEmpty()
+                    ? "None"
+                    : scenarioManager.getEnabledScenarios().toString());
         }
 
         // Check for a placeholder that retrieves the host's name.
@@ -155,8 +157,8 @@ public class MistyPlaceholderAPIExpansion extends PlaceholderExpansion {
 
         Player player = Bukkit.getPlayer(uuid);
         Team team = UHCUtils.getTeam(player);
-        boolean redVsBlue = gameManager.getRegistry().getState() != GameState.LOBBY
-                && scenarioManager.isEnabled("Red vs Blue");
+        boolean redVsBlue =
+                gameManager.getRegistry().getState() != GameState.LOBBY && scenarioManager.isEnabled("Red vs Blue");
         if (redVsBlue && team != null) {
             color = switch (team.getId()) {
                 case 0 -> "&c";

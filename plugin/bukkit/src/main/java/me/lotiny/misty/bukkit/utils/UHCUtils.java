@@ -30,8 +30,10 @@ public class UHCUtils {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Autowired
     private static KitManager kitManager;
 
@@ -131,7 +133,9 @@ public class UHCUtils {
     }
 
     public int getGameKills(Player player) {
-        return Metadata.provideForPlayer(player).getOrDefault(KeyEx.GAME_KILLS_KEY, new Stats()).getAmount();
+        return Metadata.provideForPlayer(player)
+                .getOrDefault(KeyEx.GAME_KILLS_KEY, new Stats())
+                .getAmount();
     }
 
     public void increaseGameKills(Player player) {

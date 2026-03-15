@@ -12,7 +12,11 @@ import lombok.Setter;
 import me.lotiny.misty.api.game.GameManager;
 import me.lotiny.misty.api.game.registry.CombatLogger;
 import me.lotiny.misty.api.scenario.ScenarioManager;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.GoldenHead;
+import me.lotiny.misty.bukkit.utils.ItemStackUtils;
+import me.lotiny.misty.bukkit.utils.KeyEx;
+import me.lotiny.misty.bukkit.utils.Snapshot;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -25,18 +29,23 @@ import java.util.UUID;
 public class CombatLoggerImpl implements CombatLogger {
 
     public static final MetadataKey<UUID> COMBAT_LOGGER_KEY = MetadataKey.create("combat-logger", UUID.class);
+
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Getter
     private final String playerName;
+
     @Getter
     private final UUID playerUniqueId;
 
     @Setter
     @Getter
     private String nameFormat;
+
     @Getter
     private Villager spawnedEntity;
 

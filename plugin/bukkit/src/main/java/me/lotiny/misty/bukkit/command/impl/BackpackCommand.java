@@ -25,8 +25,7 @@ public class BackpackCommand extends AbstractCommand {
     public void onCommand(BukkitCommandContext context) {
         mustBePlayer(context, player -> {
             if (!scenarioManager.isEnabled("Backpacks")) {
-                player.sendMessage(Message.SCENARIO_NOT_ENABLED
-                        .replace("<scenario>", "Backpacks"));
+                player.sendMessage(Message.SCENARIO_NOT_ENABLED.replace("<scenario>", "Backpacks"));
                 return;
             }
 

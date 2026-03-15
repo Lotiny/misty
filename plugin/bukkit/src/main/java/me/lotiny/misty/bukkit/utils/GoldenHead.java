@@ -34,18 +34,12 @@ public class GoldenHead {
             builder = ItemBuilder.of(material);
         }
 
-        ItemStack tempItem = builder
-                .name(config.getName())
-                .build();
+        ItemStack tempItem = builder.name(config.getName()).build();
 
         ConditionUtils.notNull(tempItem, "Failed to create a GoldenHead");
 
         if (VersionUtils.isHigher(21, 4) && SpigotUtil.SPIGOT_TYPE == SpigotUtil.SpigotType.PAPER) {
-            MistyPaper.applyConsumable(
-                    tempItem,
-                    config.getTime(),
-                    config.getPotionEffects()
-            );
+            MistyPaper.applyConsumable(tempItem, config.getTime(), config.getPotionEffects());
         }
 
         cachedItem = tempItem;

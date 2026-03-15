@@ -27,7 +27,9 @@ public class VersionUtils {
     }
 
     public boolean isBetween(int lowerMinor, int lowerPatch, int higherMinor, int higherPatch) {
-        return MCServer.current().getVersion().isBetweenOrEqual(MCVersion.of(lowerMinor, lowerPatch), MCVersion.of(higherMinor, higherPatch));
+        return MCServer.current()
+                .getVersion()
+                .isBetweenOrEqual(MCVersion.of(lowerMinor, lowerPatch), MCVersion.of(higherMinor, higherPatch));
     }
 
     public String getPluginVersion() {

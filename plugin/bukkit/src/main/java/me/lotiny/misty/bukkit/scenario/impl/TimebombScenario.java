@@ -31,10 +31,7 @@ public class TimebombScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.TNT)
                 .name("&b" + getName())
-                .lore(
-                        "&7When player died their stuff will be in the chest",
-                        "&7that have 30 seconds to loot it."
-                )
+                .lore("&7When player died their stuff will be in the chest", "&7that have 30 seconds to loot it.")
                 .build();
     }
 

@@ -33,7 +33,8 @@ public class ScoreboardProvider extends PlaceholderProvider implements SidebarPr
 
     @Override
     public @Nullable Component getTitle(@NotNull MCPlayer mcPlayer) {
-        return LegacyAdventureUtil.decode(Config.getScoreboardConfig().getScoreboard().getTitle());
+        return LegacyAdventureUtil.decode(
+                Config.getScoreboardConfig().getScoreboard().getTitle());
     }
 
     @Override
@@ -46,13 +47,13 @@ public class ScoreboardProvider extends PlaceholderProvider implements SidebarPr
         Team team = UHCUtils.getTeam(player);
 
         for (String line : lines) {
-            if (line.equals("<start_timer>") && gameManager.getRegistry().getStartTask() == null)
-                continue;
+            if (line.equals("<start_timer>") && gameManager.getRegistry().getStartTask() == null) continue;
 
             if (line.equals("<no_clean>") && (!scenarioManager.isEnabled("No Clean") || !UHCUtils.hasNoClean(player)))
                 continue;
 
-            if (line.equals("<dnd>") && (!scenarioManager.isEnabled("Do Not Disturb") || team == null || !UHCUtils.isInCombat(team)))
+            if (line.equals("<dnd>")
+                    && (!scenarioManager.isEnabled("Do Not Disturb") || team == null || !UHCUtils.isInCombat(team)))
                 continue;
 
             if (line.equals("<scenarios>")) {
@@ -64,7 +65,8 @@ public class ScoreboardProvider extends PlaceholderProvider implements SidebarPr
                     int more = Math.max(0, enabledScenarios.size() - maxLines);
 
                     for (int i = 0; i < Math.min(maxLines, enabledScenarios.size()); i++) {
-                        String scenarioLine = "<white>- <aqua>" + enabledScenarios.get(i).getName();
+                        String scenarioLine =
+                                "<white>- <aqua>" + enabledScenarios.get(i).getName();
                         sidebarLines.add(SidebarLine.of(decode(mcPlayer, scenarioLine, resolver)));
                     }
 

@@ -61,7 +61,10 @@ public class Replacement {
      * @return The message with replacements applied and translated.
      */
     public String toString() {
-        replacements.keySet().forEach(current -> this.message = this.message.replace(String.valueOf(current), String.valueOf(replacements.get(current))));
+        replacements
+                .keySet()
+                .forEach(current -> this.message =
+                        this.message.replace(String.valueOf(current), String.valueOf(replacements.get(current))));
         return CC.translate(this.message);
     }
 }

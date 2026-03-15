@@ -25,7 +25,8 @@ public class SVCHook implements PluginHook, VoicechatPlugin, Listener {
 
     @Override
     public void register() {
-        BukkitVoicechatService service = BukkitPlugin.INSTANCE.getServer().getServicesManager().load(BukkitVoicechatService.class);
+        BukkitVoicechatService service =
+                BukkitPlugin.INSTANCE.getServer().getServicesManager().load(BukkitVoicechatService.class);
         if (service != null) {
             service.registerPlugin(this);
         }

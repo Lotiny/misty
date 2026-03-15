@@ -42,8 +42,7 @@ public class CentralEnchantmentScenario extends Scenario {
                         "&7Players cannot craft enchanting tables, but",
                         "&7a single, pre-placed enchanting table exists at",
                         "&7 the world center (0,0). This creates a high-risk,",
-                        "&7high-reward area that teams must fight to control."
-                )
+                        "&7high-reward area that teams must fight to control.")
                 .build();
     }
 
@@ -84,8 +83,7 @@ public class CentralEnchantmentScenario extends Scenario {
         boolean enchant = Metadata.provideForBlock(block).getOrDefault(ENCHANT_KEY, false);
         if (enchant) {
             event.setCancelled(true);
-            player.sendMessage(Message.SCENARIO_BLOCK_ACTION
-                    .replace("<scenario>", this.getName()));
+            player.sendMessage(Message.SCENARIO_BLOCK_ACTION.replace("<scenario>", this.getName()));
         }
     }
 
@@ -99,8 +97,7 @@ public class CentralEnchantmentScenario extends Scenario {
         boolean enchant = Metadata.provideForBlock(block).getOrDefault(ENCHANT_KEY, false);
         if (!enchant) {
             event.setCancelled(true);
-            player.sendMessage(Message.SCENARIO_BLOCK_ACTION
-                    .replace("<scenario>", this.getName()));
+            player.sendMessage(Message.SCENARIO_BLOCK_ACTION.replace("<scenario>", this.getName()));
         }
     }
 }

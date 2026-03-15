@@ -21,16 +21,16 @@ public class FirelessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.FLINT_AND_STEEL)
                 .name("&b" + getName())
-                .lore(
-                        "&7You talk zero damage from fire."
-                )
+                .lore("&7You talk zero damage from fire.")
                 .build();
     }
 
     @EventHandler
     public void handleEntityDamageEvent(PlayerDamageEvent event) {
         EntityDamageEvent.DamageCause cause = event.getCause();
-        if (cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA) {
+        if (cause == EntityDamageEvent.DamageCause.FIRE
+                || cause == EntityDamageEvent.DamageCause.FIRE_TICK
+                || cause == EntityDamageEvent.DamageCause.LAVA) {
             event.setCancelled(true);
         }
     }

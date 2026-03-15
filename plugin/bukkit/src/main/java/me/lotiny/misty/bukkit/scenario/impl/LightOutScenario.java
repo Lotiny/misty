@@ -21,9 +21,7 @@ public class LightOutScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.TORCH)
                 .name("&b" + getName())
-                .lore(
-                        "&7Torch cannot be placed."
-                )
+                .lore("&7Torch cannot be placed.")
                 .build();
     }
 
@@ -33,8 +31,7 @@ public class LightOutScenario extends Scenario {
 
         if (XBlock.isSimilar(event.getBlock(), XMaterial.TORCH)) {
             event.setCancelled(true);
-            player.sendMessage(Message.SCENARIO_BLOCK_ACTION
-                    .replace("<scenario>", this.getName()));
+            player.sendMessage(Message.SCENARIO_BLOCK_ACTION.replace("<scenario>", this.getName()));
         }
     }
 }

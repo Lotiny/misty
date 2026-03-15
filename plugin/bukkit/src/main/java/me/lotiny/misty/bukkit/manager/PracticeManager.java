@@ -71,23 +71,29 @@ public class PracticeManager {
 
         this.players.add(player.getUniqueId());
 
-        MCSchedulers.getGlobalScheduler().schedule(() -> {
-            player.getInventory().setArmorContents(kit.getArmors());
-            player.getInventory().setContents(kit.getItems());
-            player.teleport(getRandomLocation());
-            player.setFallDistance(0);
-            XSound.BLOCK_NOTE_BLOCK_BASS.play(player);
-        }, 5L);
+        MCSchedulers.getGlobalScheduler()
+                .schedule(
+                        () -> {
+                            player.getInventory().setArmorContents(kit.getArmors());
+                            player.getInventory().setContents(kit.getItems());
+                            player.teleport(getRandomLocation());
+                            player.setFallDistance(0);
+                            XSound.BLOCK_NOTE_BLOCK_BASS.play(player);
+                        },
+                        5L);
     }
 
     public void leave(Player player) {
         this.players.remove(player.getUniqueId());
 
-        MCSchedulers.getGlobalScheduler().schedule(() -> {
-            HotBar.get().apply(player);
-            LocationEx.LOBBY.teleport(player);
-            XSound.BLOCK_NOTE_BLOCK_BASS.play(player);
-        }, 5L);
+        MCSchedulers.getGlobalScheduler()
+                .schedule(
+                        () -> {
+                            HotBar.get().apply(player);
+                            LocationEx.LOBBY.teleport(player);
+                            XSound.BLOCK_NOTE_BLOCK_BASS.play(player);
+                        },
+                        5L);
     }
 
     public void broadcast(String message) {
@@ -120,8 +126,8 @@ public class PracticeManager {
 
             this.opened = true;
 
-            Utilities.broadcast(Message.PRACTICE_ENABLED
-                    .replace("<player>", sender instanceof Player ? sender.getName() : "Console"));
+            Utilities.broadcast(Message.PRACTICE_ENABLED.replace(
+                    "<player>", sender instanceof Player ? sender.getName() : "Console"));
             return;
         }
 
@@ -140,8 +146,8 @@ public class PracticeManager {
         }
 
         this.players.clear();
-        Utilities.broadcast(Message.PRACTICE_DISABLED
-                .replace("<player>", sender instanceof Player ? sender.getName() : "Console"));
+        Utilities.broadcast(
+                Message.PRACTICE_DISABLED.replace("<player>", sender instanceof Player ? sender.getName() : "Console"));
     }
 
     public Location getRandomLocation() {

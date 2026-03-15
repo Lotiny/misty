@@ -23,6 +23,7 @@ public class GameSettingImpl implements GameSetting {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static TeamManager teamManager;
 
@@ -95,9 +96,7 @@ public class GameSettingImpl implements GameSetting {
         this.poison = other.isPoison();
         this.invisible = other.isInvisible();
 
-        this.enabledScenarios = other.getEnabledScenarios() != null
-                ? List.copyOf(other.getEnabledScenarios())
-                : null;
+        this.enabledScenarios = other.getEnabledScenarios() != null ? List.copyOf(other.getEnabledScenarios()) : null;
 
         this.def = other.isDef();
         this.loaded = other.isLoaded();
@@ -109,7 +108,8 @@ public class GameSettingImpl implements GameSetting {
             List<Team> teamsToDisband = new ArrayList<>();
             teamManager.getTeams().forEach((id, team) -> {
                 if (team.getMembers(false).size() > size) {
-                    team.sendMessage("&cThe max team size has been change to lower than your currently team size so your team has been disbanded.");
+                    team.sendMessage(
+                            "&cThe max team size has been change to lower than your currently team size so your team has been disbanded.");
                     teamsToDisband.add(team);
                 }
             });
@@ -126,15 +126,12 @@ public class GameSettingImpl implements GameSetting {
         if (sender != null) {
             String message;
             if (value instanceof Boolean b) {
-                message = b ? Message.CONFIG_CHANGED_ENABLED
-                        : Message.CONFIG_CHANGED_DISABLED;
+                message = b ? Message.CONFIG_CHANGED_ENABLED : Message.CONFIG_CHANGED_DISABLED;
             } else {
-                message = Message.CONFIG_CHANGED
-                        .replace("<value>", value.toString());
+                message = Message.CONFIG_CHANGED.replace("<value>", value.toString());
             }
 
-            Utilities.broadcast(message
-                    .replace("<config>", Utilities.getFormattedName(configType.name()))
+            Utilities.broadcast(message.replace("<config>", Utilities.getFormattedName(configType.name()))
                     .replace("<player>", sender.getName()));
         }
     }

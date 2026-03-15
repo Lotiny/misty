@@ -23,10 +23,7 @@ public class GoneFishingScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.COD)
                 .name("&b" + getName())
-                .lore(
-                        "&7Player start with 20000 Level, 64 Anvil",
-                        "&7and OP Fishing Rod"
-                )
+                .lore("&7Player start with 20000 Level, 64 Anvil", "&7and OP Fishing Rod")
                 .build();
     }
 

@@ -33,8 +33,7 @@ public class CreeperPongScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7Players start with a stack of Charged Creeper Spawn Eggs,",
-                        "&7Knockback X stick and an Unbreaking X Flint and Steel."
-                )
+                        "&7Knockback X stick and an Unbreaking X Flint and Steel.")
                 .build();
     }
 
@@ -60,7 +59,8 @@ public class CreeperPongScenario extends Scenario {
                 World world = location.getWorld();
                 if (world == null) return;
 
-                Creeper creeper = (Creeper) location.getWorld().spawnEntity(location.clone().add(0.0, 1.0, 0.0), EntityType.CREEPER);
+                Creeper creeper = (Creeper)
+                        location.getWorld().spawnEntity(location.clone().add(0.0, 1.0, 0.0), EntityType.CREEPER);
                 creeper.setPowered(true);
             }
         }

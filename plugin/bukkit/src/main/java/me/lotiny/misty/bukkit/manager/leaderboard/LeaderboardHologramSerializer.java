@@ -28,7 +28,8 @@ public class LeaderboardHologramSerializer implements StorageSerializer<Leaderbo
     @Override
     public JsonObject toJson(LeaderboardHologram object) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("leaderboardType", object.getLeaderboard().getStatType().getData());
+        jsonObject.addProperty(
+                "leaderboardType", object.getLeaderboard().getStatType().getData());
         jsonObject.addProperty("position", object.getPosition().toString());
 
         return jsonObject;

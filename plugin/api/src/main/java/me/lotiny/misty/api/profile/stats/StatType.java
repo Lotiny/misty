@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 @RequiredArgsConstructor
 public enum StatType {
-
     ELO(XMaterial.EXPERIENCE_BOTTLE),
     WINS(XMaterial.NETHER_STAR),
     KILLS(XMaterial.IRON_SWORD),

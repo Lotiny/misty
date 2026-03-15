@@ -29,14 +29,23 @@ public class LeaderboardManager {
         this.leaderboardMap = new HashMap<>();
 
         for (StatType statType : StatType.values()) {
-            this.leaderboardMap.put(statType, new Leaderboard(statType, Utilities.getFormattedName(statType.name()), statType.getData()));
+            this.leaderboardMap.put(
+                    statType,
+                    new Leaderboard(statType, Utilities.getFormattedName(statType.name()), statType.getData()));
         }
 
-        MCSchedulers.getAsyncScheduler().scheduleAtFixedRate(() -> {
-            this.savePlayerData();
-            this.updateLeaderBoard();
-            storageRegistry.getLeaderboardHologramStorage().getAll().forEach(LeaderboardHologram::spawn);
-        }, Duration.ofSeconds(5), Duration.ofMinutes(10));
+        MCSchedulers.getAsyncScheduler()
+                .scheduleAtFixedRate(
+                        () -> {
+                            this.savePlayerData();
+                            this.updateLeaderBoard();
+                            storageRegistry
+                                    .getLeaderboardHologramStorage()
+                                    .getAll()
+                                    .forEach(LeaderboardHologram::spawn);
+                        },
+                        Duration.ofSeconds(5),
+                        Duration.ofMinutes(10));
     }
 
     @PreDestroy
@@ -62,8 +71,7 @@ public class LeaderboardManager {
                 LeaderboardPlayer leaderBoardPlayer = new LeaderboardPlayer(
                         place,
                         profile.getName(),
-                        String.valueOf(profile.getStats(statType).getAmount())
-                );
+                        String.valueOf(profile.getStats(statType).getAmount()));
 
                 leaderBoard.getPlayers().put(place, leaderBoardPlayer);
             });

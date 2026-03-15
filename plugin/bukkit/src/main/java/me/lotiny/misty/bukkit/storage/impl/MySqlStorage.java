@@ -8,14 +8,18 @@ import me.lotiny.misty.bukkit.storage.StorageRegistry;
 import me.lotiny.misty.bukkit.storage.StorageSerializer;
 import org.jetbrains.annotations.NotNull;
 
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
+import javax.sql.DataSource;
 
 @RequiredArgsConstructor
 @SuppressWarnings({"SqlNoDataSourceInspection", "SqlSourceToSinkFlow"})
@@ -49,7 +53,7 @@ public class MySqlStorage<T> implements Storage<T> {
                     + ");";
 
             try (Connection conn = dataSource.getConnection();
-                 Statement stmt = conn.createStatement()) {
+                    Statement stmt = conn.createStatement()) {
                 stmt.executeUpdate(sql);
             }
         } catch (SQLException e) {
@@ -102,7 +106,8 @@ public class MySqlStorage<T> implements Storage<T> {
             validateJsonPathKey(key);
 
             String jsonPath = "'$." + key + "'";
-            sql = "SELECT " + dataColumn + " FROM " + tableName + " WHERE JSON_UNQUOTE(JSON_EXTRACT(" + dataColumn + ", " + jsonPath + ")) = ? LIMIT 1";
+            sql = "SELECT " + dataColumn + " FROM " + tableName + " WHERE JSON_UNQUOTE(JSON_EXTRACT(" + dataColumn
+                    + ", " + jsonPath + ")) = ? LIMIT 1";
         }
         return sql;
     }
@@ -126,10 +131,7 @@ public class MySqlStorage<T> implements Storage<T> {
     @Override
     public void load(T object) {
         String key = serializer.getKey(object);
-        find(uniqueKey, key).ifPresentOrElse(
-                loadedObject -> cache.put(key, loadedObject),
-                () -> create(key)
-        );
+        find(uniqueKey, key).ifPresentOrElse(loadedObject -> cache.put(key, loadedObject), () -> create(key));
     }
 
     @Override
@@ -137,8 +139,8 @@ public class MySqlStorage<T> implements Storage<T> {
         String sql = "SELECT " + dataColumn + " FROM " + tableName;
 
         try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 String jsonString = rs.getString(dataColumn);
@@ -171,7 +173,7 @@ public class MySqlStorage<T> implements Storage<T> {
                     + " LIMIT ?";
 
             try (Connection conn = dataSource.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
                 pstmt.setInt(1, count);
 
@@ -197,7 +199,7 @@ public class MySqlStorage<T> implements Storage<T> {
         cache.remove(key);
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, key);
             int affectedRows = pstmt.executeUpdate();
@@ -215,7 +217,7 @@ public class MySqlStorage<T> implements Storage<T> {
 
         String sql = "TRUNCATE TABLE " + tableName;
         try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement()) {
+                Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             Log.error(e.getMessage());
@@ -233,7 +235,7 @@ public class MySqlStorage<T> implements Storage<T> {
                 + " ON DUPLICATE KEY UPDATE " + dataColumn + " = VALUES(" + dataColumn + ")";
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, key);
             pstmt.setString(2, jsonString);

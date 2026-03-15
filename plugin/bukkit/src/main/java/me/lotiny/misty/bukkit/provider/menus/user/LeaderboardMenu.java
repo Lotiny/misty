@@ -25,6 +25,7 @@ public class LeaderboardMenu extends MistyPaginatedMenu {
 
     @Autowired
     private static LeaderboardManager leaderboardManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
 
@@ -43,12 +44,10 @@ public class LeaderboardMenu extends MistyPaginatedMenu {
         List<MenuItem> buttons = new ArrayList<>();
 
         for (StatType statType : StatType.values()) {
-            buttons.add(MenuItem.of(
-                    ItemBuilder.of(statType.getMaterial())
-                            .name("&b" + Utilities.getFormattedName(statType.name()))
-                            .lore(buildLore(statType))
-                            .build()
-            ));
+            buttons.add(MenuItem.of(ItemBuilder.of(statType.getMaterial())
+                    .name("&b" + Utilities.getFormattedName(statType.name()))
+                    .lore(buildLore(statType))
+                    .build()));
         }
 
         return buttons;
@@ -57,18 +56,17 @@ public class LeaderboardMenu extends MistyPaginatedMenu {
     @Override
     public Map<Integer, MenuItem> getBorderButtons(Player player, NormalPane topPane, NormalPane bottomPane, Gui gui) {
         return Map.of(
-                4, MenuItem.of(
+                4,
+                MenuItem.of(
                         ItemBuilder.of(XMaterial.PLAYER_HEAD)
                                 .skull(player)
                                 .name("&eYour Stats")
                                 .lore("&7Click to view your stats!")
-                                .build()
-                        , (clickedPlayer, clickType) -> {
+                                .build(),
+                        (clickedPlayer, clickType) -> {
                             new StatsMenu(storageRegistry.getProfile(clickedPlayer.getUniqueId())).open(clickedPlayer);
                             playClick(clickedPlayer);
-                        }
-                )
-        );
+                        }));
     }
 
     private List<String> buildLore(StatType statType) {
@@ -77,9 +75,10 @@ public class LeaderboardMenu extends MistyPaginatedMenu {
 
         Leaderboard leaderboard = leaderboardManager.getLeaderboardMap().get(statType);
         if (leaderboard != null) {
-            leaderboard.getPlayers().forEach((place, player) ->
-                    lore.add("&9#" + place + " &e" + player.getName() + " &7- &b" + player.getValue())
-            );
+            leaderboard
+                    .getPlayers()
+                    .forEach((place, player) ->
+                            lore.add("&9#" + place + " &e" + player.getName() + " &7- &b" + player.getValue()));
         } else {
             lore.add("&cNo data available.");
         }

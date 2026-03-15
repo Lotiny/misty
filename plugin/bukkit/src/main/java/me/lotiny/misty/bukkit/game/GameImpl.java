@@ -22,7 +22,11 @@ import me.lotiny.misty.api.team.Team;
 import me.lotiny.misty.api.team.TeamManager;
 import me.lotiny.misty.bukkit.config.Config;
 import me.lotiny.misty.bukkit.config.impl.MainConfig;
-import me.lotiny.misty.bukkit.game.listeners.*;
+import me.lotiny.misty.bukkit.game.listeners.CombatListener;
+import me.lotiny.misty.bukkit.game.listeners.CombatLoggerListener;
+import me.lotiny.misty.bukkit.game.listeners.ConnectListener;
+import me.lotiny.misty.bukkit.game.listeners.GameListener;
+import me.lotiny.misty.bukkit.game.listeners.PlayerDeathListener;
 import me.lotiny.misty.bukkit.hook.PluginHookManager;
 import me.lotiny.misty.bukkit.manager.WorldManager;
 import me.lotiny.misty.bukkit.manager.border.visual.VisualBorderGenerator;
@@ -49,16 +53,22 @@ public class GameImpl implements Game {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static WorldManager worldManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Autowired
     private static TeamManager teamManager;
+
     @Autowired
     private static PluginHookManager pluginHookManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
+
     @Autowired
     private static VisualBlockService visualBlockService;
 
@@ -72,8 +82,7 @@ public class GameImpl implements Game {
                 new CombatLoggerListener(),
                 new ConnectListener(),
                 new GameListener(),
-                new PlayerDeathListener()
-        );
+                new PlayerDeathListener());
     }
 
     @Override
@@ -84,7 +93,9 @@ public class GameImpl implements Game {
         int borderSize = gameManager.getGame().getSetting().getBorderSize();
         pluginHookManager.getChunkLoader().setSize(registry.getUhcWorld(), borderSize);
         if (gameManager.getGame().getSetting().isNether()) {
-            pluginHookManager.getChunkLoader().setSize(registry.getNetherWorld(), borderSize / worldManager.getNetherScale());
+            pluginHookManager
+                    .getChunkLoader()
+                    .setSize(registry.getNetherWorld(), borderSize / worldManager.getNetherScale());
         }
 
         PlayerUtils.playSound(XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
@@ -95,9 +106,13 @@ public class GameImpl implements Game {
                 .forEach(player -> {
                     UUID uuid = player.getUniqueId();
                     UHCUtils.giveStarterItem(player);
-                    MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.getPluginManager().callEvent(new PlayerScatterEvent(player, false)));
+                    MCSchedulers.getGlobalScheduler()
+                            .schedule(() -> Bukkit.getPluginManager().callEvent(new PlayerScatterEvent(player, false)));
 
-                    storageRegistry.getProfile(uuid).getStats(StatType.GAME_PLAYED).increase();
+                    storageRegistry
+                            .getProfile(uuid)
+                            .getStats(StatType.GAME_PLAYED)
+                            .increase();
                 });
 
         MCSchedulers.getGlobalScheduler().schedule(() -> {
@@ -110,7 +125,8 @@ public class GameImpl implements Game {
         });
 
         MainConfig config = Config.getMainConfig();
-        if (!scenarioManager.isEnabled("Custom Craft") && config.getHealing().getGoldenHead().isEnabled()) {
+        if (!scenarioManager.isEnabled("Custom Craft")
+                && config.getHealing().getGoldenHead().isEnabled()) {
             gameManager.addGoldenHeadRecipe();
         }
 
@@ -150,11 +166,11 @@ public class GameImpl implements Game {
             }
         });
 
-        String message = "&aCongratulations to &b" +
-                winners.stream()
+        String message = "&aCongratulations to &b"
+                + winners.stream()
                         .map(uuid -> storageRegistry.getProfile(uuid).getName())
-                        .collect(Collectors.joining(", ")) +
-                "&a for winning this UHC game!";
+                        .collect(Collectors.joining(", "))
+                + "&a for winning this UHC game!";
         Utilities.broadcast(message);
 
         RebootTask rebootTask = new RebootTask();

@@ -31,9 +31,7 @@ public class SafelootScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.LEVER)
                 .name("&b" + getName())
-                .lore(
-                        "&7The Timebomb chest will be locked to the killer."
-                )
+                .lore("&7The Timebomb chest will be locked to the killer.")
                 .build();
     }
 

@@ -39,15 +39,14 @@ public class RvbCommand extends AbstractCommand {
                 "&b/rvb blue <player> &7- &fAssign a player to be the blue team captain",
                 "&b/rvb reset &7- &fReset the team captains",
                 "&b/rvb info &7- &fGet information about the team captains",
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 
     @Command("red")
     public void onRed(BukkitCommandContext context, @Arg("player") Player player) {
         if (!scenarioManager.isEnabled(RED_VS_BLUE)) {
-            context.sendMessage(MessageType.ERROR, Message.SCENARIO_NOT_ENABLED
-                    .replace(SCENARIO_PLACEHOLDER, RED_VS_BLUE));
+            context.sendMessage(
+                    MessageType.ERROR, Message.SCENARIO_NOT_ENABLED.replace(SCENARIO_PLACEHOLDER, RED_VS_BLUE));
             return;
         }
 
@@ -58,15 +57,14 @@ public class RvbCommand extends AbstractCommand {
         }
 
         redCaptainName = player.getName();
-        context.sendMessage(MessageType.INFO, Message.RVB_ASSIGN_CAPTAIN_RED
-                .replace("<player>", player.getName()));
+        context.sendMessage(MessageType.INFO, Message.RVB_ASSIGN_CAPTAIN_RED.replace("<player>", player.getName()));
     }
 
     @Command("blue")
     public void onBlue(BukkitCommandContext context, @Arg("player") Player player) {
         if (!scenarioManager.isEnabled(RED_VS_BLUE)) {
-            context.sendMessage(MessageType.ERROR, Message.SCENARIO_NOT_ENABLED
-                    .replace(SCENARIO_PLACEHOLDER, RED_VS_BLUE));
+            context.sendMessage(
+                    MessageType.ERROR, Message.SCENARIO_NOT_ENABLED.replace(SCENARIO_PLACEHOLDER, RED_VS_BLUE));
             return;
         }
 
@@ -77,15 +75,14 @@ public class RvbCommand extends AbstractCommand {
         }
 
         blueCaptainName = player.getName();
-        context.sendMessage(MessageType.INFO, Message.RVB_ASSIGN_CAPTAIN_BLUE
-                .replace("<player>", player.getName()));
+        context.sendMessage(MessageType.INFO, Message.RVB_ASSIGN_CAPTAIN_BLUE.replace("<player>", player.getName()));
     }
 
     @Command("reset")
     public void onRemove(BukkitCommandContext context) {
         if (!scenarioManager.isEnabled(RED_VS_BLUE)) {
-            context.sendMessage(MessageType.ERROR, Message.SCENARIO_NOT_ENABLED
-                    .replace(SCENARIO_PLACEHOLDER, RED_VS_BLUE));
+            context.sendMessage(
+                    MessageType.ERROR, Message.SCENARIO_NOT_ENABLED.replace(SCENARIO_PLACEHOLDER, RED_VS_BLUE));
             return;
         }
 
@@ -98,8 +95,8 @@ public class RvbCommand extends AbstractCommand {
     @Command("info")
     public void onInfo(BukkitCommandContext context) {
         if (!scenarioManager.isEnabled(RED_VS_BLUE)) {
-            context.sendMessage(MessageType.ERROR, Message.SCENARIO_NOT_ENABLED
-                    .replace(SCENARIO_PLACEHOLDER, RED_VS_BLUE));
+            context.sendMessage(
+                    MessageType.ERROR, Message.SCENARIO_NOT_ENABLED.replace(SCENARIO_PLACEHOLDER, RED_VS_BLUE));
             return;
         }
 
@@ -108,7 +105,6 @@ public class RvbCommand extends AbstractCommand {
                 CC.CHAT_BAR,
                 "&bRed Team Captain: &f" + redCaptainName,
                 "&bBlue Team Captain: &f" + blueCaptainName,
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 }

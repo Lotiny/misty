@@ -42,8 +42,7 @@ public class SkyHighScenario extends Scenario {
                 .lore(
                         "&7Player start with 2 stack of block, 16 pumpkin, 32 snow block",
                         "&7and diamond shovel. When border shrunk to 500x500 player must",
-                        "&7go above Y:150 or talking 1 damage every 30 seconds."
-                )
+                        "&7go above Y:150 or talking 1 damage every 30 seconds.")
                 .build();
     }
 
@@ -79,15 +78,21 @@ public class SkyHighScenario extends Scenario {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void handleBorderShrunk(BorderShrunkEvent event) {
         if (event.getSize() == 500) {
-            task = Bukkit.getScheduler().runTaskTimerAsynchronously(BukkitPlugin.INSTANCE, () -> {
-                gameManager.getRegistry().getAlivePlayers().forEach(uuid -> {
-                    Player player = Bukkit.getPlayer(uuid);
-                    if (player != null && player.getLocation().getY() <= 150) {
-                        player.sendMessage(CC.RED + CC.BOLD + "Please go above Y:150 to prevent this damage.");
-                        player.damage(1);
-                    }
-                });
-            }, 0, 600);
+            task = Bukkit.getScheduler()
+                    .runTaskTimerAsynchronously(
+                            BukkitPlugin.INSTANCE,
+                            () -> {
+                                gameManager.getRegistry().getAlivePlayers().forEach(uuid -> {
+                                    Player player = Bukkit.getPlayer(uuid);
+                                    if (player != null && player.getLocation().getY() <= 150) {
+                                        player.sendMessage(
+                                                CC.RED + CC.BOLD + "Please go above Y:150 to prevent this damage.");
+                                        player.damage(1);
+                                    }
+                                });
+                            },
+                            0,
+                            600);
         }
     }
 

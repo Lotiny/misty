@@ -69,9 +69,7 @@ public class MenuItem {
 
         short maxDurability = item.getType().getMaxDurability();
         if (maxDurability > 0) {
-            item = ItemBuilder.of(item)
-                    .durability(maxDurability)
-                    .build();
+            item = ItemBuilder.of(item).durability(maxDurability).build();
         }
 
         if (callback == null) {
@@ -87,8 +85,8 @@ public class MenuItem {
         if (xAttribute.isSupported() && xAttribute.get() != null) {
             meta.addAttributeModifier(
                     xAttribute.get(),
-                    XAttribute.createModifier("attack-damage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND)
-            );
+                    XAttribute.createModifier(
+                            "attack-damage", 10, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         }
     }
 }

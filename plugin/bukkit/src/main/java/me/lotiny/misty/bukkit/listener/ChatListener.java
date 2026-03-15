@@ -67,10 +67,7 @@ public class ChatListener {
         this.teamFormat = config.getChatFormat().getTeam();
         this.spectatorFormat = config.getChatFormat().getSpectator();
 
-        this.eventNode = EventNode.type(
-                "chat-listeners",
-                BukkitEventFilter.PLAYER
-        );
+        this.eventNode = EventNode.type("chat-listeners", BukkitEventFilter.PLAYER);
 
         eventNode.addListener(AsyncPlayerChatEvent.class, event -> {
             Player player = event.getPlayer();
@@ -171,8 +168,7 @@ public class ChatListener {
         String rankColor = rank.getRankColor(uuid);
         String rankSuffix = rank.getRankSuffix(uuid);
 
-        String chatFormat = format
-                .replace("<prefix>", prefix + rankPrefix)
+        String chatFormat = format.replace("<prefix>", prefix + rankPrefix)
                 .replace("<player>", rankColor + player.getName())
                 .replace("<suffix>", rankSuffix)
                 .replace("<message>", event.getMessage());

@@ -25,8 +25,7 @@ public class ColdWeaponScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7Flame and Fire Aspect got removed from Enchanting pool",
-                        "&7also you cannot apply Flame or Fire Aspect in Anvil."
-                )
+                        "&7also you cannot apply Flame or Fire Aspect in Anvil.")
                 .build();
     }
 
@@ -41,7 +40,8 @@ public class ColdWeaponScenario extends Scenario {
         if (event.getInventory().getType() == InventoryType.ANVIL) {
             ItemStack item = event.getCurrentItem();
             if (item != null && XMaterial.ENCHANTED_BOOK.isSimilar(item)) {
-                if (event.getCurrentItem().getEnchantments().containsKey(XEnchantment.FLAME.get()) || event.getCurrentItem().getEnchantments().containsKey(XEnchantment.FIRE_ASPECT.get())) {
+                if (event.getCurrentItem().getEnchantments().containsKey(XEnchantment.FLAME.get())
+                        || event.getCurrentItem().getEnchantments().containsKey(XEnchantment.FIRE_ASPECT.get())) {
                     event.setCancelled(true);
                 }
             }

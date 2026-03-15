@@ -27,10 +27,13 @@ public class MistyApiImpl implements MistyApi {
 
     @Autowired
     private static CustomItemRegistry customItemRegistry;
+
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
+
     @Autowired
     private static ScenarioManager scenarioManager;
 

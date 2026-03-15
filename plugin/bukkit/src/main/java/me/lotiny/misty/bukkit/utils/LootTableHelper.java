@@ -38,7 +38,8 @@ public class LootTableHelper {
             Attribute attribute = XAttribute.LUCK.get();
             if (XAttribute.LUCK.isSupported() && attribute != null) {
                 AttributeInstance instance = player.getAttribute(attribute);
-                ConditionUtils.notNull(instance, "Could not get luck attribute instance for player " + player.getName());
+                ConditionUtils.notNull(
+                        instance, "Could not get luck attribute instance for player " + player.getName());
                 float playerLuck = (float) instance.getValue();
 
                 builder.luck(playerLuck);

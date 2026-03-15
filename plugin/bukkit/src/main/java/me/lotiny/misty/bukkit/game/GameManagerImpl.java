@@ -38,7 +38,14 @@ import me.lotiny.misty.bukkit.hook.PluginHookManager;
 import me.lotiny.misty.bukkit.hook.impl.apollo.ApolloHook;
 import me.lotiny.misty.bukkit.storage.StorageRegistry;
 import me.lotiny.misty.bukkit.task.AnnounceTask;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.GoldenHead;
+import me.lotiny.misty.bukkit.utils.KeyEx;
+import me.lotiny.misty.bukkit.utils.PlayerUtils;
+import me.lotiny.misty.bukkit.utils.ReflectionUtils;
+import me.lotiny.misty.bukkit.utils.Snapshot;
+import me.lotiny.misty.bukkit.utils.TeamEx;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
+import me.lotiny.misty.bukkit.utils.Utilities;
 import me.lotiny.misty.bukkit.utils.cooldown.CombatLoggerCooldown;
 import me.lotiny.misty.shared.recipe.MistyShapedRecipe;
 import org.bukkit.Bukkit;
@@ -62,24 +69,33 @@ public class GameManagerImpl implements GameManager {
 
     @Autowired
     private static TeamManager teamManager;
+
     @Autowired
     private static PluginHookManager pluginHookManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
+
     @Autowired
     private static NameTagService nameTagService;
+
     @Autowired
     private static VisibilityService visibilityService;
 
     @Getter
     private final Map<UUID, GameSetting> gameSettingMap = new ConcurrentHashMap<>();
+
     @Getter
     private GameRegistry registry;
+
     @Getter
     private Game game;
+
     private UUID settingToLoad;
+
     @Getter
     private CombatLoggerCooldown combatLoggerCooldown;
 
@@ -87,26 +103,32 @@ public class GameManagerImpl implements GameManager {
     public void onPostInit() {
         MainConfig mainConfig = Config.getMainConfig();
         this.registry = new GameRegistryImpl(mainConfig);
-        this.combatLoggerCooldown = new CombatLoggerCooldown((mainConfig.getLogoutTimer() * 60L) * 1000L, CombatLogger::remove);
+        this.combatLoggerCooldown =
+                new CombatLoggerCooldown((mainConfig.getLogoutTimer() * 60L) * 1000L, CombatLogger::remove);
         setupScoreboardTask();
 
         scenarioManager.registerScenarios();
         loadSettings();
         loadGame(settingToLoad);
 
-        if (mainConfig.getAutoStart().isEnabled() && mainConfig.getAutoStart().getAnnounce().isEnabled()) {
+        if (mainConfig.getAutoStart().isEnabled()
+                && mainConfig.getAutoStart().getAnnounce().isEnabled()) {
             new AnnounceTask().run(true, 20L);
         }
     }
 
     private void setupScoreboardTask() {
-        MCSchedulers.getAsyncScheduler().scheduleAtFixedRate(() -> {
-            Bukkit.getOnlinePlayers().forEach(this::processPlayer);
-            ApolloHook apolloHook = pluginHookManager.getApolloHook();
-            if (apolloHook != null) {
-                teamManager.getTeams().values().forEach(apolloHook::refreshTeam);
-            }
-        }, 2L, 2L);
+        MCSchedulers.getAsyncScheduler()
+                .scheduleAtFixedRate(
+                        () -> {
+                            Bukkit.getOnlinePlayers().forEach(this::processPlayer);
+                            ApolloHook apolloHook = pluginHookManager.getApolloHook();
+                            if (apolloHook != null) {
+                                teamManager.getTeams().values().forEach(apolloHook::refreshTeam);
+                            }
+                        },
+                        2L,
+                        2L);
     }
 
     private void processPlayer(Player player) {
@@ -121,7 +143,8 @@ public class GameManagerImpl implements GameManager {
     }
 
     private void handlePlayerScoreboard(Player player) {
-        if (scenarioManager.isEnabled("Secret Health") || !Config.getMainConfig().isHealthBelowName()) return;
+        if (scenarioManager.isEnabled("Secret Health")
+                || !Config.getMainConfig().isHealthBelowName()) return;
 
         ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
         if (scoreboardManager != null) {
@@ -152,7 +175,8 @@ public class GameManagerImpl implements GameManager {
     }
 
     private void loadSettings() {
-        for (Map.Entry<UUID, UHCConfig.GameConfig> entry : Config.getUhcConfig().getGameConfig().entrySet()) {
+        for (Map.Entry<UUID, UHCConfig.GameConfig> entry :
+                Config.getUhcConfig().getGameConfig().entrySet()) {
             UUID id = entry.getKey();
             UHCConfig.GameConfig gameConfig = entry.getValue();
 
@@ -202,7 +226,9 @@ public class GameManagerImpl implements GameManager {
 
         this.game = new GameImpl(loadedSetting);
 
-        scenarioManager.getEnabledScenarios().forEach(scenario -> scenarioManager.disable(scenario, this, Bukkit.getConsoleSender(), false));
+        scenarioManager
+                .getEnabledScenarios()
+                .forEach(scenario -> scenarioManager.disable(scenario, this, Bukkit.getConsoleSender(), false));
 
         loadedSetting.getEnabledScenarios().forEach(s -> {
             Scenario scenario = scenarioManager.getScenario(s);
@@ -219,59 +245,54 @@ public class GameManagerImpl implements GameManager {
 
     @Override
     public void saveGame(GameSetting setting) {
-        Config.getUhcConfig().getGameConfig().put(
-                setting.getConfigId(),
-                new UHCConfig.GameConfig(
-                        setting.getConfigName(),
-                        setting.isDef(),
-                        setting.getEnabledScenarios(),
-                        new UHCConfig.Potion(
-                                setting.isSpeed1(),
-                                setting.isSpeed2(),
-                                setting.isStrength1(),
-                                setting.isStrength2(),
-                                setting.isPoison(),
-                                setting.isInvisible()
-                        ),
-                        new UHCConfig.Setting(
-                                setting.getTeamSize(),
-                                setting.getFinalHeal(),
-                                setting.getGracePeriod(),
-                                setting.getBorderSize(),
-                                setting.getFirstShrink(),
-                                setting.isLastBorderFlat(),
-                                setting.getAppleRate(),
-                                setting.isShears(),
-                                setting.isLateScatter(),
-                                setting.isGodApple(),
-                                setting.isPearlDamage(),
-                                setting.isChatBeforePvp(),
-                                setting.isNether(),
-                                setting.getNetherTime(),
-                                setting.isBedBomb()
-                        ),
-                        setting.getSavedBy(),
-                        LocalDate.parse(setting.getSavedDate())
-                )
-        );
+        Config.getUhcConfig()
+                .getGameConfig()
+                .put(
+                        setting.getConfigId(),
+                        new UHCConfig.GameConfig(
+                                setting.getConfigName(),
+                                setting.isDef(),
+                                setting.getEnabledScenarios(),
+                                new UHCConfig.Potion(
+                                        setting.isSpeed1(),
+                                        setting.isSpeed2(),
+                                        setting.isStrength1(),
+                                        setting.isStrength2(),
+                                        setting.isPoison(),
+                                        setting.isInvisible()),
+                                new UHCConfig.Setting(
+                                        setting.getTeamSize(),
+                                        setting.getFinalHeal(),
+                                        setting.getGracePeriod(),
+                                        setting.getBorderSize(),
+                                        setting.getFirstShrink(),
+                                        setting.isLastBorderFlat(),
+                                        setting.getAppleRate(),
+                                        setting.isShears(),
+                                        setting.isLateScatter(),
+                                        setting.isGodApple(),
+                                        setting.isPearlDamage(),
+                                        setting.isChatBeforePvp(),
+                                        setting.isNether(),
+                                        setting.getNetherTime(),
+                                        setting.isBedBomb()),
+                                setting.getSavedBy(),
+                                LocalDate.parse(setting.getSavedDate())));
         Config.getUhcConfig().save();
     }
 
     @Override
     public void addGoldenHeadRecipe() {
-        Bukkit.getServer().addRecipe(
-                ReflectionUtils.get().createShapedRecipe(
-                        MistyShapedRecipe.builder()
+        Bukkit.getServer()
+                .addRecipe(ReflectionUtils.get()
+                        .createShapedRecipe(MistyShapedRecipe.builder()
                                 .namespace("golden-head")
                                 .result(GoldenHead.getItem())
                                 .shape("AAAABAAAA")
                                 .ingredients(Map.of(
                                         'A', XMaterial.GOLD_INGOT,
-                                        'B', XMaterial.PLAYER_HEAD
-                                ))
-                                .build()
-                )
-        );
+                                        'B', XMaterial.PLAYER_HEAD))
+                                .build()));
     }
 
     @Override
@@ -347,7 +368,8 @@ public class GameManagerImpl implements GameManager {
         PlayerUtils.playSound(XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
         Utilities.broadcast("&bAll players have been healed.");
 
-        MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.getPluginManager().callEvent(new FinalHealExecutedEvent()));
+        MCSchedulers.getGlobalScheduler()
+                .schedule(() -> Bukkit.getPluginManager().callEvent(new FinalHealExecutedEvent()));
     }
 
     @Override
@@ -362,7 +384,8 @@ public class GameManagerImpl implements GameManager {
             Utilities.broadcast("&aThe chat is now un-muted!");
         }
 
-        MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.getPluginManager().callEvent(new GracePeriodEndEvent()), 1L);
+        MCSchedulers.getGlobalScheduler()
+                .schedule(() -> Bukkit.getPluginManager().callEvent(new GracePeriodEndEvent()), 1L);
     }
 
     @Override
@@ -379,7 +402,8 @@ public class GameManagerImpl implements GameManager {
     @Override
     public void disqualifyPlayer(UUID uuid) {
         Profile profile = storageRegistry.getProfile(uuid);
-        Team team = Metadata.provideForPlayer(uuid).getOrThrow(KeyEx.SNAPSHOT_KEY).getTeam();
+        Team team =
+                Metadata.provideForPlayer(uuid).getOrThrow(KeyEx.SNAPSHOT_KEY).getTeam();
 
         this.registry.getPlayers().replace(uuid, false);
 

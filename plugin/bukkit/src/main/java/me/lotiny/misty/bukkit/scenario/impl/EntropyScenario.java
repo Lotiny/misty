@@ -30,8 +30,7 @@ public class EntropyScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7Every 10 minutes every players will lose 1 level",
-                        "&7if the player do not have any level they will died."
-                )
+                        "&7if the player do not have any level they will died.")
                 .build();
     }
 

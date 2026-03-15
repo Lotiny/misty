@@ -47,9 +47,11 @@ public class LateScatterCommand extends AbstractCommand {
             }
 
             UUID uuid = target.getUniqueId();
-            if (UHCUtils.isAlive(uuid) || registry.getPlayers().containsKey(uuid) ||
-                    (player != target && !player.hasPermission(Permission.LATE_SCATTER_OTHER)) ||
-                    (gameManager.getRegistry().isPvpEnabled() && !player.hasPermission(Permission.LATE_SCATTER_BYPASS))) {
+            if (UHCUtils.isAlive(uuid)
+                    || registry.getPlayers().containsKey(uuid)
+                    || (player != target && !player.hasPermission(Permission.LATE_SCATTER_OTHER))
+                    || (gameManager.getRegistry().isPvpEnabled()
+                            && !player.hasPermission(Permission.LATE_SCATTER_BYPASS))) {
                 player.sendMessage(Message.LATE_SCATTER_CANT);
                 return;
             }
@@ -58,12 +60,14 @@ public class LateScatterCommand extends AbstractCommand {
             registry.getPlayers().put(uuid, true);
 
             UHCUtils.giveStarterItem(target);
-            MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.getPluginManager().callEvent(new PlayerScatterEvent(target, true)));
+            MCSchedulers.getGlobalScheduler()
+                    .schedule(() -> Bukkit.getPluginManager().callEvent(new PlayerScatterEvent(target, true)));
             if (scenarioManager.isEnabled("Red vs Blue")) {
                 Team team0 = teamManager.getTeams().get(0);
                 Team team1 = teamManager.getTeams().get(1);
 
-                Team smallerTeam = team0.getMembers(true).size() > team1.getMembers(true).size() ? team1 : team0;
+                Team smallerTeam =
+                        team0.getMembers(true).size() > team1.getMembers(true).size() ? team1 : team0;
                 smallerTeam.addMember(target);
             } else {
                 Team team = UHCUtils.getTeam(target);
@@ -74,7 +78,8 @@ public class LateScatterCommand extends AbstractCommand {
                 }
             }
 
-            gameManager.teleportToRandomLocation(target, gameManager.getGame().getSetting().getBorderSize());
+            gameManager.teleportToRandomLocation(
+                    target, gameManager.getGame().getSetting().getBorderSize());
         });
     }
 }

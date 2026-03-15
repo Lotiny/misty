@@ -38,15 +38,14 @@ public class ItemRecipeMenu extends MistyPaginatedMenu {
     public List<MenuItem> getButtons(Player player, PaginatedPane pane, Gui menu) {
         return new ArrayList<>(customItemRegistry.getCustomItems().values())
                 .stream()
-                .map(customItem -> MenuItem.of(
-                        buildIcon(customItem, player),
-                        (clickedPlayer, clickType) -> {
-                            playClick(clickedPlayer);
-                            new RecipeMenu(customItem).open(player);
-                        },
-                        false
-                ))
-                .toList();
+                        .map(customItem -> MenuItem.of(
+                                buildIcon(customItem, player),
+                                (clickedPlayer, clickType) -> {
+                                    playClick(clickedPlayer);
+                                    new RecipeMenu(customItem).open(player);
+                                },
+                                false))
+                        .toList();
     }
 
     @Override
@@ -64,7 +63,8 @@ public class ItemRecipeMenu extends MistyPaginatedMenu {
 
         List<String> lore = meta.getLore() != null ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
         lore.add(" ");
-        lore.add(CC.translate("&7Crafted: &a" + getCraftedAmount(customItem, player) + "/" + customItem.getCraftLimit().getAmount()));
+        lore.add(CC.translate("&7Crafted: &a" + getCraftedAmount(customItem, player) + "/"
+                + customItem.getCraftLimit().getAmount()));
 
         meta.setLore(lore);
         icon.setItemMeta(meta);

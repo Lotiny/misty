@@ -28,10 +28,7 @@ public class HasteyBoysScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.STONE_PICKAXE)
                 .name("&b" + getName())
-                .lore(
-                        "&7Every tool that you craft will have",
-                        "&7Efficiency 3 and Unbreaking 1."
-                )
+                .lore("&7Every tool that you craft will have", "&7Efficiency 3 and Unbreaking 1.")
                 .build();
     }
 
@@ -42,10 +39,11 @@ public class HasteyBoysScenario extends Scenario {
 
         ItemStack result = recipe.getResult();
         if (Tools.isTool(XMaterial.matchXMaterial(result)) && !customItemRegistry.isCustomItem(result)) {
-            event.getInventory().setResult(ItemBuilder.of(result.getType())
-                    .enchantment(XEnchantment.EFFICIENCY, 3)
-                    .enchantment(XEnchantment.UNBREAKING, 1)
-                    .build());
+            event.getInventory()
+                    .setResult(ItemBuilder.of(result.getType())
+                            .enchantment(XEnchantment.EFFICIENCY, 3)
+                            .enchantment(XEnchantment.UNBREAKING, 1)
+                            .build());
         }
     }
 }

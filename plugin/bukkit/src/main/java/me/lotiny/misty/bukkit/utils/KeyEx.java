@@ -15,7 +15,8 @@ public class KeyEx {
     // Game Kills
     public MetadataKey<Stats> GAME_KILLS_KEY = MetadataKey.create("misty:game-kills-key", Stats.class);
     // Combat
-    public MetaKey<CombatCooldown> COMBAT_COOLDOWN_KEY = MetaKey.create("misty:combat-cooldown-key", CombatCooldown.class);
+    public MetaKey<CombatCooldown> COMBAT_COOLDOWN_KEY =
+            MetaKey.create("misty:combat-cooldown-key", CombatCooldown.class);
     // Team
     public MetadataKey<Team> TEAM_KEY = MetadataKey.create("misty:team-key", Team.class);
 }

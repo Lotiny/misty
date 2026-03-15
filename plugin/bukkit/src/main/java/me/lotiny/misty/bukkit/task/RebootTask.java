@@ -28,7 +28,8 @@ public class RebootTask extends AbstractScheduleTask {
                 sendCountdownMessage();
 
                 if (getSeconds() == 5) {
-                    MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.getOnlinePlayers().forEach((player) -> player.kickPlayer(CC.RED + "The game has been ended!")));
+                    MCSchedulers.getGlobalScheduler().schedule(() -> Bukkit.getOnlinePlayers()
+                            .forEach((player) -> player.kickPlayer(CC.RED + "The game has been ended!")));
                 }
             }
         };
@@ -50,7 +51,6 @@ public class RebootTask extends AbstractScheduleTask {
     }
 
     private void sendCountdownMessage() {
-        Utilities.broadcast(Message.REBOOT_TIME
-                .replace("<time>", TimeFormatUtils.formatTimeUnit(getSeconds())));
+        Utilities.broadcast(Message.REBOOT_TIME.replace("<time>", TimeFormatUtils.formatTimeUnit(getSeconds())));
     }
 }

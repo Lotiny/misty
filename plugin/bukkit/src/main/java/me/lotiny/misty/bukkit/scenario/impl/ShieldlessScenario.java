@@ -21,9 +21,7 @@ public class ShieldlessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.SHIELD)
                 .name("&b" + getName())
-                .lore(
-                        "&7Shield cannot be used."
-                )
+                .lore("&7Shield cannot be used.")
                 .build();
     }
 

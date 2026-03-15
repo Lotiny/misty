@@ -8,10 +8,10 @@ import lombok.experimental.UtilityClass;
 public class EloUtils {
 
     private final KFactor[] K_FACTORS = {
-            new KFactor(0, 1000, 40),   // Beginner
-            new KFactor(1001, 1400, 45),
-            new KFactor(1401, 1800, 35),
-            new KFactor(1801, 2200, 25) // Advanced
+        new KFactor(0, 1000, 40), // Beginner
+        new KFactor(1001, 1400, 45),
+        new KFactor(1401, 1800, 35),
+        new KFactor(1801, 2200, 25) // Advanced
     };
 
     private final int DEFAULT_K_FACTOR = 15; // fallback for very high ratings
@@ -86,5 +86,4 @@ public class EloUtils {
         private final int endIndex;
         private final double value;
     }
-
 }

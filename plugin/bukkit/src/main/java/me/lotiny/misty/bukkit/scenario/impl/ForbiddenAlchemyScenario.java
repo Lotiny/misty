@@ -39,10 +39,7 @@ public class ForbiddenAlchemyScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.BREWING_STAND)
                 .name("&b" + getName())
-                .lore(
-                        "&7Mining a Redstone Ore has a chance to drop",
-                        "&7a brewing ingredient."
-                )
+                .lore("&7Mining a Redstone Ore has a chance to drop", "&7a brewing ingredient.")
                 .build();
     }
 
@@ -61,14 +58,14 @@ public class ForbiddenAlchemyScenario extends Scenario {
             if (drop != null && drop.isSupported()) {
                 UHCUtils.dropItem(block.getLocation(), ItemStackUtils.of(drop));
                 PlayerUtils.playSound(XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
-                player.sendMessage(Message.FORBIDDEN_ALCHEMY_DROP
-                        .replace("<item>", drop.friendlyName()));
+                player.sendMessage(Message.FORBIDDEN_ALCHEMY_DROP.replace("<item>", drop.friendlyName()));
             }
         }
     }
 
     private XMaterial getWeightedRandomDrop(Random random) {
-        int totalWeight = brewingDrops.values().stream().mapToInt(Integer::intValue).sum();
+        int totalWeight =
+                brewingDrops.values().stream().mapToInt(Integer::intValue).sum();
         int roll = random.nextInt(totalWeight);
         int cumulative = 0;
 

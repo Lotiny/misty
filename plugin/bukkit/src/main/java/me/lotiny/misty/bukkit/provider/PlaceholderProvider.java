@@ -33,10 +33,13 @@ public abstract class PlaceholderProvider {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Autowired
     private static BorderManager borderManager;
+
     @Autowired
     private static PluginHookManager pluginHookManager;
 
@@ -65,7 +68,8 @@ public abstract class PlaceholderProvider {
             tagResolver.resolver(parsed("team_kills", team.getTeamKills()));
         }
 
-        ScoreboardConfig.Placeholder placeholder = Config.getScoreboardConfig().getScoreboard().getPlaceholder();
+        ScoreboardConfig.Placeholder placeholder =
+                Config.getScoreboardConfig().getScoreboard().getPlaceholder();
         addStartTimerTag(tagResolver, placeholder, registry);
         addNoCleanTag(tagResolver, placeholder, player);
         addDoNotDisturbTag(tagResolver, placeholder, player);
@@ -83,23 +87,26 @@ public abstract class PlaceholderProvider {
         return Placeholder.parsed(key, String.valueOf(value));
     }
 
-    private void addStartTimerTag(TagResolver.Builder tagResolver, ScoreboardConfig.Placeholder placeholder, GameRegistry registry) {
-        tagResolver.resolver(parsed("start_timer", placeholder.getStartTime()
-                .replace("<time>", getTaskTimer(registry.getStartTask()))));
+    private void addStartTimerTag(
+            TagResolver.Builder tagResolver, ScoreboardConfig.Placeholder placeholder, GameRegistry registry) {
+        tagResolver.resolver(parsed(
+                "start_timer", placeholder.getStartTime().replace("<time>", getTaskTimer(registry.getStartTask()))));
     }
 
-    private void addNoCleanTag(TagResolver.Builder tagResolver, ScoreboardConfig.Placeholder placeholder, Player player) {
+    private void addNoCleanTag(
+            TagResolver.Builder tagResolver, ScoreboardConfig.Placeholder placeholder, Player player) {
         if (scenarioManager.isEnabled("No Clean")) {
-            PlayerCooldown cooldown = Metadata.provideForPlayer(player.getUniqueId()).getOrNull(NoCleanScenario.NO_CLEAN_KEY);
+            PlayerCooldown cooldown =
+                    Metadata.provideForPlayer(player.getUniqueId()).getOrNull(NoCleanScenario.NO_CLEAN_KEY);
             if (cooldown != null) {
                 String replace = cooldown.getCooldownMillis(player);
-                tagResolver.resolver(parsed("no_clean", placeholder.getNoClean()
-                        .replace("<time>", replace)));
+                tagResolver.resolver(parsed("no_clean", placeholder.getNoClean().replace("<time>", replace)));
             }
         }
     }
 
-    private void addDoNotDisturbTag(TagResolver.Builder tagResolver, ScoreboardConfig.Placeholder placeholder, Player player) {
+    private void addDoNotDisturbTag(
+            TagResolver.Builder tagResolver, ScoreboardConfig.Placeholder placeholder, Player player) {
         if (scenarioManager.isEnabled("Do Not Disturb")) {
             Team team = UHCUtils.getTeam(player);
             if (team == null) return;
@@ -110,9 +117,12 @@ public abstract class PlaceholderProvider {
             Team linked = cooldown.getTeam();
             String time = cooldown.getCooldownMillis(team);
 
-            tagResolver.resolver(parsed("dnd", placeholder.getDoNotDisturb()
-                    .replace("<linked>", String.valueOf(linked.getId()))
-                    .replace("<time>", time)));
+            tagResolver.resolver(parsed(
+                    "dnd",
+                    placeholder
+                            .getDoNotDisturb()
+                            .replace("<linked>", String.valueOf(linked.getId()))
+                            .replace("<time>", time)));
         }
     }
 
@@ -126,7 +136,9 @@ public abstract class PlaceholderProvider {
     }
 
     private void addScatterTag(TagResolver.Builder tagResolver, GameRegistry registry) {
-        int scatterPercent = Math.round((float) registry.getPlayersScattered().size() / registry.getPlayers().size() * 100);
+        int scatterPercent = Math.round((float) registry.getPlayersScattered().size()
+                / registry.getPlayers().size()
+                * 100);
         tagResolver.resolver(parsed("scatter_percentage", scatterPercent + "%"));
     }
 

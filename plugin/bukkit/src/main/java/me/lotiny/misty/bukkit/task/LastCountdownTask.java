@@ -6,7 +6,12 @@ import me.lotiny.misty.api.game.GameManager;
 import me.lotiny.misty.api.task.AbstractScheduleTask;
 import me.lotiny.misty.api.team.Team;
 import me.lotiny.misty.bukkit.config.Config;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.Message;
+import me.lotiny.misty.bukkit.utils.PlayerUtils;
+import me.lotiny.misty.bukkit.utils.TeamEx;
+import me.lotiny.misty.bukkit.utils.TimeFormatUtils;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
+import me.lotiny.misty.bukkit.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -40,8 +45,7 @@ public class LastCountdownTask extends AbstractScheduleTask {
 
             if (isImportanceSeconds(getSeconds())) {
                 PlayerUtils.playSound(XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
-                Utilities.broadcast(Message.START_TIME
-                        .replace("<time>", TimeFormatUtils.formatTimeUnit(getSeconds())));
+                Utilities.broadcast(Message.START_TIME.replace("<time>", TimeFormatUtils.formatTimeUnit(getSeconds())));
             }
         };
     }

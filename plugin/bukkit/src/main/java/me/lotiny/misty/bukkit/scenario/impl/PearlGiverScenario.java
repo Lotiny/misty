@@ -30,8 +30,7 @@ public class PearlGiverScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7Player start with 3 ender pearl and when someone died",
-                        "&7all alive players will receive 1 ender pearl."
-                )
+                        "&7all alive players will receive 1 ender pearl.")
                 .build();
     }
 

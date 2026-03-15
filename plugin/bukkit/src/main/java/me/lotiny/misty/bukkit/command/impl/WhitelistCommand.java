@@ -19,7 +19,9 @@ import java.util.List;
 
 @InjectableComponent
 @RequiredArgsConstructor
-@Command(value = {"whitelist", "wl"}, permissionNode = "misty.command.whitelist")
+@Command(
+        value = {"whitelist", "wl"},
+        permissionNode = "misty.command.whitelist")
 @CommandPresence(MistyPresenceProvider.class)
 public class WhitelistCommand extends AbstractCommand {
 
@@ -34,20 +36,18 @@ public class WhitelistCommand extends AbstractCommand {
                 "&b/wl remove <player> &7- &fRemove player from whitelist",
                 "&b/wl toggle &7- &fToggle enable/disable whitelist",
                 "&b/wl list &7- &fList all whitelisted players",
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 
     @Command("add")
     public void onAdd(BukkitCommandContext context, @Arg("target") String target) {
         List<String> whitelistPlayers = gameManager.getRegistry().getWhitelistPlayers();
         if (whitelistPlayers.contains(target)) {
-            context.sendMessage(MessageType.INFO, Message.WHITELIST_PLAYER_ALREADY_WHITELISTED
-                    .replace("<player>", target));
+            context.sendMessage(
+                    MessageType.INFO, Message.WHITELIST_PLAYER_ALREADY_WHITELISTED.replace("<player>", target));
         } else {
             whitelistPlayers.add(target);
-            context.sendMessage(MessageType.INFO, Message.WHITELIST_ADD
-                    .replace("<player>", target));
+            context.sendMessage(MessageType.INFO, Message.WHITELIST_ADD.replace("<player>", target));
         }
     }
 
@@ -55,11 +55,9 @@ public class WhitelistCommand extends AbstractCommand {
     public void onRemove(BukkitCommandContext context, @Arg("target") String target) {
         List<String> whitelistPlayers = gameManager.getRegistry().getWhitelistPlayers();
         if (whitelistPlayers.remove(target)) {
-            context.sendMessage(MessageType.INFO, Message.WHITELIST_REMOVE
-                    .replace("<player>", target));
+            context.sendMessage(MessageType.INFO, Message.WHITELIST_REMOVE.replace("<player>", target));
         } else {
-            context.sendMessage(MessageType.INFO, Message.WHITELIST_PLAYER_NOT_WHITELISTED
-                    .replace("<player>", target));
+            context.sendMessage(MessageType.INFO, Message.WHITELIST_PLAYER_NOT_WHITELISTED.replace("<player>", target));
         }
     }
 

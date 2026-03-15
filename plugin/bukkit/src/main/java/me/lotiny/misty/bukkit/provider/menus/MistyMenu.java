@@ -36,9 +36,7 @@ public abstract class MistyMenu {
         getButtons(player, pane, gui).forEach((slot, menuItem) -> pane.setSlot(slot, menuItem.build()));
 
         if (isFilled(player)) {
-            pane.fillEmptySlots(GuiSlot.of(
-                    XMaterial.GRAY_STAINED_GLASS_PANE, " "
-            ));
+            pane.fillEmptySlots(GuiSlot.of(XMaterial.GRAY_STAINED_GLASS_PANE, " "));
         }
 
         gui.addPane(pane);

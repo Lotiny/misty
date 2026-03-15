@@ -45,12 +45,12 @@ public class RecipeMenu extends MistyMenu {
 
         List<Recipe> recipes = customItem.getRecipes();
         if (recipes.isEmpty()) {
-            slots.put(SLOT_OUTPUT, MenuItem.of(
-                    ItemBuilder.of(XMaterial.BARRIER)
+            slots.put(
+                    SLOT_OUTPUT,
+                    MenuItem.of(ItemBuilder.of(XMaterial.BARRIER)
                             .name("&cNo Recipe Found")
                             .lore("&7This item has no registered recipe.")
-                            .build()
-            ));
+                            .build()));
         } else {
             Recipe recipe = recipes.getFirst();
             if (recipe instanceof ShapedRecipe shaped) {
@@ -62,15 +62,12 @@ public class RecipeMenu extends MistyMenu {
 
         slots.put(SLOT_OUTPUT, MenuItem.of(customItem.getItem(), false));
 
-        slots.put(SLOT_BACK, MenuItem.of(
-                ItemBuilder.of(XMaterial.REDSTONE)
-                        .name("&cBack")
-                        .build(),
-                (clickedPlayer, clickType) -> {
+        slots.put(
+                SLOT_BACK,
+                MenuItem.of(ItemBuilder.of(XMaterial.REDSTONE).name("&cBack").build(), (clickedPlayer, clickType) -> {
                     playClick(clickedPlayer);
                     new ItemRecipeMenu().open(clickedPlayer);
-                }
-        ));
+                }));
 
         return slots;
     }
@@ -80,7 +77,12 @@ public class RecipeMenu extends MistyMenu {
         for (String row : recipe.getShape()) {
             for (char c : row.toCharArray()) {
                 ItemStack ingredient = recipe.getIngredientMap().get(c);
-                slots.put(CRAFTING_SLOTS[index], MenuItem.of(ingredient != null ? ingredient : XMaterial.AIR.parseItem(), (player, clickType) -> player.getInventory().addItem(ingredient), false));
+                slots.put(
+                        CRAFTING_SLOTS[index],
+                        MenuItem.of(
+                                ingredient != null ? ingredient : XMaterial.AIR.parseItem(),
+                                (player, clickType) -> player.getInventory().addItem(ingredient),
+                                false));
                 index++;
             }
         }
@@ -91,7 +93,12 @@ public class RecipeMenu extends MistyMenu {
         for (ItemStack ingredient : recipe.getIngredientList()) {
             int amount = Math.max(1, ingredient.getAmount());
             for (int i = 0; i < amount && index < CRAFTING_SLOTS.length; i++, index++) {
-                slots.put(CRAFTING_SLOTS[index], MenuItem.of(ingredient, (player, clickType) -> player.getInventory().addItem(ingredient), false));
+                slots.put(
+                        CRAFTING_SLOTS[index],
+                        MenuItem.of(
+                                ingredient,
+                                (player, clickType) -> player.getInventory().addItem(ingredient),
+                                false));
             }
         }
 
@@ -100,16 +107,12 @@ public class RecipeMenu extends MistyMenu {
             index++;
         }
 
-        slots.put(SLOT_SHAPELESS_INFO, MenuItem.of(
-                ItemBuilder.of(XMaterial.REDSTONE_TORCH)
+        slots.put(
+                SLOT_SHAPELESS_INFO,
+                MenuItem.of(ItemBuilder.of(XMaterial.REDSTONE_TORCH)
                         .name("&cShapeless Recipe")
                         .enchantment(XEnchantment.UNBREAKING, 1)
-                        .lore(
-                                "&7This item is a shapeless recipe,",
-                                "&7meaning you can craft it",
-                                "&7in any shape."
-                        )
-                        .build()
-        ));
+                        .lore("&7This item is a shapeless recipe,", "&7meaning you can craft it", "&7in any shape.")
+                        .build()));
     }
 }

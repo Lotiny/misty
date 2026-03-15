@@ -30,7 +30,8 @@ public class HomeworkScenario extends Scenario {
     @Autowired
     private static GameManager gameManager;
 
-    private final MetadataKey<XMaterial> HOMEWORK_ITEM_KEY = MetadataKey.create("misty:homework-item-key", XMaterial.class);
+    private final MetadataKey<XMaterial> HOMEWORK_ITEM_KEY =
+            MetadataKey.create("misty:homework-item-key", XMaterial.class);
     private final MetadataKey<Integer> HOMEWORK_AMOUNT_KEY = MetadataKey.createIntegerKey("misty:homework-amount-key");
 
     @Override
@@ -46,8 +47,7 @@ public class HomeworkScenario extends Scenario {
                         "&7Every 10 minutes player will get assigned item",
                         "&7you much collect and have it in inventory.",
                         "&7If you do not have the item you will lose 1 full heart.",
-                        "&7If you have it you will gain 1 full heart."
-                )
+                        "&7If you have it you will gain 1 full heart.")
                 .build();
     }
 

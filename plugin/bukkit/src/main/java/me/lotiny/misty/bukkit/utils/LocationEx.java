@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 @RequiredArgsConstructor
 public enum LocationEx {
-
-    PRACTICE, LOBBY;
+    PRACTICE,
+    LOBBY;
 
     public Position getPosition() {
         MainConfig mainConfig = Config.getMainConfig();

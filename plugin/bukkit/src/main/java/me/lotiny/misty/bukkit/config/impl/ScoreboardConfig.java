@@ -25,8 +25,7 @@ public final class ScoreboardConfig extends BaseConfig {
                 "<white>World<gray>: <aqua><world>",
                 "<white>Total Chunks<gray>: <aqua><chunks>",
                 "<white>Progress<gray>: <aqua><progress>%",
-                "<gray><st>------------------"
-        );
+                "<gray><st>------------------");
         private List<String> lobby = List.of(
                 "<gray><st>------------------",
                 "<white>Players<gray>: <aqua><players>",
@@ -35,16 +34,14 @@ public final class ScoreboardConfig extends BaseConfig {
                 " ",
                 "<white>Scenarios:",
                 "<scenarios>",
-                "<gray><st>------------------"
-        );
+                "<gray><st>------------------");
         private List<String> scatter = List.of(
                 "<gray><st>------------------",
                 "<white>Players<gray>: <aqua><players>",
                 "<white>Type<gray>: <aqua><game_type>",
                 " ",
                 "<white>Scatter<gray>: <aqua><scatter_percentage>",
-                "<gray><st>------------------"
-        );
+                "<gray><st>------------------");
         private List<String> gameFFA = List.of(
                 "<gray><st>------------------",
                 "<white>Game Time<gray>: <aqua><game_timer>",
@@ -53,8 +50,7 @@ public final class ScoreboardConfig extends BaseConfig {
                 "<white>Border<gray>: <aqua><border> <gray>(<red><shrink_in><gray>)",
                 "<dnd>",
                 "<no_clean>",
-                "<gray><st>------------------"
-        );
+                "<gray><st>------------------");
         private List<String> gameTeam = List.of(
                 "<gray><st>------------------",
                 "<white>Game Time<gray>: <aqua><game_timer>",
@@ -64,15 +60,13 @@ public final class ScoreboardConfig extends BaseConfig {
                 "<white>Border<gray>: <aqua><border> <gray>(<red><shrink_in><gray>)",
                 "<dnd>",
                 "<no_clean>",
-                "<gray><st>------------------"
-        );
+                "<gray><st>------------------");
         private List<String> end = List.of(
                 "<gray><st>------------------",
                 "<white>Game Time<gray>: <aqua><game_time>",
                 " ",
                 "<red>Reboot in <dark_red><b><reboot_time>",
-                "<gray><st>------------------"
-        );
+                "<gray><st>------------------");
     }
 
     @Getter

@@ -14,7 +14,7 @@ public class StatTypeArgTransformer extends BukkitArgTransformer<StatType> {
 
     @Override
     public Class[] type() {
-        return new Class[]{StatType.class};
+        return new Class[] {StatType.class};
     }
 
     @Override
@@ -29,8 +29,6 @@ public class StatTypeArgTransformer extends BukkitArgTransformer<StatType> {
 
     @Override
     public List<String> tabComplete(Player player, String source) {
-        return Arrays.stream(StatType.values())
-                .map(StatType::getData)
-                .toList();
+        return Arrays.stream(StatType.values()).map(StatType::getData).toList();
     }
 }

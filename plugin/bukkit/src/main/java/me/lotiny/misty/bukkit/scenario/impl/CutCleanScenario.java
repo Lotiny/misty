@@ -41,10 +41,7 @@ public class CutCleanScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.IRON_INGOT)
                 .name("&b" + getName())
-                .lore(
-                        "&7All ores and animal food will be",
-                        "&7dropped in it's smelted version."
-                )
+                .lore("&7All ores and animal food will be", "&7dropped in it's smelted version.")
                 .build();
     }
 

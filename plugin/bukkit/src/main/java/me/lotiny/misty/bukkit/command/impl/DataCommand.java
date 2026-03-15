@@ -38,8 +38,7 @@ public class DataCommand extends AbstractCommand {
                 "&b/data add <player> <data> <amount> &7- &fAdd player data",
                 "&b/data remove <player> <data> <amount> &7- &fRemove player data",
                 "&b/data set <player> <data> <amount> &7- &fSet player data",
-                CC.CHAT_BAR
-        );
+                CC.CHAT_BAR);
     }
 
     @Command("wipe")
@@ -51,18 +50,23 @@ public class DataCommand extends AbstractCommand {
     @Command("reset")
     public void onReset(BukkitCommandContext context, @Arg("target") Profile profile) {
         storageRegistry.getProfileStorage().delete(profile);
-        context.sendMessage(MessageType.INFO, Message.DATA_RESET
-                .replace("<player>", profile.getName()));
+        context.sendMessage(MessageType.INFO, Message.DATA_RESET.replace("<player>", profile.getName()));
     }
 
     @Command("add")
-    public void onAdd(BukkitCommandContext context, @Arg("target") Profile profile, @Arg("statType") StatType data, @Arg("amount") int amount) {
+    public void onAdd(
+            BukkitCommandContext context,
+            @Arg("target") Profile profile,
+            @Arg("statType") StatType data,
+            @Arg("amount") int amount) {
         Stats stats = profile.getStats(data);
         stats.increase(amount);
-        context.sendMessage(MessageType.INFO, Message.DATA_INCREASED
-                .replace("<player>", profile.getName())
-                .replace("<data>", Utilities.getFormattedName(data.name()))
-                .replace("<amount>", String.valueOf(amount)));
+        context.sendMessage(
+                MessageType.INFO,
+                Message.DATA_INCREASED
+                        .replace("<player>", profile.getName())
+                        .replace("<data>", Utilities.getFormattedName(data.name()))
+                        .replace("<amount>", String.valueOf(amount)));
 
         Player target = Bukkit.getPlayer(profile.getUniqueId());
         if (target == null) {
@@ -71,13 +75,19 @@ public class DataCommand extends AbstractCommand {
     }
 
     @Command("remove")
-    public void onRemove(BukkitCommandContext context, @Arg("target") Profile profile, @Arg("statType") StatType data, @Arg("amount") int amount) {
+    public void onRemove(
+            BukkitCommandContext context,
+            @Arg("target") Profile profile,
+            @Arg("statType") StatType data,
+            @Arg("amount") int amount) {
         Stats stats = profile.getStats(data);
         stats.decrease(amount);
-        context.sendMessage(MessageType.INFO, Message.DATA_DECREASED
-                .replace("<player>", profile.getName())
-                .replace("<data>", Utilities.getFormattedName(data.name()))
-                .replace("<amount>", String.valueOf(amount)));
+        context.sendMessage(
+                MessageType.INFO,
+                Message.DATA_DECREASED
+                        .replace("<player>", profile.getName())
+                        .replace("<data>", Utilities.getFormattedName(data.name()))
+                        .replace("<amount>", String.valueOf(amount)));
 
         Player target = Bukkit.getPlayer(profile.getUniqueId());
         if (target == null) {
@@ -86,13 +96,19 @@ public class DataCommand extends AbstractCommand {
     }
 
     @Command("set")
-    public void onSet(BukkitCommandContext context, @Arg("target") Profile profile, @Arg("statType") StatType data, @Arg("amount") int amount) {
+    public void onSet(
+            BukkitCommandContext context,
+            @Arg("target") Profile profile,
+            @Arg("statType") StatType data,
+            @Arg("amount") int amount) {
         Stats stats = profile.getStats(data);
         stats.setAmount(amount);
-        context.sendMessage(MessageType.INFO, Message.DATA_SET
-                .replace("<player>", profile.getName())
-                .replace("<data>", Utilities.getFormattedName(data.name()))
-                .replace("<amount>", String.valueOf(amount)));
+        context.sendMessage(
+                MessageType.INFO,
+                Message.DATA_SET
+                        .replace("<player>", profile.getName())
+                        .replace("<data>", Utilities.getFormattedName(data.name()))
+                        .replace("<amount>", String.valueOf(amount)));
 
         Player target = Bukkit.getPlayer(profile.getUniqueId());
         if (target == null) {

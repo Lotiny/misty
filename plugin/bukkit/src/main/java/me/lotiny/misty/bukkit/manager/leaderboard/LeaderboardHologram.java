@@ -34,9 +34,7 @@ public class LeaderboardHologram {
             lines.add(HologramLine.create(LegacyAdventureUtil.decode(format)));
         });
 
-        this.hologram = Hologram.create(position)
-                .lines(lines)
-                .spawn();
+        this.hologram = Hologram.create(position).lines(lines).spawn();
     }
 
     public void remove() {

@@ -22,9 +22,7 @@ public class GoldRushScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.GOLD_INGOT)
                 .name("&b" + getName())
-                .lore(
-                        "&7Leather and Iron armor cannot be craft."
-                )
+                .lore("&7Leather and Iron armor cannot be craft.")
                 .build();
     }
 

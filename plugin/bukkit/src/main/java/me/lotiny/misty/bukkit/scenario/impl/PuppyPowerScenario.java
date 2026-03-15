@@ -22,10 +22,7 @@ public class PuppyPowerScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.BONE)
                 .name("&b" + getName())
-                .lore(
-                        "&7Player start with 64 rotten flesh, 64 bone and",
-                        "&764 wolf spawn egg."
-                )
+                .lore("&7Player start with 64 rotten flesh, 64 bone and", "&764 wolf spawn egg.")
                 .build();
     }
 

@@ -39,12 +39,16 @@ public class SettingsMenu extends MistyMenu {
     private static final int SLOT_SAVE_CONFIGS = 24;
     private static final int SLOT_CONFIG = 30;
     private static final int SLOT_SCENARIOS = 32;
+
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static PracticeManager practiceManager;
+
     @Autowired
     private static WorldManager worldManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
 
@@ -78,11 +82,8 @@ public class SettingsMenu extends MistyMenu {
         return MenuItem.of(
                 ItemBuilder.of(XMaterial.WRITABLE_BOOK)
                         .name("&2Whitelist Add")
-                        .lore(
-                                " ",
-                                "&7Click to add player to whitelist",
-                                " "
-                        ).build(),
+                        .lore(" ", "&7Click to add player to whitelist", " ")
+                        .build(),
                 (clickedPlayer, clickType) -> {
                     if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
                     playClick(clickedPlayer);
@@ -94,11 +95,10 @@ public class SettingsMenu extends MistyMenu {
                                 if (!isValidName(target)) {
                                     return List.of(
                                             AnvilGUI.ResponseAction.replaceInputText("Try again!"),
-                                            AnvilGUI.ResponseAction.run(() ->
-                                                    PlayerUtils.playSound(clickedPlayer,
-                                                            XSound.ENTITY_WANDERING_TRADER_NO,
-                                                            XSound.ENTITY_VILLAGER_NO))
-                                    );
+                                            AnvilGUI.ResponseAction.run(() -> PlayerUtils.playSound(
+                                                    clickedPlayer,
+                                                    XSound.ENTITY_WANDERING_TRADER_NO,
+                                                    XSound.ENTITY_VILLAGER_NO)));
                                 }
                                 return List.of(AnvilGUI.ResponseAction.close());
                             })
@@ -108,50 +108,52 @@ public class SettingsMenu extends MistyMenu {
                                     clickedPlayer.sendMessage(Message.WHITELIST_NAME_NOT_VALID);
                                     return;
                                 }
-                                if (gameManager.getRegistry().getWhitelistPlayers().contains(target)) {
-                                    clickedPlayer.sendMessage(Message.WHITELIST_PLAYER_ALREADY_WHITELISTED
-                                            .replace("<player>", target));
+                                if (gameManager
+                                        .getRegistry()
+                                        .getWhitelistPlayers()
+                                        .contains(target)) {
+                                    clickedPlayer.sendMessage(
+                                            Message.WHITELIST_PLAYER_ALREADY_WHITELISTED.replace("<player>", target));
                                     return;
                                 }
                                 gameManager.getRegistry().getWhitelistPlayers().add(target);
                                 PlayerUtils.playSound(clickedPlayer, XSound.ENTITY_EXPERIENCE_ORB_PICKUP);
-                                clickedPlayer.sendMessage(Message.WHITELIST_ADD
-                                        .replace("<player>", target));
+                                clickedPlayer.sendMessage(Message.WHITELIST_ADD.replace("<player>", target));
                             })
                             .text("Enter Player Name")
                             .plugin(BukkitPlugin.INSTANCE)
                             .open(clickedPlayer);
-                }
-        );
+                });
     }
 
     private MenuItem buildWhitelistToggleButton() {
         return MenuItem.of(
-                buildToggleItem(XMaterial.RAIL, "&6Whitelist", gameManager.getRegistry().isWhitelist()),
+                buildToggleItem(
+                        XMaterial.RAIL, "&6Whitelist", gameManager.getRegistry().isWhitelist()),
                 (clickedPlayer, clickType) -> {
                     if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
                     playClick(clickedPlayer);
-                    gameManager.getRegistry().setWhitelist(clickedPlayer, !gameManager.getRegistry().isWhitelist());
+                    gameManager
+                            .getRegistry()
+                            .setWhitelist(
+                                    clickedPlayer, !gameManager.getRegistry().isWhitelist());
                     open(clickedPlayer);
-                }
-        );
+                });
     }
 
     private MenuItem buildWhitelistedPlayerButton() {
         return MenuItem.of(
-                ItemBuilder.of(Utilities.createSkull("http://textures.minecraft.net/texture/92607d664798962e10e8d7942b35f07119f8b4b846bcd53deeba1e532747b46"))
+                ItemBuilder.of(
+                                Utilities.createSkull(
+                                        "http://textures.minecraft.net/texture/92607d664798962e10e8d7942b35f07119f8b4b846bcd53deeba1e532747b46"))
                         .name("&dWhitelisted Players")
-                        .lore(
-                                " ",
-                                "&7Click to show all Whitelisted Players",
-                                " "
-                        ).build(),
+                        .lore(" ", "&7Click to show all Whitelisted Players", " ")
+                        .build(),
                 (clickedPlayer, clickType) -> {
                     if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
                     playClick(clickedPlayer);
                     new WhitelistMenu().open(clickedPlayer);
-                }
-        );
+                });
     }
 
     private MenuItem buildPracticeButton() {
@@ -162,84 +164,59 @@ public class SettingsMenu extends MistyMenu {
                     playClick(clickedPlayer);
                     practiceManager.setOpened(!practiceManager.isOpened(), clickedPlayer);
                     open(clickedPlayer);
-                }
-        );
+                });
     }
 
     private MenuItem buildWorldEditorButton() {
         return MenuItem.of(
                 ItemBuilder.of(XMaterial.GRASS_BLOCK)
                         .name("&aWorld Editor")
-                        .lore(
-                                " ",
-                                "&7Click to open World Editor",
-                                "&7menu.",
-                                " "
-                        )
+                        .lore(" ", "&7Click to open World Editor", "&7menu.", " ")
                         .build(),
                 (clickedPlayer, clickType) -> {
                     if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
                     playClick(clickedPlayer);
                     new WorldEditorMenu().open(clickedPlayer);
-                }
-        );
+                });
     }
 
     private MenuItem buildSaveConfigsButton() {
         return MenuItem.of(
                 ItemBuilder.of(XMaterial.ANVIL)
                         .name("&6Save Configurations")
-                        .lore(
-                                " ",
-                                "&7Click to save or load",
-                                "&7config and scenario.",
-                                " "
-                        )
+                        .lore(" ", "&7Click to save or load", "&7config and scenario.", " ")
                         .build(),
                 (clickedPlayer, clickType) -> {
                     if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
                     playClick(clickedPlayer);
                     new SaveConfigsMenu().open(clickedPlayer);
-                }
-        );
+                });
     }
 
     private MenuItem buildConfigButton() {
         return MenuItem.of(
                 ItemBuilder.of(XMaterial.BOOK)
                         .name("&6Configuration")
-                        .lore(
-                                " ",
-                                "&7Click to open uhc game",
-                                "&7configuration menu.",
-                                " "
-                        )
+                        .lore(" ", "&7Click to open uhc game", "&7configuration menu.", " ")
                         .build(),
                 (clickedPlayer, clickType) -> {
                     if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
                     playClick(clickedPlayer);
                     new ConfigMenu(gameManager.getGame().getSetting()).open(clickedPlayer);
-                }
-        );
+                });
     }
 
     private MenuItem buildScenariosButton() {
         return MenuItem.of(
                 ItemBuilder.of(XMaterial.PAPER)
                         .name("&2Scenarios")
-                        .lore(
-                                " ",
-                                "&7Click to open toggleable",
-                                "&7scenarios menu",
-                                " "
-                        )
+                        .lore(" ", "&7Click to open toggleable", "&7scenarios menu", " ")
                         .build(),
                 (clickedPlayer, clickType) -> {
                     if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
                     playClick(clickedPlayer);
                     new ScenariosAdminMenu().open(clickedPlayer);
-                }
-        );
+                });
     }
 
     private ItemStack buildToggleItem(XMaterial material, String name, boolean enabled) {
@@ -251,8 +228,7 @@ public class SettingsMenu extends MistyMenu {
                         " ",
                         enabled ? "&e» &aEnabled" : "&a  Enabled",
                         enabled ? "&c  Disabled" : "&e» &cDisabled",
-                        " "
-                )
+                        " ")
                 .build();
     }
 

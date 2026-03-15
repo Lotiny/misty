@@ -24,9 +24,11 @@ public final class MessageConfig extends BaseConfig {
     private String configChangedDisabled = "<prefix> &b<config>&e has been &cdisabled &eby &b<player>";
     private String configEditName = "<prefix> &aChanged this config name to &r<name>";
 
-    private String scheduleNoSchedule = "<prefix> &cThe countdown hasn’t been set yet. Use '/uhc schedule <time>' to set it.";
+    private String scheduleNoSchedule =
+            "<prefix> &cThe countdown hasn’t been set yet. Use '/uhc schedule <time>' to set it.";
     private String scheduleCancel = "<prefix> &cYou’ve canceled the countdown.";
-    private String scheduleAlreadySet = "<prefix> &cThe countdown is already running. Type '/uhc schedule cancel' to stop it.";
+    private String scheduleAlreadySet =
+            "<prefix> &cThe countdown is already running. Type '/uhc schedule cancel' to stop it.";
     private String scheduleSet = "<prefix> &eYou’ve set the countdown to &b<time>&e.";
     private String scheduleMinimum = "<prefix> &cThe start time must be greater than 10 seconds.";
 
@@ -45,7 +47,8 @@ public final class MessageConfig extends BaseConfig {
     private String lateScatterDisabled = "<prefix> &cLate-scatter is currently disabled.";
     private String lateScatterCant = "<prefix> &cYou can’t late-scatter this player.";
 
-    private String reScatterDone = "<prefix> &aYou’ve been re-scattered! You can use re-scatter &b<amount> &amore times.";
+    private String reScatterDone =
+            "<prefix> &aYou’ve been re-scattered! You can use re-scatter &b<amount> &amore times.";
     private String reScatterCant = "<prefix> &cYou can no longer re-scatter.";
     private String reScatterLimited = "<prefix> &cYou have reached your re-scatter limit of &b<amount>&c.";
 
@@ -73,7 +76,8 @@ public final class MessageConfig extends BaseConfig {
     private String teamInviteSend = "&eYou've invited &b<invited>&e to join your team.";
     private String teamInviteReceived = "&eYou have been invited to join &b<inviter>&e's team.";
     private String teamInviteAlreadySend = "&cYou have already sent an invitation to this player.";
-    private String teamJoinFailed = "&cJoining the team failed, either the invite expired or the player doesn't have a team.";
+    private String teamJoinFailed =
+            "&cJoining the team failed, either the invite expired or the player doesn't have a team.";
     private String teamDisabled = "&cTeams are not enabled or this feature has been turned off.";
     private String teamFull = "&cThe team is already full!";
     private String teamAlreadyInTeam = "&eYou are already in a team.";
@@ -118,7 +122,8 @@ public final class MessageConfig extends BaseConfig {
     private String loveAtFirstSightTeamWith = "&7[&dLAFS&7] &aYou are now teamed with &b<player>&a!";
     private String loveAtFirstSightAlreadyHaveTeam = "&7[&dLAFS&7] &cThat player already has a teammate.";
 
-    private String ultraParanoidBroadcast = "&7[&6Ultra-Paranoid&7] &b<player> &ehas mined &b<block> &eat &b(<x>, <y>, <z>)";
+    private String ultraParanoidBroadcast =
+            "&7[&6Ultra-Paranoid&7] &b<player> &ehas mined &b<block> &eat &b(<x>, <y>, <z>)";
 
     private String timebombExplode = "&7[&6Timebomb&7] &f<player>'s corpse has exploded.";
 
@@ -149,15 +154,16 @@ public final class MessageConfig extends BaseConfig {
     private String noCleanExpired = "&cYou are no longer protected by No-Clean!";
     private String noCleanProtected = "&cThis player is protected by No-Clean.";
 
-    private String webLimitReached = "&cYou have too many webs in your inventory! They have been removed to the limit of 8.";
+    private String webLimitReached =
+            "&cYou have too many webs in your inventory! They have been removed to the limit of 8.";
 
     private String entropyLevel = "&7[&8Entropy&7] &cYou’ve lost 1 level.";
     private String entropyDead = "&7[&8Entropy&7] &cYou died because you had no levels left.";
 
-    private String chumpCharityBroadcast = "&7[&dChump-Charity&7] &b<player> &ahas been healed by the Chump Charity scenario!";
+    private String chumpCharityBroadcast =
+            "&7[&dChump-Charity&7] &b<player> &ahas been healed by the Chump Charity scenario!";
     private String chumpCharityPlayer = "&7[&dChump-Charity&7] &eYou’ve been healed!";
 
     private String playerSwapPlayer = "&7[&aPlayer-Swap&7] &eYou were chosen to swap locations with &b<player>&e.";
     private String playerSwapBroadcast = "&7[&aPlayer-Swap&7] &b<player1> &eand &b<player2> &ehave swapped locations!";
-
 }

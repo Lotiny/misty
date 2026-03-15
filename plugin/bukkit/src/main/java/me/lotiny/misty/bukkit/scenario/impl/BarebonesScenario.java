@@ -31,8 +31,7 @@ public class BarebonesScenario extends Scenario {
                 .lore(
                         "&7You are not able to mined Diamond Ore or Gold Ore!",
                         "&7If you kill a player, they will drop 1 diamond,",
-                        "&7a golden apple, 2 string and 32 arrows."
-                )
+                        "&7a golden apple, 2 string and 32 arrows.")
                 .build();
     }
 
@@ -53,7 +52,6 @@ public class BarebonesScenario extends Scenario {
                 ItemStackUtils.of(XMaterial.DIAMOND),
                 ItemStackUtils.of(XMaterial.GOLDEN_APPLE),
                 ItemStackUtils.of(XMaterial.ARROW, 32),
-                ItemStackUtils.of(XMaterial.STRING, 2)
-        );
+                ItemStackUtils.of(XMaterial.STRING, 2));
     }
 }

@@ -20,12 +20,11 @@ public abstract class BaseConfig {
 
     @Setter
     private transient Path configFile;
+
     @Setter
     private transient YamlConfigurationProperties properties;
 
-    protected BaseConfig() {
-
-    }
+    protected BaseConfig() {}
 
     public void setup(Plugin plugin, String fileName) {
         this.configFile = new File(plugin.getDataFolder(), fileName).toPath();

@@ -21,9 +21,7 @@ public class SoupScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.MUSHROOM_STEW)
                 .name("&b" + getName())
-                .lore(
-                        "&7Right-click at soup will heal you for 3.5 hearts."
-                )
+                .lore("&7Right-click at soup will heal you for 3.5 hearts.")
                 .build();
     }
 
@@ -31,7 +29,8 @@ public class SoupScenario extends Scenario {
     public void handlePlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (event.getAction().toString().startsWith("RIGHT_") && XMaterial.MUSHROOM_STEM.isSimilar(PlayerUtils.getItemInHand(player))) {
+        if (event.getAction().toString().startsWith("RIGHT_")
+                && XMaterial.MUSHROOM_STEM.isSimilar(PlayerUtils.getItemInHand(player))) {
             double health = player.getHealth();
             double maxHealth = PlayerUtils.getMaxHealth(player);
 

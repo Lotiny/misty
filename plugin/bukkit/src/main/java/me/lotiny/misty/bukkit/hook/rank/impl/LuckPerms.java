@@ -46,10 +46,11 @@ public class LuckPerms implements IRank {
 
     @Override
     public int getRankWeight(UUID uuid) {
-        return Objects.requireNonNull(this.luckPerms.getGroupManager().getGroup(
-                        Objects.requireNonNull(getMetaData(uuid)
-                                .getPrimaryGroup())))
-                .getWeight().orElse(0);
+        return Objects.requireNonNull(this.luckPerms
+                        .getGroupManager()
+                        .getGroup(Objects.requireNonNull(getMetaData(uuid).getPrimaryGroup())))
+                .getWeight()
+                .orElse(0);
     }
 
     @Override

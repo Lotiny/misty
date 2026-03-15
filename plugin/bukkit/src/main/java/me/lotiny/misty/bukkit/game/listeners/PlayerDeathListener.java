@@ -20,7 +20,11 @@ import me.lotiny.misty.bukkit.config.ConfigManager;
 import me.lotiny.misty.bukkit.config.impl.MainConfig;
 import me.lotiny.misty.bukkit.provider.hotbar.HotBar;
 import me.lotiny.misty.bukkit.storage.StorageRegistry;
-import me.lotiny.misty.bukkit.utils.*;
+import me.lotiny.misty.bukkit.utils.KeyEx;
+import me.lotiny.misty.bukkit.utils.Snapshot;
+import me.lotiny.misty.bukkit.utils.TeamEx;
+import me.lotiny.misty.bukkit.utils.UHCUtils;
+import me.lotiny.misty.bukkit.utils.VersionUtils;
 import me.lotiny.misty.bukkit.utils.elo.EloUtils;
 import me.lotiny.misty.paper.MistyPaper;
 import org.bukkit.Bukkit;
@@ -42,12 +46,16 @@ public class PlayerDeathListener implements Listener {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Autowired
     private static TeamManager teamManager;
+
     @Autowired
     private static ConfigManager configManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
 
@@ -56,7 +64,8 @@ public class PlayerDeathListener implements Listener {
     private final List<PotionEffect> playerHeadConsumeEffects;
 
     public PlayerDeathListener() {
-        MainConfig.Healing.HealingItem healingItem = configManager.get(MainConfig.class).getHealing().getPlayerHead();
+        MainConfig.Healing.HealingItem healingItem =
+                configManager.get(MainConfig.class).getHealing().getPlayerHead();
         this.playerHeadEnabled = healingItem.isEnabled();
         this.playerHeadConsumeTime = healingItem.getTime();
         this.playerHeadConsumeEffects = healingItem.getPotionEffects();
@@ -67,7 +76,9 @@ public class PlayerDeathListener implements Listener {
         GameRegistry registry = gameManager.getRegistry();
 
         Player player = event.getEntity();
-        if (!UHCUtils.isAlive(player.getUniqueId())) return;
+        if (!UHCUtils.isAlive(player.getUniqueId())) {
+            return;
+        }
 
         Profile profile = storageRegistry.getProfile(player.getUniqueId());
         Player killer = player.getKiller();
@@ -113,7 +124,8 @@ public class PlayerDeathListener implements Listener {
         }
     }
 
-    private void handleDeathMessageAndElo(PlayerDeathEvent event, Player player, Profile profile, Player killer, Profile killerProfile) {
+    private void handleDeathMessageAndElo(
+            PlayerDeathEvent event, Player player, Profile profile, Player killer, Profile killerProfile) {
         String deathMessage = event.getDeathMessage();
         if (deathMessage == null) {
             deathMessage = player.getName() + " died";
@@ -126,8 +138,13 @@ public class PlayerDeathListener implements Listener {
             killerProfile.getStats(StatType.KILLS).increase();
 
             event.setDeathMessage(CC.translate(deathMessage
-                    .replace(player.getName(), "&c" + player.getName() + "&7[&c" + UHCUtils.getGameKills(player) + "&7]&e")
-                    .replace(killer.getName(), "&a" + killer.getName() + "&7[&a" + UHCUtils.getGameKills(killer) + "&7]&e") + "&r"));
+                            .replace(
+                                    player.getName(),
+                                    "&c" + player.getName() + "&7[&c" + UHCUtils.getGameKills(player) + "&7]&e")
+                            .replace(
+                                    killer.getName(),
+                                    "&a" + killer.getName() + "&7[&a" + UHCUtils.getGameKills(killer) + "&7]&e")
+                    + "&r"));
 
             if (gameManager.getGame().getSetting().getTeamSize() > 1) {
                 Team killerTeam = UHCUtils.getTeam(killer);
@@ -138,8 +155,8 @@ public class PlayerDeathListener implements Listener {
 
             updateElo(profile, killerProfile, metadata);
         } else {
-            event.setDeathMessage(CC.translate(deathMessage
-                    .replace(player.getName(), "&c" + player.getName() + "&7[&c" + UHCUtils.getGameKills(player) + "&7]&e")));
+            event.setDeathMessage(CC.translate(deathMessage.replace(
+                    player.getName(), "&c" + player.getName() + "&7[&c" + UHCUtils.getGameKills(player) + "&7]&e")));
 
             updateEloNoKiller(profile, metadata);
         }
@@ -176,7 +193,8 @@ public class PlayerDeathListener implements Listener {
 
         if (team.getMembers(true).isEmpty()) {
             if (scenarioManager.isEnabled("Backpacks")) {
-                for (ItemStack item : team.getStorage().getOrThrow(TeamEx.TEAM_INVENTORY).getContents()) {
+                for (ItemStack item :
+                        team.getStorage().getOrThrow(TeamEx.TEAM_INVENTORY).getContents()) {
                     if (item != null && item.getType() != XMaterial.AIR.get()) {
                         UHCUtils.dropItem(player.getLocation(), item);
                     }
@@ -187,16 +205,13 @@ public class PlayerDeathListener implements Listener {
     }
 
     private void dropPlayerHead(Player player) {
-        ItemStack itemToDrop = ItemBuilder.of(XMaterial.PLAYER_HEAD)
-                .skull(player)
-                .build();
+        ItemStack itemToDrop =
+                ItemBuilder.of(XMaterial.PLAYER_HEAD).skull(player).build();
 
-        if (playerHeadEnabled && VersionUtils.isHigher(21, 4) && SpigotUtil.SPIGOT_TYPE == SpigotUtil.SpigotType.PAPER) {
-            MistyPaper.applyConsumable(
-                    itemToDrop,
-                    playerHeadConsumeTime,
-                    playerHeadConsumeEffects
-            );
+        if (playerHeadEnabled
+                && VersionUtils.isHigher(21, 4)
+                && SpigotUtil.SPIGOT_TYPE == SpigotUtil.SpigotType.PAPER) {
+            MistyPaper.applyConsumable(itemToDrop, playerHeadConsumeTime, playerHeadConsumeEffects);
         }
 
         UHCUtils.dropItem(player.getLocation(), itemToDrop);

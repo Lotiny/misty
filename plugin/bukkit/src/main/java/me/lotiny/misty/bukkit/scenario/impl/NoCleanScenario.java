@@ -16,7 +16,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class NoCleanScenario extends Scenario {
 
-    public static MetadataKey<PlayerCooldown> NO_CLEAN_KEY = MetadataKey.create("misty:no-clean-key", PlayerCooldown.class);
+    public static MetadataKey<PlayerCooldown> NO_CLEAN_KEY =
+            MetadataKey.create("misty:no-clean-key", PlayerCooldown.class);
 
     @Override
     public String getName() {
@@ -27,9 +28,7 @@ public class NoCleanScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.DIAMOND_SWORD)
                 .name("&b" + getName())
-                .lore(
-                        "&7When you get a kill you will take no damage for 20 seconds."
-                )
+                .lore("&7When you get a kill you will take no damage for 20 seconds.")
                 .build();
     }
 

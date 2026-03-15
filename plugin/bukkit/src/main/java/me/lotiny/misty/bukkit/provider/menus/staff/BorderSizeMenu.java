@@ -23,6 +23,7 @@ public class BorderSizeMenu extends MistyPaginatedMenu {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static BorderManager borderManager;
 
@@ -47,11 +48,8 @@ public class BorderSizeMenu extends MistyPaginatedMenu {
             buttons.add(MenuItem.of(
                     ItemBuilder.of(XMaterial.PAPER)
                             .name("&b" + size + "x" + size)
-                            .lore(
-                                    " ",
-                                    isActive ? "&e» &aSelected" : "&7Click to set border size",
-                                    " "
-                            ).build(),
+                            .lore(" ", isActive ? "&e» &aSelected" : "&7Click to set border size", " ")
+                            .build(),
                     (clickedPlayer, clickType) -> {
                         if (!clickedPlayer.hasPermission(Permission.HOST_PERMISSION)) return;
 
@@ -61,8 +59,7 @@ public class BorderSizeMenu extends MistyPaginatedMenu {
 
                         playClick(clickedPlayer);
                         open(clickedPlayer, pane.getPage());
-                    }
-            ));
+                    }));
         }
 
         return buttons;
@@ -73,4 +70,3 @@ public class BorderSizeMenu extends MistyPaginatedMenu {
         return Map.of();
     }
 }
-

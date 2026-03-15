@@ -14,16 +14,12 @@ public final class KitSerializer implements Serializer<Kit, Map<String, String>>
     public Map<String, String> serialize(Kit kit) {
         return Map.of(
                 "armors", serialize(kit.getArmors()),
-                "items", serialize(kit.getItems())
-        );
+                "items", serialize(kit.getItems()));
     }
 
     @Override
     public Kit deserialize(Map<String, String> stringStringMap) {
-        return new Kit(
-                deserialize(stringStringMap.get("armors")),
-                deserialize(stringStringMap.get("items"))
-        );
+        return new Kit(deserialize(stringStringMap.get("armors")), deserialize(stringStringMap.get("items")));
     }
 
     private String serialize(ItemStack[] input) {

@@ -25,32 +25,27 @@ public class CustomItemRecipeCreatorImpl implements CustomItemRecipeCreator {
             throw new IllegalArgumentException("Invalid shape length: " + customItem.getId());
         }
 
-        return ReflectionUtils.get().createShapedRecipe(
-                MistyShapedRecipe.builder()
+        return ReflectionUtils.get()
+                .createShapedRecipe(MistyShapedRecipe.builder()
                         .namespace(generateNamespace())
                         .result(customItemRegistry.createResult(customItem))
                         .shape(shape)
                         .ingredients(ingredients)
-                        .build()
-        );
+                        .build());
     }
 
     @Override
     public Recipe createShapeless(Map<Object, Integer> ingredients) {
-        return ReflectionUtils.get().createShapelessRecipe(
-                MistyShapelessRecipe.builder()
+        return ReflectionUtils.get()
+                .createShapelessRecipe(MistyShapelessRecipe.builder()
                         .namespace(generateNamespace())
                         .result(customItemRegistry.createResult(customItem))
                         .ingredients(ingredients)
-                        .build()
-        );
+                        .build());
     }
 
     private String generateNamespace() {
         int count = recipeCounter.getAndIncrement();
-        return count == 0
-                ? customItem.getId()
-                : customItem.getId() + "-" + count;
+        return count == 0 ? customItem.getId() : customItem.getId() + "-" + count;
     }
-
 }

@@ -47,11 +47,7 @@ public class v1_16_5 extends v1_12_2 {
         if (shape.length() != 9) {
             throw new IllegalArgumentException("Recipe shape must be a 9-character string for a 3x3 grid.");
         }
-        shapedRecipe.shape(
-                shape.substring(0, 3),
-                shape.substring(3, 6),
-                shape.substring(6)
-        );
+        shapedRecipe.shape(shape.substring(0, 3), shape.substring(3, 6), shape.substring(6));
 
         recipe.getIngredients().forEach((character, ingredientObject) -> {
             RecipeChoice choice = createRecipeChoice(ingredientObject);
@@ -89,7 +85,8 @@ public class v1_16_5 extends v1_12_2 {
             case Material material -> item = new ItemStack(material);
             case null -> throw new IllegalArgumentException("Ingredient object cannot be null.");
             default ->
-                    throw new IllegalArgumentException("Unsupported ingredient type: " + ingredientObject.getClass().getName());
+                throw new IllegalArgumentException("Unsupported ingredient type: "
+                        + ingredientObject.getClass().getName());
         }
 
         return new RecipeChoice.ExactChoice(item);

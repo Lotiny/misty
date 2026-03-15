@@ -32,24 +32,28 @@ public class StatsMenu extends MistyMenu {
 
     @Override
     public Map<Integer, MenuItem> getButtons(Player player, NormalPane pane, Gui gui) {
-        return Map.of(13, MenuItem.of(
-                ItemBuilder.of(XMaterial.GOLDEN_APPLE)
+        return Map.of(
+                13,
+                MenuItem.of(ItemBuilder.of(XMaterial.GOLDEN_APPLE)
                         .name("&6&lUHC")
                         .lore(
                                 " ",
-                                "&bGame Played&7: &f" + profile.getStats(StatType.GAME_PLAYED).getAmount(),
+                                "&bGame Played&7: &f"
+                                        + profile.getStats(StatType.GAME_PLAYED).getAmount(),
                                 " ",
                                 "&bELO&7: &f" + profile.getStats(StatType.ELO).getAmount(),
                                 "&bWins&7: &f" + profile.getStats(StatType.WINS).getAmount(),
                                 " ",
-                                "&bKills&7: &f" + profile.getStats(StatType.KILLS).getAmount(),
-                                "&bDeaths&7: &f" + profile.getStats(StatType.DEATHS).getAmount(),
+                                "&bKills&7: &f"
+                                        + profile.getStats(StatType.KILLS).getAmount(),
+                                "&bDeaths&7: &f"
+                                        + profile.getStats(StatType.DEATHS).getAmount(),
                                 "&bK/D&7: &f" + getKillDeathRatio(),
                                 " ",
-                                "&bDiamond&7: &f" + profile.getStats(StatType.DIAMOND_MINED).getAmount()
-                        )
-                        .build()
-        ));
+                                "&bDiamond&7: &f"
+                                        + profile.getStats(StatType.DIAMOND_MINED)
+                                                .getAmount())
+                        .build()));
     }
 
     private String getKillDeathRatio() {

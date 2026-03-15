@@ -20,10 +20,7 @@ public class BleedingSweetsScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.DIAMOND)
                 .name("&b" + getName())
-                .lore(
-                        "&7Whenever a player dies, they will drop a diamond,",
-                        "&75 gold, 1 string, 16 arrows."
-                )
+                .lore("&7Whenever a player dies, they will drop a diamond,", "&75 gold, 1 string, 16 arrows.")
                 .build();
     }
 
@@ -33,7 +30,6 @@ public class BleedingSweetsScenario extends Scenario {
                 ItemStackUtils.of(XMaterial.DIAMOND),
                 ItemStackUtils.of(XMaterial.GOLD_INGOT, 5),
                 ItemStackUtils.of(XMaterial.ARROW, 16),
-                ItemStackUtils.of(XMaterial.STRING)
-        );
+                ItemStackUtils.of(XMaterial.STRING));
     }
 }

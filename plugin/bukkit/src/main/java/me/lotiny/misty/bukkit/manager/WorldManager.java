@@ -16,7 +16,11 @@ import me.lotiny.misty.bukkit.hook.PluginHookManager;
 import me.lotiny.misty.bukkit.utils.LocationEx;
 import me.lotiny.misty.bukkit.utils.ReflectionUtils;
 import me.lotiny.misty.bukkit.utils.Utilities;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
@@ -69,7 +73,8 @@ public class WorldManager {
 
     public void createWorld(String worldName, World.Environment environment, WorldType worldType) {
         Utilities.broadcast("&fStarted creating the world &b" + worldName + "&f...");
-        World world = Bukkit.createWorld(new WorldCreator(worldName).environment(environment).type(worldType));
+        World world = Bukkit.createWorld(
+                new WorldCreator(worldName).environment(environment).type(worldType));
         if (world != null) {
             clearEntities(world);
 
@@ -114,10 +119,9 @@ public class WorldManager {
     }
 
     public void clearEntities(World world) {
-        MCSchedulers.getGlobalScheduler().schedule(() ->
-                world.getEntitiesByClasses(Monster.class, Animals.class, Villager.class)
-                        .forEach(Entity::remove)
-        );
+        MCSchedulers.getGlobalScheduler()
+                .schedule(() -> world.getEntitiesByClasses(Monster.class, Animals.class, Villager.class)
+                        .forEach(Entity::remove));
     }
 
     private void deleteFiles(File path) {
@@ -139,5 +143,4 @@ public class WorldManager {
             Log.error("Failed to delete directory: " + path.getAbsolutePath());
         }
     }
-
 }

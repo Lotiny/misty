@@ -27,8 +27,7 @@ public class BetterEnchantScenario extends Scenario {
                 .lore(
                         "&7When you left-click the enchanting table",
                         "&7while holding enchanted book the enchant will",
-                        "&7be removed from the book!"
-                )
+                        "&7be removed from the book!")
                 .build();
     }
 

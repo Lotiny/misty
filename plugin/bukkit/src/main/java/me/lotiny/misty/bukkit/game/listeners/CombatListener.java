@@ -23,8 +23,10 @@ public class CombatListener implements Listener {
 
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static ScenarioManager scenarioManager;
+
     @Autowired
     private static StorageRegistry storageRegistry;
 
@@ -87,8 +89,11 @@ public class CombatListener implements Listener {
 
         if (scenarioManager.isEnabled("Do Not Disturb")) {
             Player target = Bukkit.getPlayer(targetTeam.getMembers(false).getFirst());
-            team.sendMessage(Message.DO_NOT_DISTURB_UNLINKED_WITH
-                    .replace("<linked>", (gameManager.getGame().getSetting().getTeamSize() > 1) ? "Team #" + targetTeam.getId() : target == null ? "null" : target.getName()));
+            team.sendMessage(Message.DO_NOT_DISTURB_UNLINKED_WITH.replace(
+                    "<linked>",
+                    (gameManager.getGame().getSetting().getTeamSize() > 1)
+                            ? "Team #" + targetTeam.getId()
+                            : target == null ? "null" : target.getName()));
         }
     }
 
@@ -110,7 +115,10 @@ public class CombatListener implements Listener {
 
     private void sendUnlinkedMessage(Team team, Team opponentTeam) {
         Player target = Bukkit.getPlayer(opponentTeam.getMembers(false).getFirst());
-        team.sendMessage(Message.DO_NOT_DISTURB_UNLINKED_WITH
-                .replace("<linked>", (gameManager.getGame().getSetting().getTeamSize() > 1) ? "Team #" + opponentTeam.getId() : target == null ? "null" : target.getName()));
+        team.sendMessage(Message.DO_NOT_DISTURB_UNLINKED_WITH.replace(
+                "<linked>",
+                (gameManager.getGame().getSetting().getTeamSize() > 1)
+                        ? "Team #" + opponentTeam.getId()
+                        : target == null ? "null" : target.getName()));
     }
 }

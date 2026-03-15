@@ -42,8 +42,7 @@ public class TrackerScenario extends Scenario {
                 .name("&b" + getName())
                 .lore(
                         "&7When PVP Enabled all players will receive a Tracker Compass",
-                        "&7that track closest player location."
-                )
+                        "&7that track closest player location.")
                 .build();
     }
 
@@ -57,33 +56,45 @@ public class TrackerScenario extends Scenario {
             }
         });
 
-        task = MCSchedulers.getAsyncScheduler().scheduleAtFixedRate(() -> {
-            uuids.forEach(uuid -> {
-                Player player = Bukkit.getPlayer(uuid);
-                if (player != null) {
-                    ItemStack item = PlayerUtils.getItemInHand(player);
-                    if (XMaterial.COMPASS.isSimilar(item)) {
-                        Location location = player.getLocation();
-                        World world = location.getWorld();
-                        if (world == null) return;
+        task = MCSchedulers.getAsyncScheduler()
+                .scheduleAtFixedRate(
+                        () -> {
+                            uuids.forEach(uuid -> {
+                                Player player = Bukkit.getPlayer(uuid);
+                                if (player != null) {
+                                    ItemStack item = PlayerUtils.getItemInHand(player);
+                                    if (XMaterial.COMPASS.isSimilar(item)) {
+                                        Location location = player.getLocation();
+                                        World world = location.getWorld();
+                                        if (world == null) return;
 
-                        Entity target = location.getWorld().getNearbyEntities(location, 1000, 100, 1000)
-                                .stream()
-                                .filter(entity -> entity instanceof Player)
-                                .filter(entity -> UHCUtils.getTeam((Player) entity) != UHCUtils.getTeam(player))
-                                .findFirst()
-                                .orElse(null);
+                                        Entity target =
+                                                location
+                                                        .getWorld()
+                                                        .getNearbyEntities(location, 1000, 100, 1000)
+                                                        .stream()
+                                                        .filter(entity -> entity instanceof Player)
+                                                        .filter(entity -> UHCUtils.getTeam((Player) entity)
+                                                                != UHCUtils.getTeam(player))
+                                                        .findFirst()
+                                                        .orElse(null);
 
-                        if (target == null) {
-                            changeItemName(item, "&cFailed to find nearest player.");
-                        } else {
-                            changeItemName(item, "&b" + target.getName() + "&7: &f" + Math.round(location.distance(target.getLocation())) + " Block(s)");
-                            player.setCompassTarget(target.getLocation());
-                        }
-                    }
-                }
-            });
-        }, 20L, 20L);
+                                        if (target == null) {
+                                            changeItemName(item, "&cFailed to find nearest player.");
+                                        } else {
+                                            changeItemName(
+                                                    item,
+                                                    "&b" + target.getName() + "&7: &f"
+                                                            + Math.round(location.distance(target.getLocation()))
+                                                            + " Block(s)");
+                                            player.setCompassTarget(target.getLocation());
+                                        }
+                                    }
+                                }
+                            });
+                        },
+                        20L,
+                        20L);
     }
 
     @Override

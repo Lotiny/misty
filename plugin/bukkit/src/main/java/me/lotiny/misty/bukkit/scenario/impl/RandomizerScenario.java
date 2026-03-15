@@ -34,10 +34,7 @@ public class RandomizerScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.GRASS_BLOCK)
                 .name("&b" + getName())
-                .lore(
-                        "&7Every block you break or entity you kill",
-                        "&7have a randomly partner drop."
-                )
+                .lore("&7Every block you break or entity you kill", "&7have a randomly partner drop.")
                 .build();
     }
 
@@ -56,7 +53,8 @@ public class RandomizerScenario extends Scenario {
         if (object instanceof XMaterial xMat) {
             UHCUtils.dropItem(location, ItemStackUtils.of(xMat));
         } else {
-            Collection<ItemStack> drops = RandomizerUtils.get().getLootTableHelper().getLootItems(location, event.getPlayer(), (int) object);
+            Collection<ItemStack> drops =
+                    RandomizerUtils.get().getLootTableHelper().getLootItems(location, event.getPlayer(), (int) object);
             for (ItemStack drop : drops) {
                 UHCUtils.dropItem(location, drop);
             }

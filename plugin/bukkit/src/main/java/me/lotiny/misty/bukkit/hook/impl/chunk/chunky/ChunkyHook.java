@@ -1,8 +1,8 @@
 package me.lotiny.misty.bukkit.hook.impl.chunk.chunky;
 
-import io.fairyproject.container.Autowired;
 import io.fairyproject.log.Log;
 import io.fairyproject.mc.scheduler.MCSchedulers;
+import lombok.RequiredArgsConstructor;
 import me.lotiny.misty.api.game.GameManager;
 import me.lotiny.misty.bukkit.config.Config;
 import me.lotiny.misty.bukkit.config.impl.MainConfig;
@@ -13,12 +13,11 @@ import me.lotiny.misty.bukkit.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.popcraft.chunky.api.ChunkyAPI;
 
+@RequiredArgsConstructor
 public class ChunkyHook implements PluginHook, ChunkLoader {
 
-    @Autowired
-    private static GameManager gameManager;
-    @Autowired
-    private static WorldManager worldManager;
+    private final GameManager gameManager;
+    private final WorldManager worldManager;
 
     private int size;
     private String world;
@@ -31,14 +30,18 @@ public class ChunkyHook implements PluginHook, ChunkLoader {
     @Override
     public void register() {
         chunky = Bukkit.getServer().getServicesManager().load(ChunkyAPI.class);
-        if (chunky == null) return;
+
+        if (chunky == null) {
+            return;
+        }
 
         chunky.onGenerationComplete(event -> {
             String world = event.world();
             String nether = gameManager.getRegistry().getNetherWorld();
             Utilities.broadcast("&aFinished loading the world &2" + world + "&a!");
             if (world.equals(gameManager.getRegistry().getUhcWorld())) {
-                MCSchedulers.getGlobalScheduler().schedule(() -> fillWorld(nether, size / worldManager.getNetherScale()));
+                MCSchedulers.getGlobalScheduler()
+                        .schedule(() -> fillWorld(nether, size / worldManager.getNetherScale()));
             } else if (world.equals(nether)) {
                 this.completed = true;
 

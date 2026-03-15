@@ -22,13 +22,9 @@ public abstract class Scenario implements Listener {
         return true;
     }
 
-    public void onEnable() {
+    public void onEnable() {}
 
-    }
-
-    public void onDisable() {
-
-    }
+    public void onDisable() {}
 
     public List<ItemStack> getDroppedItems() {
         return Collections.emptyList();

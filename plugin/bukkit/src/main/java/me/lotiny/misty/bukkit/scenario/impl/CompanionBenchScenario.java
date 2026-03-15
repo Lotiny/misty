@@ -45,8 +45,7 @@ public class CompanionBenchScenario extends Scenario {
                 .lore(
                         "&7You will get a Crafting Table at the game start",
                         "&7you cannot craft another crafting table or use",
-                        "&7other crafting table."
-                )
+                        "&7other crafting table.")
                 .build();
     }
 
@@ -90,7 +89,9 @@ public class CompanionBenchScenario extends Scenario {
             return;
         }
 
-        if (!this.workBenchLocation.get(player.getUniqueId()).equals(block.getLocation().toString())) {
+        if (!this.workBenchLocation
+                .get(player.getUniqueId())
+                .equals(block.getLocation().toString())) {
             event.setCancelled(true);
             player.sendMessage(CC.RED + "You can't break Crafting Table that isn't your own.");
             return;
@@ -132,7 +133,9 @@ public class CompanionBenchScenario extends Scenario {
                     return;
                 }
 
-                if (!this.workBenchLocation.get(player.getUniqueId()).equals(block.getLocation().toString())) {
+                if (!this.workBenchLocation
+                        .get(player.getUniqueId())
+                        .equals(block.getLocation().toString())) {
                     event.setCancelled(true);
                     player.sendMessage(CC.RED + "You can't use other Crafting Table.");
                 }

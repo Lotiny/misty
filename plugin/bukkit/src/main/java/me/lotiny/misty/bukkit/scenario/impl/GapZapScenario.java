@@ -21,10 +21,7 @@ public class GapZapScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.GOLD_NUGGET)
                 .name("&b" + getName())
-                .lore(
-                        "&7When you take damage while you have regeneration",
-                        "&7effect the effect will be cancel."
-                )
+                .lore("&7When you take damage while you have regeneration", "&7effect the effect will be cancel.")
                 .build();
     }
 

@@ -19,7 +19,7 @@ public class LeaderboardArgTransformer extends BukkitArgTransformer<Leaderboard>
 
     @Override
     public Class[] type() {
-        return new Class[]{Leaderboard.class};
+        return new Class[] {Leaderboard.class};
     }
 
     @Override
@@ -34,9 +34,7 @@ public class LeaderboardArgTransformer extends BukkitArgTransformer<Leaderboard>
 
     @Override
     public List<String> tabComplete(Player player, String source) {
-        return leaderboardManager.getLeaderboardMap()
-                .values()
-                .stream()
+        return leaderboardManager.getLeaderboardMap().values().stream()
                 .map(Leaderboard::getData)
                 .toList();
     }

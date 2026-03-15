@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum DefaultFontInfo {
-
     A('A', 5),
     a('a', 5),
     B('B', 5),

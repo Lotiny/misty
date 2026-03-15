@@ -24,8 +24,10 @@ public class TeamImpl implements Team {
 
     @Autowired
     private static StorageRegistry storageRegistry;
+
     @Autowired
     private static GameManager gameManager;
+
     @Autowired
     private static TeamManager teamManager;
 
@@ -63,9 +65,7 @@ public class TeamImpl implements Team {
     @Override
     public List<UUID> getMembers(boolean onlyAlive) {
         if (onlyAlive) {
-            return this.members.stream()
-                    .filter(UHCUtils::isAlive)
-                    .collect(Collectors.toList());
+            return this.members.stream().filter(UHCUtils::isAlive).collect(Collectors.toList());
         } else {
             return this.members;
         }
@@ -95,14 +95,12 @@ public class TeamImpl implements Team {
             setTeamKills(UHCUtils.getGameKills(player));
         }
 
-        sendMessage(Message.TEAM_MEMBER_JOINED
-                .replace("<player>", player.getName()));
+        sendMessage(Message.TEAM_MEMBER_JOINED.replace("<player>", player.getName()));
     }
 
     @Override
     public void removeMember(Player player) {
-        sendMessage(Message.TEAM_MEMBER_LEFT
-                .replace("<player>", player.getName()));
+        sendMessage(Message.TEAM_MEMBER_LEFT.replace("<player>", player.getName()));
 
         this.members.remove(player.getUniqueId());
         UHCUtils.setTeam(player, null);

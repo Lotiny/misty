@@ -23,9 +23,7 @@ public class EnchantlessScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.ENCHANTING_TABLE)
                 .name("&b" + getName())
-                .lore(
-                        "&7Enchantment Table and Anvil are disabled!"
-                )
+                .lore("&7Enchantment Table and Anvil are disabled!")
                 .build();
     }
 
@@ -38,8 +36,10 @@ public class EnchantlessScenario extends Scenario {
             Block block = event.getClickedBlock();
             if (block == null) return;
 
-            if (XBlock.isSimilar(block, XMaterial.ANVIL) || XBlock.isSimilar(block, XMaterial.CHIPPED_ANVIL) ||
-                    XBlock.isSimilar(block, XMaterial.DAMAGED_ANVIL) || XBlock.isSimilar(block, XMaterial.ENCHANTING_TABLE)) {
+            if (XBlock.isSimilar(block, XMaterial.ANVIL)
+                    || XBlock.isSimilar(block, XMaterial.CHIPPED_ANVIL)
+                    || XBlock.isSimilar(block, XMaterial.DAMAGED_ANVIL)
+                    || XBlock.isSimilar(block, XMaterial.ENCHANTING_TABLE)) {
                 event.setCancelled(true);
                 player.sendMessage(CC.RED + "You can't use this while Enchantless Scenario is enabled.");
             }

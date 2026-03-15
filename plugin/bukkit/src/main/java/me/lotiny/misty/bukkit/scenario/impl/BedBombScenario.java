@@ -27,9 +27,7 @@ public class BedBombScenario extends Scenario {
     public ItemStack getIcon() {
         return ItemBuilder.of(XMaterial.RED_BED)
                 .name("&b" + getName())
-                .lore(
-                        "&7Bed will be explode in any world!"
-                )
+                .lore("&7Bed will be explode in any world!")
                 .build();
     }
 

@@ -25,6 +25,7 @@ public class KitManager {
 
     @Setter
     private int defaultKit;
+
     @Getter
     private boolean random;
 

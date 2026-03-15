@@ -52,7 +52,8 @@ public class ScatterTask extends AbstractScheduleTask {
             World world = Bukkit.getWorld(registry.getUhcWorld());
             if (world == null) return;
 
-            location = gameManager.findSafeScatterLocation(world, gameManager.getGame().getSetting().getBorderSize());
+            location = gameManager.findSafeScatterLocation(
+                    world, gameManager.getGame().getSetting().getBorderSize());
         }
 
         player.teleport(location);
