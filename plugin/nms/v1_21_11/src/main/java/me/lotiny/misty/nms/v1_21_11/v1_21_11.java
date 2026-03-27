@@ -1,7 +1,7 @@
 package me.lotiny.misty.nms.v1_21_11;
 
+import me.lotiny.misty.nms.helper.BukkitGameRule;
 import me.lotiny.misty.nms.v1_21_4.v1_21_4;
-import me.lotiny.misty.shared.utils.BukkitGameRule;
 import org.bukkit.GameRule;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;

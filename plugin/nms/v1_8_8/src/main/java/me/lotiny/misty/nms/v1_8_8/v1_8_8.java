@@ -3,9 +3,9 @@ package me.lotiny.misty.nms.v1_8_8;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XPotion;
 import io.fairyproject.util.ConditionUtils;
-import me.lotiny.misty.shared.ReflectionManager;
-import me.lotiny.misty.shared.recipe.MistyShapedRecipe;
-import me.lotiny.misty.shared.recipe.MistyShapelessRecipe;
+import me.lotiny.misty.nms.NMS;
+import me.lotiny.misty.nms.helper.recipe.MistyShapedRecipe;
+import me.lotiny.misty.nms.helper.recipe.MistyShapelessRecipe;
 import net.minecraft.server.v1_8_R3.Item;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,7 +25,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 @SuppressWarnings("deprecation")
-public class v1_8_8 implements ReflectionManager {
+public class v1_8_8 extends NMS {
 
     @Override
     public boolean isItem(Material material) {

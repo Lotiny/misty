@@ -4,7 +4,7 @@ group = rootProperties("group")
 version = rootProperties("version")
 
 base {
-    archivesName.set("${rootProperties("name")}API")
+    archivesName.set("MistyAPI")
 }
 
 dependencies {

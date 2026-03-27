@@ -6,7 +6,7 @@ version = rootProperties("version")
 // Fairy configuration
 fairy {
     name.set("Misty")
-    mainPackage.set("me.lotiny.misty.bukkit")
+    mainPackage.set("me.lotiny.misty")
     fairyPackage.set("io.fairyproject")
 
     // Plugin Dependencies
@@ -33,9 +33,8 @@ fairy {
 
 dependencies {
     implementation(project(":plugin:api"))
-    implementation(project(":plugin:bukkit"))
+    implementation(project(":plugin:core"))
     implementation(project(":plugin:paper"))
-    implementation(project(":plugin:common"))
     implementation(project(":plugin:nms:v1_8_8"))
     implementation(project(":plugin:nms:v1_12_2"))
     implementation(project(":plugin:nms:v1_16_5"))

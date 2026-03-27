@@ -50,7 +50,6 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "com.github.johnrengelman.shadow")
     apply(plugin = "io.freefair.lombok")
-    apply(plugin = "com.diffplug.spotless")
 
     // Configure dependencies
     dependencies {
@@ -72,16 +71,24 @@ subprojects {
     }
 
     // Spotless configuration
-    spotless {
-        java {
-            palantirJavaFormat()
+    if (project.file("src").exists()) {
+        apply(plugin = "com.diffplug.spotless")
 
-            formatAnnotations()
-            removeUnusedImports()
-            importOrderFile(rootProject.file(".spotless/misty.importorder"))
+        spotless {
+            java {
+                palantirJavaFormat()
 
-            trimTrailingWhitespace()
-            endWithNewline()
+                formatAnnotations()
+                removeUnusedImports()
+
+                val importOrder = rootProject.file(".spotless/misty.importorder")
+                if (importOrder.exists()) {
+                    importOrderFile(importOrder)
+                }
+
+                trimTrailingWhitespace()
+                endWithNewline()
+            }
         }
     }
 
@@ -93,13 +100,16 @@ subprojects {
         relocate("io.fairyproject.bootstrap", "${properties("group")}.fairy.bootstrap")
         relocate("io.fairyproject.bukkit.menu", "${properties("group")}.fairy.menu")
         relocate("io.fairyproject.bukkit.storage", "${properties("group")}.fairy.storage")
-        relocate("net.wesjd.anvilgui", "${properties("group")}.anvilgui")
         relocate("net.kyori", "io.fairyproject.libs.kyori")
         relocate("com.cryptomorin.xseries", "io.fairyproject.libs.xseries")
         relocate("org.yaml.snakeyaml", "io.fairyproject.libs.snakeyaml")
         relocate("com.google.gson", "io.fairyproject.libs.gson")
         relocate("com.github.retrooper.packetevents", "io.fairyproject.libs.packetevents")
         relocate("io.github.retrooper.packetevents", "io.fairyproject.libs.packetevents")
+
+        relocate("net.wesjd.anvilgui", "${properties("group")}.libs.anvilgui")
+        relocate("de.exlll.configlib", "${properties("group")}.libs.configlib")
+
         archiveClassifier.set("plugin")
         mergeServiceFiles()
         exclude("META-INF/maven/**")

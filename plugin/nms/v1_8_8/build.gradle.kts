@@ -4,7 +4,7 @@ group = rootProperties("group")
 version = rootProperties("version")
 
 dependencies {
-    implementation(project(":plugin:common"))
+    implementation(project(":plugin:core"))
 
     // Spigot dependency
     compileOnly(files("${rootProject.projectDir}/libs/patched_1.8.8.jar"))

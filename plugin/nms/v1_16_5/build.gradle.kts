@@ -4,7 +4,7 @@ group = rootProperties("group")
 version = rootProperties("version")
 
 dependencies {
-    implementation(project(":plugin:common"))
+    implementation(project(":plugin:core"))
     implementation(project(":plugin:nms:v1_8_8"))
     implementation(project(":plugin:nms:v1_12_2"))
 
