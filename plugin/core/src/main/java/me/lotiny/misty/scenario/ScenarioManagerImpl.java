@@ -52,29 +52,40 @@ public class ScenarioManagerImpl implements ScenarioManager {
 
     @Override
     public void registerScenarios() {
+        int loadedCount = 0;
+
         try {
             ClassPath classPath = ClassPath.from(getClass().getClassLoader());
-
-            classPath.getTopLevelClasses("me.lotiny.misty.bukkit.scenario.impl").forEach(classInfo -> {
+            for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClasses("me.lotiny.misty.scenario.impl")) {
                 try {
                     Class<?> clazz = classInfo.load();
 
-                    if (Scenario.class.isAssignableFrom(clazz)
-                            && !clazz.isInterface()
-                            && !Modifier.isAbstract(clazz.getModifiers())) {
-                        Scenario scenario =
-                                (Scenario) clazz.getDeclaredConstructor().newInstance();
-
-                        if (scenario.shouldRegister()) {
-                            scenarios.add(scenario);
-                        }
+                    if (!Scenario.class.isAssignableFrom(clazz)
+                            || clazz.isInterface()
+                            || Modifier.isAbstract(clazz.getModifiers())) {
+                        continue;
                     }
+
+                    Scenario scenario =
+                            (Scenario) clazz.getDeclaredConstructor().newInstance();
+
+                    if (scenario.shouldRegister()) {
+                        scenarios.add(scenario);
+                        loadedCount++;
+                    }
+
+                } catch (ReflectiveOperationException e) {
+                    Log.warn("Failed to instantiate scenario class '" + classInfo.getName() + "'.", e);
                 } catch (Exception e) {
-                    Log.warn("Failed to load scenario: " + e.getMessage());
+                    Log.warn(
+                            "Unexpected error while loading scenario '" + classInfo.getName() + "': " + e.getMessage(),
+                            e);
                 }
-            });
+            }
+
+            Log.info("Successfully loaded and registered " + loadedCount + " scenarios.");
         } catch (Exception e) {
-            Log.warn("Failed to load scenarios: " + e.getMessage());
+            Log.warn("Critical failure while scanning for scenario classes: " + e.getMessage(), e);
         }
     }
 
