@@ -127,12 +127,12 @@ public abstract class NMS {
         }
 
         String classSuffix = entry.getValue();
+        String className = "me.lotiny.misty.nms.v" + classSuffix + ".v" + classSuffix;
         try {
-            String className = "me.lotiny.misty.nms.v" + classSuffix;
             instance = (NMS) Class.forName(className).getDeclaredConstructor().newInstance();
-            Log.info("Loaded NMS v" + classSuffix + " for server " + major + "." + minor + "." + patch);
+            Log.info("Loaded NMS v" + classSuffix + " from " + className);
         } catch (Exception e) {
-            Log.error("Critical error loading NMS bridge for v" + classSuffix, e);
+            Log.error("Critical error loading NMS bridge for " + className, e);
             Utilities.disable();
         }
     }
