@@ -1,9 +1,11 @@
 package me.lotiny.misty.provider;
 
+import com.github.retrooper.packetevents.util.ColorUtil;
 import io.fairyproject.bukkit.util.LegacyAdventureUtil;
 import io.fairyproject.container.Autowired;
 import io.fairyproject.container.DependsOn;
 import io.fairyproject.container.InjectableComponent;
+import io.fairyproject.container.PostInitialize;
 import io.fairyproject.mc.MCPlayer;
 import io.fairyproject.mc.nametag.NameTag;
 import io.fairyproject.mc.nametag.NameTagAdapter;
@@ -16,9 +18,7 @@ import me.lotiny.misty.config.ConfigManager;
 import me.lotiny.misty.config.impl.MainConfig;
 import me.lotiny.misty.hook.rank.RankManager;
 import me.lotiny.misty.utils.UHCUtils;
-import me.lotiny.misty.utils.VersionUtils;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 
 @DependsOn(ConfigManager.class)
@@ -34,8 +34,15 @@ public class NameTagProvider extends NameTagAdapter {
     @Autowired
     private static ScenarioManager scenarioManager;
 
+    private String teamPrefix;
+
     public NameTagProvider() {
         super("misty-nametag", 100);
+    }
+
+    @PostInitialize
+    public void onPostInit() {
+        this.teamPrefix = Config.getMainConfig().getNameTag().getTeamPrefix();
     }
 
     @Override
@@ -47,32 +54,23 @@ public class NameTagProvider extends NameTagAdapter {
         Player targetPlayer = target.as(Player.class);
         Player sourcePlayer = player.as(Player.class);
 
-        String color = determineColor(sourcePlayer, targetPlayer);
+        NamedTextColor color = determineColor(sourcePlayer, targetPlayer);
         String prefix = "";
 
         boolean isTeamGame = gameManager.getGame().getSetting().getTeamSize() > 1;
         Team team = UHCUtils.getTeam(targetPlayer);
 
         if (isTeamGame && team != null && !scenarioManager.isEnabled("Red vs Blue")) {
-            prefix =
-                    Config.getMainConfig().getNameTag().getTeamPrefix().replace("<team>", String.valueOf(team.getId()));
-        } else if (VersionUtils.is(8, 8)) {
-            prefix = " ";
-        }
-
-        if (VersionUtils.is(8, 8)) {
-            return NameTag.builder()
-                    .prefix(LegacyAdventureUtil.decode(color + prefix))
-                    .build();
+            prefix = teamPrefix.replace("<team>", String.valueOf(team.getId()));
         }
 
         return NameTag.builder()
-                .color(fromColorCode(color))
+                .color(color)
                 .prefix(LegacyAdventureUtil.decode(prefix))
                 .build();
     }
 
-    private String determineColor(Player player, Player target) {
+    private NamedTextColor determineColor(Player player, Player target) {
         MainConfig config = Config.getMainConfig();
         if (!UHCUtils.isAlive(target.getUniqueId())) {
             return config.getNameTag().getSpectator();
@@ -81,7 +79,8 @@ public class NameTagProvider extends NameTagAdapter {
         Team targetTeam = UHCUtils.getTeam(target);
         Team profileTeam = UHCUtils.getTeam(player);
         if (gameManager.getRegistry().getState() != GameState.INGAME) {
-            return rankManager.getRank().getRankColor(target.getUniqueId());
+            String rankColor = rankManager.getRank().getRankColor(target.getUniqueId());
+            return fromCode(rankColor);
         }
 
         if (UHCUtils.hasNoClean(target)) {
@@ -90,9 +89,9 @@ public class NameTagProvider extends NameTagAdapter {
 
         if (scenarioManager.isEnabled("Red vs Blue")) {
             if (targetTeam.getId() == 0) {
-                return "&c";
+                return NamedTextColor.RED;
             } else {
-                return "&9";
+                return NamedTextColor.BLUE;
             }
         }
 
@@ -110,39 +109,16 @@ public class NameTagProvider extends NameTagAdapter {
         }
     }
 
-    public TextColor fromColorCode(String colorCode) {
-        if (colorCode == null || colorCode.length() < 2 || colorCode.charAt(0) != '&') {
+    private NamedTextColor fromCode(String code) {
+        if (code == null || code.isEmpty()) {
             return null;
         }
 
-        if (colorCode.startsWith("&#") && colorCode.length() == 8) {
-            String hex = colorCode.substring(1);
-            try {
-                return TextColor.fromHexString(hex);
-            } catch (IllegalArgumentException e) {
-                return null;
-            }
-        }
+        char c = Character.toLowerCase(code.charAt(code.length() - 1));
 
-        char codeChar = Character.toLowerCase(colorCode.charAt(1));
-        return switch (codeChar) {
-            case '0' -> NamedTextColor.BLACK;
-            case '1' -> NamedTextColor.DARK_BLUE;
-            case '2' -> NamedTextColor.DARK_GREEN;
-            case '3' -> NamedTextColor.DARK_AQUA;
-            case '4' -> NamedTextColor.DARK_RED;
-            case '5' -> NamedTextColor.DARK_PURPLE;
-            case '6' -> NamedTextColor.GOLD;
-            case '7' -> NamedTextColor.GRAY;
-            case '8' -> NamedTextColor.DARK_GRAY;
-            case '9' -> NamedTextColor.BLUE;
-            case 'a' -> NamedTextColor.GREEN;
-            case 'b' -> NamedTextColor.AQUA;
-            case 'c' -> NamedTextColor.RED;
-            case 'd' -> NamedTextColor.LIGHT_PURPLE;
-            case 'e' -> NamedTextColor.YELLOW;
-            case 'f' -> NamedTextColor.WHITE;
-            default -> null;
-        };
+        String codes = "0123456789abcdef";
+        int id = codes.indexOf(c);
+
+        return ColorUtil.fromId(id);
     }
 }

@@ -6,8 +6,10 @@ import de.exlll.configlib.YamlConfigurations;
 import lombok.Setter;
 import me.lotiny.misty.config.serializer.KitSerializer;
 import me.lotiny.misty.config.serializer.LocationSerializer;
+import me.lotiny.misty.config.serializer.NamedTextColorSerializer;
 import me.lotiny.misty.config.serializer.PotionEffectSerializer;
 import me.lotiny.misty.kit.Kit;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -33,6 +35,7 @@ public abstract class BaseConfig {
                 .addSerializer(Kit.class, new KitSerializer())
                 .addSerializer(Location.class, new LocationSerializer())
                 .addSerializer(PotionEffect.class, new PotionEffectSerializer())
+                .addSerializer(NamedTextColor.class, new NamedTextColorSerializer())
                 .build();
     }
 
