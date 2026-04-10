@@ -7,7 +7,7 @@ plugins {
     id("java-library")
 
     // Fairy framework plugin
-    id("io.fairyproject") version "0.8.4b1-SNAPSHOT" apply false
+    id("io.fairyproject") version "0.8.6b1-SNAPSHOT" apply false
 
     // Dependency management plugin
     id("io.spring.dependency-management") version "1.1.0"
