@@ -5,12 +5,9 @@ version = rootProperties("version")
 
 // Fairy configuration
 fairy {
-    name.set("Misty")
-    mainPackage.set("me.lotiny.misty")
-    fairyPackage.set("io.fairyproject")
-
-    // Plugin Dependencies
-    bukkitProperties().depends.add("fairy-lib-plugin")
+    name.set(rootProperties("name"))
+    mainPackage.set(rootProperties("group"))
+    fairyPackage.set(rootProperties("group") + ".fairy")
 
     // Plugin Soft Dependencies
     bukkitProperties().softDepends.add("WorldBorder")

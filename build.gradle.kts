@@ -53,21 +53,18 @@ subprojects {
 
     // Configure dependencies
     dependencies {
-        api("io.fairyproject:bukkit-bootstrap")
-        compileOnlyApi("io.fairyproject:bukkit-platform")
-        compileOnlyApi("io.fairyproject:mc-animation")
-        compileOnlyApi("io.fairyproject:bukkit-command")
-        compileOnlyApi("io.fairyproject:bukkit-gui")
-        compileOnlyApi("io.fairyproject:mc-hologram")
-        compileOnlyApi("io.fairyproject:bukkit-xseries")
-        compileOnlyApi("io.fairyproject:bukkit-items")
-        compileOnlyApi("io.fairyproject:mc-nametag")
-        compileOnlyApi("io.fairyproject:mc-sidebar")
-        compileOnlyApi("io.fairyproject:bukkit-visibility")
-        compileOnlyApi("io.fairyproject:bukkit-visual")
-        compileOnlyApi("io.fairyproject:bukkit-timer")
-        compileOnlyApi("io.fairyproject:bukkit-nbt")
-        compileOnlyApi("io.fairyproject:mc-tablist")
+        api("io.fairyproject:bukkit-bundles")
+        api("io.fairyproject:bukkit-command")
+        api("io.fairyproject:bukkit-gui")
+        api("io.fairyproject:bukkit-xseries")
+        api("io.fairyproject:bukkit-items")
+        api("io.fairyproject:bukkit-visibility")
+        api("io.fairyproject:bukkit-visual")
+        api("io.fairyproject:bukkit-timer")
+        api("io.fairyproject:bukkit-nbt")
+        api("io.fairyproject:mc-hologram")
+        api("io.fairyproject:mc-nametag")
+        api("io.fairyproject:mc-sidebar")
     }
 
     // Spotless configuration
@@ -97,18 +94,17 @@ subprojects {
         archiveFileName.set("Misty-${properties("version")}.jar")
 
         // Relocate fairy to avoid plugin conflict
-        relocate("io.fairyproject.bootstrap", "${properties("group")}.fairy.bootstrap")
-        relocate("io.fairyproject.bukkit.menu", "${properties("group")}.fairy.menu")
-        relocate("io.fairyproject.bukkit.storage", "${properties("group")}.fairy.storage")
-        relocate("net.kyori", "io.fairyproject.libs.kyori")
-        relocate("com.cryptomorin.xseries", "io.fairyproject.libs.xseries")
-        relocate("org.yaml.snakeyaml", "io.fairyproject.libs.snakeyaml")
-        relocate("com.google.gson", "io.fairyproject.libs.gson")
-        relocate("com.github.retrooper.packetevents", "io.fairyproject.libs.packetevents")
-        relocate("io.github.retrooper.packetevents", "io.fairyproject.libs.packetevents")
-
+        relocate("io.fairyproject", "${properties("group")}.fairy")
+        relocate("net.kyori", "${properties("group")}.libs.kyori")
+        relocate("com.cryptomorin.xseries", "${properties("group")}.libs.xseries")
+        relocate("org.yaml.snakeyaml", "${properties("group")}.libs.snakeyaml")
+        relocate("com.google.gson", "${properties("group")}.libs.gson")
+        relocate("com.github.retrooper.packetevents", "${properties("group")}.libs.packetevents")
+        relocate("io.github.retrooper.packetevents", "${properties("group")}.libs.packetevents")
         relocate("net.wesjd.anvilgui", "${properties("group")}.libs.anvilgui")
         relocate("de.exlll.configlib", "${properties("group")}.libs.configlib")
+
+        relocate("io.fairyproject.bukkit.menu", "${properties("group")}.fairy.menu")
 
         archiveClassifier.set("plugin")
         mergeServiceFiles()
