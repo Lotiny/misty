@@ -38,7 +38,7 @@ public abstract class NMS {
         VERSION_MAP.put(11605, "1_16_5");
         VERSION_MAP.put(12100, "1_21");
         VERSION_MAP.put(12104, "1_21_4");
-        VERSION_MAP.put(12111, "1_21_11");
+        VERSION_MAP.put(260100, "1_21_4");
 
         loadVersionedNms();
     }
@@ -52,10 +52,6 @@ public abstract class NMS {
     }
 
     public int getPotionEffectLevel(ItemStack item) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setGameRule(World world, String rule, Object value) {
         throw new UnsupportedOperationException();
     }
 
@@ -144,7 +140,7 @@ public abstract class NMS {
         int matchedPatch = matchedKey % 100;
 
         if (currentMinor != matchedMinor) {
-            return false;
+            return currentMinor > matchedMinor;
         }
 
         if (currentMinor == 8 || currentMinor == 12 || currentMinor == 16) {

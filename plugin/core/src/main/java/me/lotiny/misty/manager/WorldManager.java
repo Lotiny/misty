@@ -1,5 +1,7 @@
 package me.lotiny.misty.manager;
 
+import com.cryptomorin.xseries.XGameRule;
+import io.fairyproject.bukkit.events.BukkitEventNode;
 import io.fairyproject.container.DependsOn;
 import io.fairyproject.container.InjectableComponent;
 import io.fairyproject.container.PostInitialize;
@@ -13,7 +15,6 @@ import me.lotiny.misty.config.Config;
 import me.lotiny.misty.config.ConfigManager;
 import me.lotiny.misty.config.impl.MainConfig;
 import me.lotiny.misty.hook.PluginHookManager;
-import me.lotiny.misty.nms.NMS;
 import me.lotiny.misty.utils.LocationEx;
 import me.lotiny.misty.utils.Utilities;
 import org.bukkit.Bukkit;
@@ -25,6 +26,7 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Villager;
+import org.bukkit.event.world.WorldInitEvent;
 
 import java.io.File;
 
@@ -35,6 +37,7 @@ public class WorldManager {
 
     private final GameManager gameManager;
     private final PluginHookManager pluginHookManager;
+    private final BukkitEventNode globalNode;
 
     @Getter
     private int netherScale;
@@ -43,6 +46,18 @@ public class WorldManager {
     public void onPostInit() {
         netherScale = Config.getMainConfig().getNetherScale();
         setupWorlds();
+
+        globalNode.addListener(WorldInitEvent.class, event -> {
+            World world = event.getWorld();
+            world.setDifficulty(Difficulty.EASY);
+            world.setTime(0);
+            world.setThundering(false);
+
+            XGameRule.NATURAL_HEALTH_REGENERATION.setValue(world, false);
+            XGameRule.ADVANCE_TIME.setValue(world, false);
+
+            clearEntities(world);
+        });
     }
 
     public void setupWorlds() {
@@ -67,25 +82,21 @@ public class WorldManager {
         if (world != null) {
             clearEntities(world);
             world.setTime(1000);
-            NMS.getInstance().setGameRule(world, "doDaylightCycle", false);
+            XGameRule.ADVANCE_TIME.setValue(world, false);
         }
     }
 
     public void createWorld(String worldName, World.Environment environment, WorldType worldType) {
         Utilities.broadcast("&fStarted creating the world &b" + worldName + "&f...");
-        World world = Bukkit.createWorld(
-                new WorldCreator(worldName).environment(environment).type(worldType));
-        if (world != null) {
-            clearEntities(world);
+        WorldCreator worldCreator =
+                new WorldCreator(worldName).environment(environment).type(worldType);
+        World world = Bukkit.createWorld(worldCreator);
 
-            world.setDifficulty(Difficulty.EASY);
-            world.setTime(0);
-            world.setThundering(false);
-            NMS.getInstance().setGameRule(world, "naturalRegeneration", false);
-            NMS.getInstance().setGameRule(world, "doDaylightCycle", false);
+        if (world == null) {
+            Utilities.broadcast("&cFailed to creating the world " + worldName + ".");
+        } else {
+            Utilities.broadcast("&fFinished creating the world &b" + world.getName() + "&f!");
         }
-
-        Utilities.broadcast("&fFinished creating the world &b" + worldName + "&f!");
     }
 
     public void unloadUnusedWorld() {

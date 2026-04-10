@@ -1,5 +1,6 @@
 package me.lotiny.misty.manager.border;
 
+import com.cryptomorin.xseries.XGameRule;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XTag;
 import io.fairyproject.bukkit.metadata.Metadata;
@@ -21,7 +22,6 @@ import me.lotiny.misty.config.Config;
 import me.lotiny.misty.config.impl.MainConfig;
 import me.lotiny.misty.hook.PluginHookManager;
 import me.lotiny.misty.manager.WorldManager;
-import me.lotiny.misty.nms.NMS;
 import me.lotiny.misty.utils.MaterialUtils;
 import me.lotiny.misty.utils.Message;
 import me.lotiny.misty.utils.Utilities;
@@ -128,7 +128,7 @@ public class BorderManager {
                 }
             } else if (size == 100 && !scenarioManager.isEnabled("Permanight")) {
                 world.setTime(1000);
-                NMS.getInstance().setGameRule(world, "doDaylightCycle", false);
+                XGameRule.ADVANCE_TIME.setValue(world, false);
                 Utilities.broadcast("&bPermanently Day &ehas been enabled!");
             } else if (size == lastBorderSize
                     && gameManager.getGame().getSetting().isLastBorderFlat()) {

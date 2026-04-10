@@ -1,5 +1,6 @@
 package me.lotiny.misty.scenario.impl;
 
+import com.cryptomorin.xseries.XGameRule;
 import com.cryptomorin.xseries.XMaterial;
 import io.fairyproject.bukkit.util.items.ItemBuilder;
 import io.fairyproject.container.Autowired;
@@ -7,7 +8,6 @@ import me.lotiny.misty.api.event.UHCStartEvent;
 import me.lotiny.misty.api.game.GameManager;
 import me.lotiny.misty.api.game.GameState;
 import me.lotiny.misty.api.scenario.Scenario;
-import me.lotiny.misty.nms.NMS;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -48,7 +48,7 @@ public class PermanightScenario extends Scenario {
         World world = Bukkit.getWorld(gameManager.getRegistry().getUhcWorld());
         if (world != null) {
             world.setTime(16000);
-            NMS.getInstance().setGameRule(world, "doDaylightCycle", false);
+            XGameRule.ADVANCE_TIME.setValue(world, false);
         }
     }
 }

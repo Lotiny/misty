@@ -1,5 +1,6 @@
 package me.lotiny.misty.game;
 
+import com.cryptomorin.xseries.XGameRule;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import io.fairyproject.bukkit.visual.VisualBlockService;
@@ -30,7 +31,6 @@ import me.lotiny.misty.game.listeners.PlayerDeathListener;
 import me.lotiny.misty.hook.PluginHookManager;
 import me.lotiny.misty.manager.WorldManager;
 import me.lotiny.misty.manager.border.visual.VisualBorderGenerator;
-import me.lotiny.misty.nms.NMS;
 import me.lotiny.misty.storage.StorageRegistry;
 import me.lotiny.misty.task.BorderTask;
 import me.lotiny.misty.task.GameTask;
@@ -119,7 +119,7 @@ public class GameImpl implements Game {
             World gameWorld = Bukkit.getWorld(registry.getUhcWorld());
             if (gameWorld != null) {
                 worldManager.clearEntities(gameWorld);
-                NMS.getInstance().setGameRule(gameWorld, "doDaylightCycle", true);
+                XGameRule.ADVANCE_TIME.setValue(gameWorld, true);
                 gameWorld.setTime(0);
             }
         });

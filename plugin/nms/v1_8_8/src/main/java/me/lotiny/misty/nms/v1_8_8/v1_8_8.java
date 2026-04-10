@@ -48,11 +48,6 @@ public class v1_8_8 extends NMS {
     }
 
     @Override
-    public void setGameRule(World world, String rule, Object value) {
-        world.setGameRuleValue(rule, value.toString());
-    }
-
-    @Override
     public ItemStack getItemInHand(Player player) {
         return player.getItemInHand();
     }

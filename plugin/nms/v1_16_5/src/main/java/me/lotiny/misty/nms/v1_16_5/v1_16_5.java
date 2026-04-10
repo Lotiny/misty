@@ -4,11 +4,9 @@ import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XPotion;
 import io.fairyproject.bootstrap.bukkit.BukkitPlugin;
 import io.fairyproject.util.ConditionUtils;
-import me.lotiny.misty.nms.helper.BukkitGameRule;
 import me.lotiny.misty.nms.helper.recipe.MistyShapedRecipe;
 import me.lotiny.misty.nms.helper.recipe.MistyShapelessRecipe;
 import me.lotiny.misty.nms.v1_12_2.v1_12_2;
-import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -34,12 +32,6 @@ public class v1_16_5 extends v1_12_2 {
 
         PotionType type = meta.getBasePotionData().getType();
         return XPotion.of(type);
-    }
-
-    @Override
-    public void setGameRule(World world, String rule, Object value) {
-        GameRule<?> gameRule = GameRule.getByName(rule);
-        BukkitGameRule.setGameRule(gameRule, world, rule, value);
     }
 
     @Override

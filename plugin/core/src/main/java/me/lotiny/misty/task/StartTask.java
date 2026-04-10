@@ -1,5 +1,6 @@
 package me.lotiny.misty.task;
 
+import com.cryptomorin.xseries.XGameRule;
 import com.cryptomorin.xseries.XSound;
 import io.fairyproject.bukkit.util.Players;
 import io.fairyproject.container.Autowired;
@@ -18,7 +19,6 @@ import me.lotiny.misty.config.impl.MainConfig;
 import me.lotiny.misty.manager.PracticeManager;
 import me.lotiny.misty.manager.WorldManager;
 import me.lotiny.misty.manager.border.BorderManager;
-import me.lotiny.misty.nms.NMS;
 import me.lotiny.misty.utils.Message;
 import me.lotiny.misty.utils.PlayerUtils;
 import me.lotiny.misty.utils.TeamEx;
@@ -144,7 +144,7 @@ public class StartTask extends AbstractScheduleTask {
         MCSchedulers.getGlobalScheduler()
                 .schedule(
                         () -> {
-                            NMS.getInstance().setGameRule(world, "doDaylightCycle", false);
+                            XGameRule.ADVANCE_TIME.setValue(world, false);
                             worldManager.unloadUnusedWorld();
 
                             processPlayersForScattering(world, borderSize);
