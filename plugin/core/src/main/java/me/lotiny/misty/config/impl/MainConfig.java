@@ -12,9 +12,11 @@ import lombok.Setter;
 import me.lotiny.misty.config.BaseConfig;
 import me.lotiny.misty.config.serializer.KitSerializer;
 import me.lotiny.misty.config.serializer.LocationSerializer;
+import me.lotiny.misty.config.serializer.NamedTextColorSerializer;
 import me.lotiny.misty.config.serializer.PotionEffectSerializer;
 import me.lotiny.misty.kit.Kit;
 import me.lotiny.misty.utils.ItemStackUtils;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -278,20 +280,25 @@ public final class MainConfig extends BaseConfig {
         @Comment("The prefix to display on nametags in team games.")
         private String teamPrefix = "[<team>]";
 
+        @SerializeWith(serializer = NamedTextColorSerializer.class)
         @Comment("The color for friendly players.")
-        private String friendly = "&a";
+        private NamedTextColor friendly = NamedTextColor.GREEN;
 
+        @SerializeWith(serializer = NamedTextColorSerializer.class)
         @Comment("The color for enemies.")
-        private String enemy = "&c";
+        private NamedTextColor enemy = NamedTextColor.RED;
 
+        @SerializeWith(serializer = NamedTextColorSerializer.class)
         @Comment("The color for 'no clean' players.")
-        private String noClean = "&6";
+        private NamedTextColor noClean = NamedTextColor.GOLD;
 
+        @SerializeWith(serializer = NamedTextColorSerializer.class)
         @Comment("The color for 'do not disturb' players.")
-        private String doNotDisturb = "&d";
+        private NamedTextColor doNotDisturb = NamedTextColor.LIGHT_PURPLE;
 
+        @SerializeWith(serializer = NamedTextColorSerializer.class)
         @Comment("The color for spectators.")
-        private String spectator = "&7";
+        private NamedTextColor spectator = NamedTextColor.GRAY;
     }
 
     @Getter

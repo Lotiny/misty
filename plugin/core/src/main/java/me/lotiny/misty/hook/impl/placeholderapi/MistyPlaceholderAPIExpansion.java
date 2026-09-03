@@ -1,5 +1,6 @@
 package me.lotiny.misty.hook.impl.placeholderapi;
 
+import com.github.retrooper.packetevents.util.ColorUtil;
 import io.fairyproject.container.Containers;
 import io.fairyproject.util.CC;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -152,7 +153,7 @@ public class MistyPlaceholderAPIExpansion extends PlaceholderExpansion {
         MainConfig.NameTag nameTag = Config.getMainConfig().getNameTag();
         String color = rankManager.getRank().getRankColor(uuid);
         if (!UHCUtils.isAlive(uuid)) {
-            color = nameTag.getSpectator();
+            color = ColorUtil.toString(nameTag.getSpectator());
         }
 
         Player player = Bukkit.getPlayer(uuid);
@@ -168,11 +169,11 @@ public class MistyPlaceholderAPIExpansion extends PlaceholderExpansion {
         }
 
         if (UHCUtils.hasNoClean(player)) {
-            color = nameTag.getNoClean();
+            color = ColorUtil.toString(nameTag.getNoClean());
         }
 
         if (team != null && scenarioManager.isEnabled("Do Not Disturb") && UHCUtils.isInCombat(team)) {
-            color = nameTag.getDoNotDisturb();
+            color = ColorUtil.toString(nameTag.getDoNotDisturb());
         }
 
         if (team != null && gameManager.getGame().getSetting().getTeamSize() > 1 && !redVsBlue) {
