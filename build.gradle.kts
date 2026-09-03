@@ -7,33 +7,34 @@ plugins {
     id("java-library")
 
     // Fairy framework plugin
-    id("io.fairyproject") version "0.8.4b1-SNAPSHOT" apply false
+    id("io.fairyproject") version "0.8.7b2-SNAPSHOT" apply false
 
     // Dependency management plugin
-    id("io.spring.dependency-management") version "1.1.0"
+    id("io.spring.dependency-management") version "1.1.7"
 
     // Shadow plugin, provides the ability to shade fairy and other dependencies to compiled jar
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
+    id("com.gradleup.shadow") version "9.5.1" apply false
 
     // Lombok plugin
-    id("io.freefair.lombok") version "9.1.0" apply false
+    id("io.freefair.lombok") version "9.5.0" apply false
 
     // Spotless plugin
-    id("com.diffplug.spotless") version "8.2.1"
+    id("com.diffplug.spotless") version "8.10.1"
 }
 
 allprojects {
     // Apply Shadow plugin
-    apply(plugin = "com.github.johnrengelman.shadow")
+    pluginManager.apply("com.gradleup.shadow")
 
     // Configure repositories
     repositories {
         mavenCentral()
-        maven(url = uri("https://oss.sonatype.org/content/repositories/snapshots/"))
-        maven(url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/"))
-        maven(url = uri("https://repo.codemc.io/repository/maven-public/"))
-        maven(url = uri("https://repo.papermc.io/repository/maven-public/"))
-        maven(url = uri("https://repo.imanity.dev/imanity-libraries"))
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://repo.codemc.io/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://repo.imanity.dev/imanity-libraries")
+        maven("https://mvn.wesjd.net/")
     }
 }
 
@@ -45,34 +46,31 @@ java {
 
 subprojects {
     // Apply necessary plugins
-    apply(plugin = "java-library")
-    apply(plugin = "io.fairyproject")
-    apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "com.github.johnrengelman.shadow")
-    apply(plugin = "io.freefair.lombok")
+    pluginManager.apply("java-library")
+    pluginManager.apply("io.fairyproject")
+    pluginManager.apply("io.spring.dependency-management")
+    pluginManager.apply("com.gradleup.shadow")
+    pluginManager.apply("io.freefair.lombok")
 
     // Configure dependencies
     dependencies {
-        api("io.fairyproject:bukkit-bootstrap")
-        compileOnlyApi("io.fairyproject:bukkit-platform")
-        compileOnlyApi("io.fairyproject:mc-animation")
+        api("io.fairyproject:bukkit-bundles")
         compileOnlyApi("io.fairyproject:bukkit-command")
         compileOnlyApi("io.fairyproject:bukkit-gui")
-        compileOnlyApi("io.fairyproject:mc-hologram")
         compileOnlyApi("io.fairyproject:bukkit-xseries")
         compileOnlyApi("io.fairyproject:bukkit-items")
-        compileOnlyApi("io.fairyproject:mc-nametag")
-        compileOnlyApi("io.fairyproject:mc-sidebar")
         compileOnlyApi("io.fairyproject:bukkit-visibility")
         compileOnlyApi("io.fairyproject:bukkit-visual")
         compileOnlyApi("io.fairyproject:bukkit-timer")
         compileOnlyApi("io.fairyproject:bukkit-nbt")
-        compileOnlyApi("io.fairyproject:mc-tablist")
+        compileOnlyApi("io.fairyproject:mc-hologram")
+        compileOnlyApi("io.fairyproject:mc-nametag")
+        compileOnlyApi("io.fairyproject:mc-sidebar")
     }
 
     // Spotless configuration
     if (project.file("src").exists()) {
-        apply(plugin = "com.diffplug.spotless")
+        pluginManager.apply("com.diffplug.spotless")
 
         spotless {
             java {
@@ -96,17 +94,18 @@ subprojects {
     tasks.withType(ShadowJar::class) {
         archiveFileName.set("Misty-${properties("version")}.jar")
 
-        // Relocate fairy to avoid plugin conflict
-        relocate("io.fairyproject.bootstrap", "${properties("group")}.fairy.bootstrap")
-        relocate("io.fairyproject.bukkit.menu", "${properties("group")}.fairy.menu")
-        relocate("io.fairyproject.bukkit.storage", "${properties("group")}.fairy.storage")
-        relocate("net.kyori", "io.fairyproject.libs.kyori")
-        relocate("com.cryptomorin.xseries", "io.fairyproject.libs.xseries")
-        relocate("org.yaml.snakeyaml", "io.fairyproject.libs.snakeyaml")
-        relocate("com.google.gson", "io.fairyproject.libs.gson")
-        relocate("com.github.retrooper.packetevents", "io.fairyproject.libs.packetevents")
-        relocate("io.github.retrooper.packetevents", "io.fairyproject.libs.packetevents")
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
+        // Relocate fairy to avoid plugin conflict
+        relocate("io.fairyproject", "${properties("group")}.fairy")
+        relocate("io.fairyproject.bukkit.menu", "${properties("group")}.fairy.menu")
+
+        relocate("net.kyori", "${properties("group")}.libs.kyori")
+        relocate("com.cryptomorin.xseries", "${properties("group")}.libs.xseries")
+        relocate("org.yaml.snakeyaml", "${properties("group")}.libs.snakeyaml")
+        relocate("com.google.gson", "${properties("group")}.libs.gson")
+        relocate("com.github.retrooper.packetevents", "${properties("group")}.libs.packetevents")
+        relocate("io.github.retrooper.packetevents", "${properties("group")}.libs.packetevents")
         relocate("net.wesjd.anvilgui", "${properties("group")}.libs.anvilgui")
         relocate("de.exlll.configlib", "${properties("group")}.libs.configlib")
 

@@ -15,10 +15,10 @@ public class Misty extends Plugin {
     @Override
     public void onPreEnable() {
         try {
-            loadLibrary("org.mongodb:mongodb-driver-sync:5.5.1");
-            loadLibrary("org.mongodb:mongodb-driver-core:5.5.1");
-            loadLibrary("org.mongodb:bson:5.5.1");
-            loadLibrary("com.zaxxer:HikariCP:7.0.2");
+            loadLibrary("org.mongodb:mongodb-driver-sync:5.11.0");
+            loadLibrary("org.mongodb:mongodb-driver-core:5.11.0");
+            loadLibrary("org.mongodb:bson:5.11.0");
+            loadLibrary("com.zaxxer:HikariCP:7.1.0");
             loadLibrary("de.maxhenkel.voicechat:voicechat-api:2.5.36", "https://maven.maxhenkel.de/repository/public");
         } catch (Exception e) {
             Log.error("Failed to load required libraries. Disabling plugin.", e);
