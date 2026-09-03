@@ -23,20 +23,29 @@ import javax.sql.DataSource;
 
 @RequiredArgsConstructor
 @SuppressWarnings({"SqlNoDataSourceInspection", "SqlSourceToSinkFlow"})
-public class MySqlStorage<T> implements Storage<T> {
+public abstract class AbstractSqlStorage<T> implements Storage<T> {
 
-    private static final Pattern SAFE_IDENTIFIER_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+$");
-    private static final Pattern SAFE_JSON_PATH_KEY_PATTERN = Pattern.compile("^[a-zA-Z0-9_.]+$");
+    protected static final Pattern SAFE_IDENTIFIER_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+$");
+    protected static final Pattern SAFE_JSON_PATH_KEY_PATTERN = Pattern.compile("^[a-zA-Z0-9_.]+$");
 
-    private final StorageRegistry storageRegistry;
-    private final String uniqueKey;
-    private final String tableName;
-    private final StorageSerializer<T> serializer;
+    protected final StorageRegistry storageRegistry;
+    protected final String uniqueKey;
+    protected final String tableName;
+    protected final StorageSerializer<T> serializer;
 
-    private final Map<String, T> cache = new ConcurrentHashMap<>();
+    protected final Map<String, T> cache = new ConcurrentHashMap<>();
+    protected final String dataColumn = "data";
+    protected DataSource dataSource;
 
-    private final String dataColumn = "data";
-    private DataSource dataSource;
+    protected abstract String getCreateTableSql();
+
+    protected abstract String getFindJsonSql(String key);
+
+    protected abstract String getTopsSql(String key);
+
+    protected abstract String getUpsertSql();
+
+    protected abstract void bindJsonParam(PreparedStatement pstmt, int index, String json) throws SQLException;
 
     @Override
     public void init() {
@@ -47,14 +56,9 @@ public class MySqlStorage<T> implements Storage<T> {
 
             this.dataSource = storageRegistry.getDataSource();
 
-            String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " ("
-                    + uniqueKey + " VARCHAR(255) PRIMARY KEY, "
-                    + dataColumn + " JSON"
-                    + ");";
-
             try (Connection conn = dataSource.getConnection();
                     Statement stmt = conn.createStatement()) {
-                stmt.executeUpdate(sql);
+                stmt.executeUpdate(getCreateTableSql());
             }
         } catch (SQLException e) {
             Log.error("Failed to initialize storage", e);
@@ -87,8 +91,7 @@ public class MySqlStorage<T> implements Storage<T> {
                     if (rs.next()) {
                         String jsonString = rs.getString(dataColumn);
                         JsonObject jsonObject = StorageRegistry.GSON.fromJson(jsonString, JsonObject.class);
-                        T loadedObject = serializer.fromJson(jsonObject);
-                        return Optional.of(loadedObject);
+                        return Optional.ofNullable(serializer.fromJson(jsonObject));
                     }
                 }
             }
@@ -99,17 +102,11 @@ public class MySqlStorage<T> implements Storage<T> {
     }
 
     private @NotNull String getSql(String key) throws SQLException {
-        String sql;
         if (key.equals(uniqueKey)) {
-            sql = "SELECT " + dataColumn + " FROM " + tableName + " WHERE " + uniqueKey + " = ?";
-        } else {
-            validateJsonPathKey(key);
-
-            String jsonPath = "'$." + key + "'";
-            sql = "SELECT " + dataColumn + " FROM " + tableName + " WHERE JSON_UNQUOTE(JSON_EXTRACT(" + dataColumn
-                    + ", " + jsonPath + ")) = ? LIMIT 1";
+            return "SELECT " + dataColumn + " FROM " + tableName + " WHERE " + uniqueKey + " = ?";
         }
-        return sql;
+        validateJsonPathKey(key);
+        return getFindJsonSql(key);
     }
 
     @Override
@@ -131,7 +128,7 @@ public class MySqlStorage<T> implements Storage<T> {
     @Override
     public void load(T object) {
         String key = serializer.getKey(object);
-        find(uniqueKey, key).ifPresentOrElse(loadedObject -> cache.put(key, loadedObject), () -> create(key));
+        find(uniqueKey, key).ifPresentOrElse(loaded -> cache.put(key, loaded), () -> create(key));
     }
 
     @Override
@@ -144,15 +141,12 @@ public class MySqlStorage<T> implements Storage<T> {
 
             while (rs.next()) {
                 String jsonString = rs.getString(dataColumn);
-
                 if (jsonString == null) continue;
 
                 JsonObject jsonObject = StorageRegistry.GSON.fromJson(jsonString, JsonObject.class);
                 T object = serializer.fromJson(jsonObject);
-
                 if (object != null) {
-                    String key = serializer.getKey(object);
-                    cache.put(key, object);
+                    cache.put(serializer.getKey(object), object);
                 }
             }
         } catch (SQLException e) {
@@ -166,11 +160,7 @@ public class MySqlStorage<T> implements Storage<T> {
 
         try {
             validateSqlIdentifier(key);
-
-            String jsonPath = "'$.stats." + key + "'";
-            String sql = "SELECT " + dataColumn + " FROM " + tableName
-                    + " ORDER BY CAST(JSON_UNQUOTE(JSON_EXTRACT(" + dataColumn + ", " + jsonPath + ")) AS SIGNED) DESC"
-                    + " LIMIT ?";
+            String sql = getTopsSql(key);
 
             try (Connection conn = dataSource.getConnection();
                     PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -202,9 +192,7 @@ public class MySqlStorage<T> implements Storage<T> {
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, key);
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
-
+            return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             Log.error(e.getMessage());
             return false;
@@ -214,8 +202,8 @@ public class MySqlStorage<T> implements Storage<T> {
     @Override
     public void deleteAll() {
         cache.clear();
-
         String sql = "TRUNCATE TABLE " + tableName;
+
         try (Connection conn = dataSource.getConnection();
                 Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
@@ -230,17 +218,12 @@ public class MySqlStorage<T> implements Storage<T> {
         JsonObject jsonObject = serializer.toJson(object);
         String jsonString = StorageRegistry.GSON.toJson(jsonObject);
 
-        String sql = "INSERT INTO " + tableName + " (" + uniqueKey + ", " + dataColumn + ")"
-                + " VALUES (?, ?)"
-                + " ON DUPLICATE KEY UPDATE " + dataColumn + " = VALUES(" + dataColumn + ")";
-
         try (Connection conn = dataSource.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(getUpsertSql())) {
 
             pstmt.setString(1, key);
-            pstmt.setString(2, jsonString);
+            bindJsonParam(pstmt, 2, jsonString);
             pstmt.executeUpdate();
-
         } catch (SQLException e) {
             Log.error(e.getMessage());
         }
@@ -255,22 +238,17 @@ public class MySqlStorage<T> implements Storage<T> {
     public void saveAll() {
         if (cache.isEmpty()) return;
 
-        String sql = "INSERT INTO " + tableName + " (" + uniqueKey + ", " + dataColumn + ")"
-                + " VALUES (?, ?)"
-                + " ON DUPLICATE KEY UPDATE " + dataColumn + " = VALUES(" + dataColumn + ")";
-
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
 
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            try (PreparedStatement pstmt = conn.prepareStatement(getUpsertSql())) {
                 for (T object : cache.values()) {
                     String key = serializer.getKey(object);
                     JsonObject jsonObject = serializer.toJson(object);
                     String jsonString = StorageRegistry.GSON.toJson(jsonObject);
 
                     pstmt.setString(1, key);
-                    pstmt.setString(2, jsonString);
-
+                    bindJsonParam(pstmt, 2, jsonString);
                     pstmt.addBatch();
                 }
 
@@ -287,13 +265,13 @@ public class MySqlStorage<T> implements Storage<T> {
         }
     }
 
-    private void validateSqlIdentifier(String identifier) throws SQLException {
+    protected void validateSqlIdentifier(String identifier) throws SQLException {
         if (identifier == null || !SAFE_IDENTIFIER_PATTERN.matcher(identifier).matches()) {
             throw new SQLException("Invalid or unsafe SQL identifier detected: " + identifier);
         }
     }
 
-    private void validateJsonPathKey(String key) throws SQLException {
+    protected void validateJsonPathKey(String key) throws SQLException {
         if (key == null || !SAFE_JSON_PATH_KEY_PATTERN.matcher(key).matches()) {
             throw new SQLException("Invalid or unsafe JSON path key detected: " + key);
         }

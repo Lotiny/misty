@@ -12,6 +12,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import io.fairyproject.bootstrap.bukkit.BukkitPlugin;
 import io.fairyproject.container.DependsOn;
 import io.fairyproject.container.InjectableComponent;
 import io.fairyproject.container.PostInitialize;
@@ -27,13 +28,13 @@ import me.lotiny.misty.manager.leaderboard.LeaderboardHologram;
 import me.lotiny.misty.manager.leaderboard.LeaderboardHologramSerializer;
 import me.lotiny.misty.profile.ProfileSerializer;
 import me.lotiny.misty.storage.impl.MongoStorage;
-import me.lotiny.misty.storage.impl.MySqlStorage;
+import me.lotiny.misty.storage.impl.sql.H2Storage;
+import me.lotiny.misty.storage.impl.sql.MySqlStorage;
+import me.lotiny.misty.storage.impl.sql.PostgresqlStorage;
 import me.lotiny.misty.utils.Utilities;
 import org.bson.Document;
-import org.bukkit.Bukkit;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
 
+import java.io.File;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,10 +63,19 @@ public class StorageRegistry {
     @PostInitialize
     public void onPostInit() {
         StorageType storageType = Config.getStorageConfig().getStorageType();
-        if (storageType == StorageType.MONGODB) {
-            connectMongoDB();
-        } else {
-            connectMySQL();
+
+        boolean connected =
+                switch (storageType) {
+                    case MONGODB -> connectMongoDB();
+                    case MYSQL -> connectSql("MySQL", createMySqlConfig());
+                    case MARIADB -> connectSql("MariaDB", createMariaDbConfig());
+                    case POSTGRES -> connectSql("PostgreSQL", createPostgresqlConfig());
+                    case H2 -> connectSql("H2", createH2Config());
+                };
+
+        if (!connected) {
+            Utilities.disable();
+            return;
         }
 
         profileStorage = createStorage(storageType, "uniqueId", "player", new ProfileSerializer());
@@ -79,17 +89,20 @@ public class StorageRegistry {
 
     @PreDestroy
     public void onPreDestroy() {
-        ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-        if (scoreboardManager != null) {
-            scoreboardManager.getMainScoreboard().getTeams().forEach(Team::unregister);
+        if (profileStorage != null) {
+            profileStorage.saveAll();
+        }
+        if (leaderboardHologramStorage != null) {
+            leaderboardHologramStorage.saveAll();
         }
 
-        profileStorage.saveAll();
-        leaderboardHologramStorage.saveAll();
-
         try {
-            mongoClient.close();
-            dataSource.close();
+            if (mongoClient != null) {
+                mongoClient.close();
+            }
+            if (dataSource != null && !dataSource.isClosed()) {
+                dataSource.close();
+            }
         } catch (Exception ignore) {
         }
     }
@@ -100,14 +113,15 @@ public class StorageRegistry {
 
     private <T> Storage<T> createStorage(
             StorageType storageType, String uniqueId, String collection, StorageSerializer<T> serializer) {
-        if (storageType == StorageType.MONGODB) {
-            return new MongoStorage<>(this, uniqueId, collection, serializer);
-        } else {
-            return new MySqlStorage<>(this, uniqueId, collection, serializer);
-        }
+        return switch (storageType) {
+            case MONGODB -> new MongoStorage<>(this, uniqueId, collection, serializer);
+            case POSTGRES -> new PostgresqlStorage<>(this, uniqueId, collection, serializer);
+            case H2 -> new H2Storage<>(this, uniqueId, collection, serializer);
+            case MYSQL, MARIADB -> new MySqlStorage<>(this, uniqueId, collection, serializer);
+        };
     }
 
-    public void connectMongoDB() {
+    public boolean connectMongoDB() {
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         StorageConfig.MongoDB mongoDB = Config.getStorageConfig().getMongoDb();
         ServerApi serverApi = ServerApi.builder().version(ServerApiVersion.V1).build();
@@ -121,42 +135,93 @@ public class StorageRegistry {
             this.mongoClient = MongoClients.create(settings);
             this.mongoDatabase = this.mongoClient.getDatabase(mongoDB.getDatabase());
             this.mongoDatabase.runCommand(new Document("ping", 1));
+            return true;
         } catch (MongoException e) {
             Log.error("Failed to connect to MongoDB, disabling the plugin...", e);
-            Utilities.disable();
+            return false;
         }
     }
 
-    public void connectMySQL() {
+    private boolean connectSql(String dialectName, HikariConfig config) {
         Logger.getLogger("com.zaxxer.hikari").setLevel(Level.WARNING);
-        StorageConfig.MySQL mySql = Config.getStorageConfig().getMySql();
-
         try {
-            HikariConfig hikariConfig = new HikariConfig();
-
-            String jdbcUrl = "jdbc:mysql://" + mySql.getHost() + ":" + mySql.getPort() + "/" + mySql.getDatabase()
-                    + "?useSSL=" + mySql.isUseSsl();
-
-            hikariConfig.setJdbcUrl(jdbcUrl);
-            hikariConfig.setUsername(mySql.getUsername());
-            hikariConfig.setPassword(mySql.getPassword());
-            hikariConfig.setMaximumPoolSize(mySql.getMaximumPoolSize());
-
-            hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
-            hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
-            hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-            hikariConfig.addDataSourceProperty("useServerPrepStmts", "true");
-            hikariConfig.addDataSourceProperty("useLocalSessionState", "true");
-            hikariConfig.addDataSourceProperty("rewriteBatchedStatements", "true");
-            hikariConfig.addDataSourceProperty("cacheResultSetMetadata", "true");
-            hikariConfig.addDataSourceProperty("cacheServerConfiguration", "true");
-
-            this.dataSource = new HikariDataSource(hikariConfig);
-            Log.info("Successfully connected to MySQL and setup connection pool.");
-
+            this.dataSource = new HikariDataSource(config);
+            Log.info("Successfully connected to " + dialectName + " and setup connection pool.");
+            return true;
         } catch (Exception e) {
-            Log.error("Failed to connect to MySQL, disabling the plugin...", e);
-            Utilities.disable();
+            Log.error("Failed to connect to " + dialectName + ", disabling the plugin...", e);
+            return false;
         }
+    }
+
+    private HikariConfig createBaseRemoteConfig(String driver, String url) {
+        StorageConfig.SQL sql = Config.getStorageConfig().getSql();
+        HikariConfig config = new HikariConfig();
+
+        config.setDriverClassName(driver);
+        config.setJdbcUrl(url);
+        config.setUsername(sql.getUsername());
+        config.setPassword(sql.getPassword());
+        config.setMaximumPoolSize(sql.getMaximumPoolSize());
+
+        return config;
+    }
+
+    private HikariConfig createMySqlConfig() {
+        StorageConfig.SQL sql = Config.getStorageConfig().getSql();
+        String url = "jdbc:mysql://" + sql.getHost() + ":" + sql.getPort() + "/" + sql.getDatabase() + "?useSSL="
+                + sql.isUseSsl();
+
+        HikariConfig config = createBaseRemoteConfig("com.mysql.cj.jdbc.Driver", url);
+        applyMySqlOptimizations(config);
+        config.addDataSourceProperty("useLocalSessionState", "true");
+        config.addDataSourceProperty("cacheResultSetMetadata", "true");
+        config.addDataSourceProperty("cacheServerConfiguration", "true");
+        return config;
+    }
+
+    private HikariConfig createMariaDbConfig() {
+        StorageConfig.SQL sql = Config.getStorageConfig().getSql();
+        String url = "jdbc:mariadb://" + sql.getHost() + ":" + sql.getPort() + "/" + sql.getDatabase() + "?useSsl="
+                + sql.isUseSsl();
+
+        HikariConfig config = createBaseRemoteConfig("org.mariadb.jdbc.Driver", url);
+        applyMySqlOptimizations(config);
+        return config;
+    }
+
+    private void applyMySqlOptimizations(HikariConfig config) {
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("useServerPrepStmts", "true");
+        config.addDataSourceProperty("rewriteBatchedStatements", "true");
+    }
+
+    private HikariConfig createPostgresqlConfig() {
+        StorageConfig.SQL sql = Config.getStorageConfig().getSql();
+        String sslMode = sql.isUseSsl() ? "require" : "disable";
+        String url = "jdbc:postgresql://" + sql.getHost() + ":" + sql.getPort() + "/" + sql.getDatabase() + "?sslmode="
+                + sslMode;
+
+        HikariConfig config = createBaseRemoteConfig("org.postgresql.Driver", url);
+        config.addDataSourceProperty("reWriteBatchedInserts", "true");
+        return config;
+    }
+
+    private HikariConfig createH2Config() {
+        File dataFolder = new File(BukkitPlugin.INSTANCE.getDataFolder(), "database");
+        if (!dataFolder.exists()) {
+            dataFolder.mkdirs();
+        }
+
+        File dbFile = new File(dataFolder, "data");
+        String url = "jdbc:h2:" + dbFile.getAbsolutePath() + ";MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE";
+
+        HikariConfig config = new HikariConfig();
+        config.setDriverClassName("org.h2.Driver");
+        config.setJdbcUrl(url);
+        config.setMaximumPoolSize(10);
+        return config;
     }
 }

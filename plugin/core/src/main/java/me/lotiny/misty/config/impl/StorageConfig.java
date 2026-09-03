@@ -10,14 +10,14 @@ import me.lotiny.misty.storage.StorageType;
 @Configuration
 public final class StorageConfig extends BaseConfig {
 
-    @Comment({"Choose storage type you want to use. (MONGODB, MYSQL)"})
-    private StorageType storageType = StorageType.MONGODB;
+    @Comment({"Choose storage type you want to use. (MONGODB, MYSQL, MARIADB, POSTGRES and H2)"})
+    private StorageType storageType = StorageType.H2;
 
     @Comment("Setting up the connection for MongoDB.")
     private MongoDB mongoDb = new MongoDB();
 
-    @Comment("Setting up the connection for MySQL.")
-    private MySQL mySql = new MySQL();
+    @Comment("Setting up the connection for SQL Type.")
+    private SQL sql = new SQL();
 
     @Getter
     @Configuration
@@ -29,7 +29,7 @@ public final class StorageConfig extends BaseConfig {
 
     @Getter
     @Configuration
-    public static class MySQL {
+    public static class SQL {
 
         private String host = "localhost";
         private int port = 3306;
